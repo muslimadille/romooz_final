@@ -33,7 +33,7 @@ dependencies:
   shimmer: ^2.0.0
   bordered_text: ^2.0.0
   flutter_html: ^2.1.5
-  flutter_svg: ^0.22.0
+  flutter_svg:
   url_launcher: ^6.0.12
   toast: ^0.1.5
   shared_preferences: ^2.0.8
@@ -66,7 +66,7 @@ dependencies:
   flutter_facebook_auth: ^3.5.0
   google_sign_in: ^5.1.1
   google_maps_place_picker: ^2.1.0-nullsafety.3
-  firebase_messaging: ^10.0.8
+  firebase_messaging:
   one_context: ^1.1.1
   social_share: ^2.2.1
   flutter_typeahead: ^3.2.1

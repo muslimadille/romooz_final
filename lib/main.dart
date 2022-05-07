@@ -22,7 +22,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  //Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

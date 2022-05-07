@@ -15,14 +15,11 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:twitter_login/twitter_login.dart';
-
 
 class Login extends StatefulWidget {
   @override
@@ -60,15 +57,18 @@ class _LoginState extends State<Login> {
     var password = _passwordController.text.toString();
 
     if (_login_by == 'email' && email == "") {
-      ToastComponent.showDialog(AppLocalizations.of(context).login_screen_email_warning, context,
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).login_screen_email_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     } else if (_login_by == 'phone' && _phone == "") {
-      ToastComponent.showDialog(AppLocalizations.of(context).login_screen_phone_warning, context,
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).login_screen_phone_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     } else if (password == "") {
-      ToastComponent.showDialog(AppLocalizations.of(context).login_screen_password_warning, context,
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).login_screen_password_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
@@ -79,7 +79,6 @@ class _LoginState extends State<Login> {
       ToastComponent.showDialog(loginResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
-
       ToastComponent.showDialog(loginResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       AuthHelper().setUserData(loginResponse);
@@ -119,15 +118,19 @@ class _LoginState extends State<Login> {
   }
 
   onPressedFacebookLogin() async {
-    final facebookLogin =await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
+    final facebookLogin =
+        await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
 
     if (facebookLogin.status == LoginStatus.success) {
-
       // get the user data
       // by default we get the userId, email,name and picture
       final userData = await FacebookAuth.instance.getUserData();
-      var loginResponse = await AuthRepository().getSocialLoginResponse("facebook",
-          userData['name'].toString(), userData['email'].toString(), userData['id'].toString(),access_token: facebookLogin.accessToken.token);
+      var loginResponse = await AuthRepository().getSocialLoginResponse(
+          "facebook",
+          userData['name'].toString(),
+          userData['email'].toString(),
+          userData['id'].toString(),
+          access_token: facebookLogin.accessToken.token);
       print("..........................${loginResponse.toString()}");
       if (loginResponse.result == false) {
         ToastComponent.showDialog(loginResponse.message, context,
@@ -148,61 +151,59 @@ class _LoginState extends State<Login> {
       print(facebookLogin.status);
       print(facebookLogin.message);
     }
-
-
-
   }
 
-  onPressedGoogleLogin() async {
-    try {
-      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-
-      print(googleUser.toString());
-
-      GoogleSignInAuthentication googleSignInAuthentication =
-      await googleUser.authentication;
-      String accessToken = googleSignInAuthentication.accessToken;
-
-
-      var loginResponse = await AuthRepository().getSocialLoginResponse("google",
-          googleUser.displayName, googleUser.email, googleUser.id,access_token: accessToken);
-
-      if (loginResponse.result == false) {
-        ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      } else {
-        ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-        AuthHelper().setUserData(loginResponse);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Main();
-        }));
-      }
-      GoogleSignIn().disconnect();
-    } on Exception catch (e) {
-      print("error is ....... $e");
-      // TODO
-    }
-
-
-
-  }
+  // onPressedGoogleLogin() async {
+  //   try {
+  //     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+  //
+  //
+  //     print(googleUser.toString());
+  //
+  //     GoogleSignInAuthentication googleSignInAuthentication =
+  //     await googleUser.authentication;
+  //     String accessToken = googleSignInAuthentication.accessToken;
+  //
+  //
+  //     var loginResponse = await AuthRepository().getSocialLoginResponse("google",
+  //         googleUser.displayName, googleUser.email, googleUser.id,access_token: accessToken);
+  //
+  //     if (loginResponse.result == false) {
+  //       ToastComponent.showDialog(loginResponse.message, context,
+  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+  //     } else {
+  //       ToastComponent.showDialog(loginResponse.message, context,
+  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+  //       AuthHelper().setUserData(loginResponse);
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //         return Main();
+  //       }));
+  //     }
+  //     GoogleSignIn().disconnect();
+  //   } on Exception catch (e) {
+  //     print("error is ....... $e");
+  //     // TODO
+  //   }
+  //
+  //
+  //
+  // }
 
   onPressedTwitterLogin() async {
     try {
-
       final twitterLogin = new TwitterLogin(
           apiKey: SocialConfig().twitter_consumer_key,
-          apiSecretKey:SocialConfig().twitter_consumer_secret,
-          redirectURI: 'activeecommerceflutterapp://'
-
-      );
+          apiSecretKey: SocialConfig().twitter_consumer_secret,
+          redirectURI: 'activeecommerceflutterapp://');
       // Trigger the sign-in flow
       final authResult = await twitterLogin.login();
 
-      var loginResponse = await AuthRepository().getSocialLoginResponse("twitter",
-          authResult.user.name, authResult.user.email, authResult.user.id.toString(),access_token: authResult.authToken);
+      var loginResponse = await AuthRepository().getSocialLoginResponse(
+          "twitter",
+          authResult.user.name,
+          authResult.user.email,
+          authResult.user.id.toString(),
+          access_token: authResult.authToken);
       print(loginResponse);
       if (loginResponse.result == false) {
         ToastComponent.showDialog(loginResponse.message, context,
@@ -219,9 +220,6 @@ class _LoginState extends State<Login> {
       print("error is ....... $e");
       // TODO
     }
-
-
-
   }
 
   @override
@@ -250,14 +248,15 @@ class _LoginState extends State<Login> {
                     child: Container(
                       width: 75,
                       height: 75,
-                      child:
-                          Image.asset('assets/login_registration_form_logo.png'),
+                      child: Image.asset(
+                          'assets/login_registration_form_logo.png'),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                      "${AppLocalizations.of(context).login_screen_login_to} " + AppConfig.app_name,
+                      "${AppLocalizations.of(context).login_screen_login_to} " +
+                          AppConfig.app_name,
                       style: TextStyle(
                           color: MyTheme.accent_color,
                           fontSize: 18,
@@ -272,7 +271,11 @@ class _LoginState extends State<Login> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
                           child: Text(
-                            _login_by == "email" ? AppLocalizations.of(context).login_screen_email : AppLocalizations.of(context).login_screen_phone,
+                            _login_by == "email"
+                                ? AppLocalizations.of(context)
+                                    .login_screen_email
+                                : AppLocalizations.of(context)
+                                    .login_screen_phone,
                             style: TextStyle(
                                 color: MyTheme.accent_color,
                                 fontWeight: FontWeight.w600),
@@ -302,7 +305,8 @@ class _LoginState extends State<Login> {
                                           });
                                         },
                                         child: Text(
-                                            AppLocalizations.of(context).login_screen_or_login_with_phone,
+                                          AppLocalizations.of(context)
+                                              .login_screen_or_login_with_phone,
                                           style: TextStyle(
                                               color: MyTheme.accent_color,
                                               fontStyle: FontStyle.italic,
@@ -333,7 +337,8 @@ class _LoginState extends State<Login> {
                                       print(value);
                                     },
                                     selectorConfig: SelectorConfig(
-                                      selectorType: PhoneInputSelectorType.DIALOG,
+                                      selectorType:
+                                          PhoneInputSelectorType.DIALOG,
                                     ),
                                     ignoreBlank: false,
                                     autoValidateMode: AutovalidateMode.disabled,
@@ -344,8 +349,9 @@ class _LoginState extends State<Login> {
                                     initialValue: phoneCode,
                                     textFieldController: _phoneNumberController,
                                     formatInput: true,
-                                    keyboardType: TextInputType.numberWithOptions(
-                                        signed: true, decimal: true),
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
                                     inputDecoration: InputDecorations
                                         .buildInputDecoration_phone(
                                             hint_text: "01710 333 558"),
@@ -361,7 +367,8 @@ class _LoginState extends State<Login> {
                                     });
                                   },
                                   child: Text(
-                                    AppLocalizations.of(context).login_screen_or_login_with_email,
+                                    AppLocalizations.of(context)
+                                        .login_screen_or_login_with_email,
                                     style: TextStyle(
                                         color: MyTheme.accent_color,
                                         fontStyle: FontStyle.italic,
@@ -406,7 +413,8 @@ class _LoginState extends State<Login> {
                                   }));
                                 },
                                 child: Text(
-                                    AppLocalizations.of(context).login_screen_forgot_password,
+                                  AppLocalizations.of(context)
+                                      .login_screen_forgot_password,
                                   style: TextStyle(
                                       color: MyTheme.accent_color,
                                       fontStyle: FontStyle.italic,
@@ -433,7 +441,8 @@ class _LoginState extends State<Login> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
                               child: Text(
-                                AppLocalizations.of(context).login_screen_log_in,
+                                AppLocalizations.of(context)
+                                    .login_screen_log_in,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -449,7 +458,8 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Center(
                               child: Text(
-                                AppLocalizations.of(context).login_screen_or_create_new_account,
+                            AppLocalizations.of(context)
+                                .login_screen_or_create_new_account,
                             style: TextStyle(
                                 color: MyTheme.medium_grey, fontSize: 12),
                           )),
@@ -471,7 +481,8 @@ class _LoginState extends State<Login> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
                               child: Text(
-                                AppLocalizations.of(context).login_screen_sign_up,
+                                AppLocalizations.of(context)
+                                    .login_screen_sign_up,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -487,13 +498,14 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Visibility(
-                          visible: allow_google_login.$ ||
-                              allow_facebook_login.$,
+                          visible:
+                              allow_google_login.$ || allow_facebook_login.$,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Center(
                                 child: Text(
-                                  AppLocalizations.of(context).login_screen_login_with,
+                              AppLocalizations.of(context)
+                                  .login_screen_login_with,
                               style: TextStyle(
                                   color: MyTheme.medium_grey, fontSize: 14),
                             )),
@@ -505,18 +517,19 @@ class _LoginState extends State<Login> {
                             child: Container(
                               width: 120,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Visibility(
                                     visible: allow_google_login.$,
                                     child: InkWell(
                                       onTap: () {
-                                        onPressedGoogleLogin();
+                                        //onPressedGoogleLogin();
                                       },
                                       child: Container(
                                         width: 28,
-                                        child:
-                                            Image.asset("assets/google_logo.png"),
+                                        child: Image.asset(
+                                            "assets/google_logo.png"),
                                       ),
                                     ),
                                   ),
@@ -537,7 +550,7 @@ class _LoginState extends State<Login> {
                                     visible: allow_twitter_login.$,
                                     child: InkWell(
                                       onTap: () {
-                                         onPressedTwitterLogin();
+                                        onPressedTwitterLogin();
                                       },
                                       child: Container(
                                         width: 28,
