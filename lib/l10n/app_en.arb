@@ -290,6 +290,7 @@
   "login_screen_sign_up": "Sign up",
   "login_screen_login_with": "Login with",
   "registration_screen_name_warning": "Enter your name",
+  "registration_commercial_name_warning": "Enter your Commercial Name",
   "registration_screen_email_warning": "Enter email",
   "registration_screen_phone_warning": "Enter phone number",
   "registration_screen_password_warning": "Enter password",
@@ -299,6 +300,7 @@
   "registration_screen_password_match_warning": "Passwords do not match",
   "registration_screen_join": "Join",
   "registration_screen_name": "Name",
+  "registration_commercial_name": "Commercial Name",
   "registration_screen_email": "Email",
   "registration_screen_phone": "Phone",
   "registration_screen_password": "Password",
@@ -441,5 +443,14 @@
   "seller_details_screen_no_top_selling_products": "No top selling products from this seller",
   "seller_details_screen_no_new_arrival": "No new arrivals",
   "seller_details_screen_btn_view_all_products": "View All Products From This Seller",
-  "seller_products_screen_search_products_of_shop": "Search products of shop"
+  "seller_products_screen_search_products_of_shop": "Search products of shop" ,
+   "registration_owner_name": "Owner Name",
+    "registration_Owner_name_warning": "Enter your Owner Name",
+
+     "registration_commercial_registration_no": "Commercial Registration No",
+    "registration_commercial_registration_no_warning": "Enter your Commercial Registration No" ,
+
+     "registration_tax_number": "TAX Number",
+    "registration_tax_number_warning": "Enter your TAX Number"
+
 }

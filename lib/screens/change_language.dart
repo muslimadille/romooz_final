@@ -13,7 +13,6 @@ import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class ChangeLanguage extends StatefulWidget {
   ChangeLanguage({Key key}) : super(key: key);
 
@@ -103,18 +102,20 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
 
       // var local_provider = new LocaleProvider();
       // local_provider.setLocale(_list[_selected_index].code);
-      Provider.of<LocaleProvider>(context,listen: false).setLocale(_list[_selected_index].mobile_app_code);
+      Provider.of<LocaleProvider>(context, listen: false)
+          .setLocale(_list[_selected_index].mobile_app_code);
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) {
-            return Main(go_back: false,);
-          }));
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return Main(
+          go_back: false,
+        );
+      }));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-   return Directionality(
+    return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -191,7 +192,7 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).change_language_no_language_is_added,
+            AppLocalizations.of(context).change_language_no_language_is_added,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     }
@@ -254,16 +255,17 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
                   ),
                 ]),
           ),
-          app_language_rtl.$ ?
-          Positioned(
-            left: 16,
-            top: 16,
-            child: buildCheckContainer(_selected_index == index),
-          ): Positioned(
-            right: 16,
-            top: 16,
-            child: buildCheckContainer(_selected_index == index),
-          )
+          app_language_rtl.$
+              ? Positioned(
+                  left: 16,
+                  top: 16,
+                  child: buildCheckContainer(_selected_index == index),
+                )
+              : Positioned(
+                  right: 16,
+                  top: 16,
+                  child: buildCheckContainer(_selected_index == index),
+                )
         ],
       ),
     );
