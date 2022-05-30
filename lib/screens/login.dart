@@ -248,8 +248,11 @@ class _LoginState extends State<Login> {
                     child: Container(
                       width: 75,
                       height: 75,
-                      child: Image.asset(
-                          'assets/login_registration_form_logo.png'),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset(
+                            'assets/login_registration_form_logo.png'),
+                      ),
                     ),
                   ),
                   Padding(

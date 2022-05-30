@@ -37,7 +37,6 @@ class _MainState extends State<Main> {
   ];
 
   void onTapped(int i) {
-
     if (!is_logged_in.$ && (i == 4 || i == 3)) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
       return;
@@ -196,6 +195,4 @@ class _MainState extends State<Main> {
       ),
     );
   }
-
-
 }

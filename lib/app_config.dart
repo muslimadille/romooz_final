@@ -4,15 +4,15 @@ var this_year = DateTime.now().year.toString();
 
 class AppConfig {
   static String copyright_text =
-      "@ ActiveItZone " + this_year; //this shows in the splash screen
-  static String app_name = "Active eCommerce"; //this shows in the splash screen
+      "@ Iserve Tech " + this_year; //this shows in the splash screen
+  static String app_name = "Romooz"; //this shows in the splash screen
   static String purchase_code =
       "bkash"; //enter your purchase code for the app from codecanyon
   //static String purchase_code = ""; //enter your purchase code for the app from codecanyon
 
   //Default language config
-  static String default_language = "en";
-  static String mobile_app_code = "en";
+  static String default_language = "ar";
+  static String mobile_app_code = "ar";
   static bool app_language_rtl = false;
 
   //configure this
