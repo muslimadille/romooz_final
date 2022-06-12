@@ -82,7 +82,7 @@ class _LoginState extends State<Login> {
       ToastComponent.showDialog(loginResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       AuthHelper().setUserData(loginResponse);
-      print("loginResponse ------ $loginResponse");
+      print("loginResponse ------ ${loginResponse.user.customer_type}");
 
       // push notification starts
       // if (OtherConfig.USE_PUSH_NOTIFICATION) {

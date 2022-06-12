@@ -30,6 +30,7 @@ class CartRepository {
     @required int cart_id,
   ) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/carts/$cart_id");
+    print("customer_type ----- ${customer_type.$}");
     final response = await http.delete(
       url,
       headers: {

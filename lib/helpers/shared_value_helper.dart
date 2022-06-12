@@ -21,6 +21,13 @@ final SharedValue<String> avatar_original = SharedValue(
   key: "avatar_original", // disk storage key for shared_preferences
 );
 
+
+final SharedValue<String> customer_type = SharedValue(
+  value: "", // initial value
+  key: "customer_type", // disk storage key for shared_preferences
+);
+
+
 final SharedValue<String> user_name = SharedValue(
   value: "", // initial value
   key: "user_name", // disk storage key for shared_preferences
