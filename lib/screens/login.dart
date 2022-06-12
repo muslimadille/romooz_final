@@ -82,32 +82,34 @@ class _LoginState extends State<Login> {
       ToastComponent.showDialog(loginResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       AuthHelper().setUserData(loginResponse);
+      print("loginResponse ------ $loginResponse");
+
       // push notification starts
-      if (OtherConfig.USE_PUSH_NOTIFICATION) {
-        final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+      // if (OtherConfig.USE_PUSH_NOTIFICATION) {
+      //   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-        await _fcm.requestPermission(
-          alert: true,
-          announcement: false,
-          badge: true,
-          carPlay: false,
-          criticalAlert: false,
-          provisional: false,
-          sound: true,
-        );
+      //   await _fcm.requestPermission(
+      //     alert: true,
+      //     announcement: false,
+      //     badge: true,
+      //     carPlay: false,
+      //     criticalAlert: false,
+      //     provisional: false,
+      //     sound: true,
+      //   );
 
-        String fcmToken = await _fcm.getToken();
+      //   String fcmToken = await _fcm.getToken();
 
-        if (fcmToken != null) {
-          print("--fcm token--");
-          print(fcmToken);
-          if (is_logged_in.$ == true) {
-            // update device token
-            var deviceTokenUpdateResponse = await ProfileRepository()
-                .getDeviceTokenUpdateResponse(fcmToken);
-          }
-        }
-      }
+      //   if (fcmToken != null) {
+      //     print("--fcm token--");
+      //     print(fcmToken);
+      //     if (is_logged_in.$ == true) {
+      //       // update device token
+      //       var deviceTokenUpdateResponse = await ProfileRepository()
+      //           .getDeviceTokenUpdateResponse(fcmToken);
+      //     }
+      //   }
+      // }
 
       //push norification ends
 
@@ -494,7 +496,44 @@ class _LoginState extends State<Login> {
                               onPressed: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return Registration();
+                                  return Registration(
+                                    customer_type: "retail",
+                                  );
+                                }));
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Container(
+                            height: 45,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: MyTheme.textfield_grey, width: 1),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(12.0))),
+                            child: FlatButton(
+                              minWidth: MediaQuery.of(context).size.width,
+                              //height: 50,
+                              color: MyTheme.wholesale_color,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(12.0))),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .login_screen_sign_up_wholesale,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              onPressed: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return Registration(
+                                    customer_type: "wholesale",
+                                  );
                                 }));
                               },
                             ),

@@ -73,16 +73,18 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LocaleProvider()),
-        ],
-        child: Consumer<LocaleProvider>(builder: (context, provider, snapshot) {
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+      ],
+      child: Consumer<LocaleProvider>(
+        builder: (context, provider, snapshot) {
           return MaterialApp(
             builder: OneContext().builder,
             navigatorKey: OneContext().navigator.key,
             title: AppConfig.app_name,
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+              fontFamily: 'NotoKufiArabic',
               primaryColor: MyTheme.white,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               accentColor: MyTheme.accent_color,
@@ -92,10 +94,9 @@ class _MyAppState extends State<MyApp> {
             )*/
               //
               // the below code is getting fonts from http
-              textTheme: GoogleFonts.sourceSansProTextTheme(textTheme).copyWith(
-                bodyText1:
-                    GoogleFonts.sourceSansPro(textStyle: textTheme.bodyText1),
-                bodyText2: GoogleFonts.sourceSansPro(
+              textTheme: GoogleFonts.tajawalTextTheme(textTheme).copyWith(
+                bodyText1: GoogleFonts.tajawal(textStyle: textTheme.bodyText1),
+                bodyText2: GoogleFonts.tajawal(
                     textStyle: textTheme.bodyText2, fontSize: 12),
               ),
             ),
@@ -110,6 +111,8 @@ class _MyAppState extends State<MyApp> {
             home: Splash(),
             //home: Main(),
           );
-        }));
+        },
+      ),
+    );
   }
 }

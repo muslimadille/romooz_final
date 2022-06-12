@@ -14,6 +14,10 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Registration extends StatefulWidget {
+  Registration({@required this.customer_type});
+
+  String customer_type;
+
   @override
   _RegistrationState createState() => _RegistrationState();
 }
@@ -30,9 +34,10 @@ class _RegistrationState extends State<Registration> {
   TextEditingController _commercialNameController = TextEditingController();
   TextEditingController _ownerNameController = TextEditingController();
 
-  TextEditingController _commercialRegistrationNoController = TextEditingController();
+  TextEditingController _commercialRegistrationNoController =
+      TextEditingController();
 
-   TextEditingController _taxNumberController = TextEditingController();
+  TextEditingController _taxNumberController = TextEditingController();
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
@@ -57,8 +62,12 @@ class _RegistrationState extends State<Registration> {
   onPressSignUp() async {
     var name = _nameController.text.toString();
     var commercial_name = _commercialNameController.text.toString();
+    print("commercial_name ---- $commercial_name" );
     var owner_name = _ownerNameController.text.toString();
-    var commercial_registration_no = _ownerNameController.text.toString();
+    var commercial_registration_no =
+        _commercialRegistrationNoController.text.toString();
+
+    var tax_number = _taxNumberController.text.toString();
 
     var email = _emailController.text.toString();
     var password = _passwordController.text.toString();
@@ -116,6 +125,32 @@ class _RegistrationState extends State<Registration> {
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return;
+    } else if (widget.customer_type == "wholesale" && commercial_name == null) {
+      ToastComponent.showDialog(
+         widget.customer_type,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" && owner_name == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).registration_Owner_name_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" &&
+        commercial_registration_no == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context)
+              .registration_commercial_registration_no_warning,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" && tax_number == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).registration_tax_number_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
     }
 
     var signupResponse = await AuthRepository().getSignupResponse(
@@ -123,7 +158,12 @@ class _RegistrationState extends State<Registration> {
         _register_by == 'email' ? email : _phone,
         password,
         password_confirm,
-        _register_by);
+        _register_by,
+        widget.customer_type,
+        owner_name,
+        commercial_name,
+        commercial_registration_no,
+        tax_number);
 
     if (signupResponse.result == false) {
       ToastComponent.showDialog(signupResponse.message, context,
@@ -211,107 +251,119 @@ class _RegistrationState extends State<Registration> {
                         ),
 
                         ///// Comercial name
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .registration_commercial_name,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Container(
-                            height: 36,
-                            child: TextField(
-                              controller: _commercialNameController,
-                              autofocus: false,
-                              decoration:
-                                  InputDecorations.buildInputDecoration_1(
-                                      hint_text: "Romooz"),
-                            ),
-                          ),
-                        ),
+                        Visibility(
+                          visible: widget.customer_type == "wholesale"
+                              ? true
+                              : false,
+                          child: ListView(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .registration_commercial_name,
+                                  style: TextStyle(
+                                      color: MyTheme.accent_color,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Container(
+                                  height: 36,
+                                  child: TextField(
+                                    controller: _commercialNameController,
+                                    autofocus: false,
+                                    decoration:
+                                        InputDecorations.buildInputDecoration_1(
+                                            hint_text: "Romooz"),
+                                  ),
+                                ),
+                              ),
 
-                        ///// Owner name
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .registration_owner_name,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Container(
-                            height: 36,
-                            child: TextField(
-                              controller: _ownerNameController,
-                              autofocus: false,
-                              decoration:
-                                  InputDecorations.buildInputDecoration_1(
-                                      hint_text: "XXXXXXXXXXXXXXXXXXXXXXXX"),
-                            ),
-                          ),
-                        ),
+                              ///// Owner name
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .registration_owner_name,
+                                  style: TextStyle(
+                                      color: MyTheme.accent_color,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Container(
+                                  height: 36,
+                                  child: TextField(
+                                    controller: _ownerNameController,
+                                    autofocus: false,
+                                    decoration:
+                                        InputDecorations.buildInputDecoration_1(
+                                            hint_text:
+                                                "XXXXXXXXXXXXXXXXXXXXXXXX"),
+                                  ),
+                                ),
+                              ),
 
+                              ///// Commercial Registration No
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .registration_commercial_registration_no,
+                                  style: TextStyle(
+                                      color: MyTheme.accent_color,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Container(
+                                  height: 36,
+                                  child: TextField(
+                                    controller:
+                                        _commercialRegistrationNoController,
+                                    autofocus: false,
+                                    decoration:
+                                        InputDecorations.buildInputDecoration_1(
+                                            hint_text:
+                                                "XXXXXXXXXXXXXXXXXXXXXXXX"),
+                                  ),
+                                ),
+                              ),
 
-                        ///// Commercial Registration No
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .registration_commercial_registration_no,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
+                              ///// TAX Number
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .registration_tax_number,
+                                  style: TextStyle(
+                                      color: MyTheme.accent_color,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Container(
+                                  height: 36,
+                                  child: TextField(
+                                    controller: _taxNumberController,
+                                    autofocus: false,
+                                    decoration:
+                                        InputDecorations.buildInputDecoration_1(
+                                            hint_text:
+                                                "XXXXXXXXXXXXXXXXXXXXXXXX"),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Container(
-                            height: 36,
-                            child: TextField(
-                              controller: _commercialRegistrationNoController,
-                              autofocus: false,
-                              decoration:
-                                  InputDecorations.buildInputDecoration_1(
-                                      hint_text: "XXXXXXXXXXXXXXXXXXXXXXXX"),
-                            ),
-                          ),
-                        ),
-
-
-                          ///// TAX Number 
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .registration_tax_number,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Container(
-                            height: 36,
-                            child: TextField(
-                              controller: _taxNumberController,
-                              autofocus: false,
-                              decoration:
-                                  InputDecorations.buildInputDecoration_1(
-                                      hint_text: "XXXXXXXXXXXXXXXXXXXXXXXX"),
-                            ),
-                          ),
-                        ),
-
 
                         Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),

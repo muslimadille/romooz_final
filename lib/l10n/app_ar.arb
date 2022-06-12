@@ -287,6 +287,7 @@
    "login_screen_log_in":"تسجيل الدخول",
    "login_screen_or_create_new_account":"أو ، قم بأنشاء حساب جديد ؟",
    "login_screen_sign_up":"انشاء حساب",
+     "login_screen_sign_up_wholesale":"انشاء حساب تاجر جملة",
    "login_screen_login_with":"تسجيل الدخول مع",
    "registration_screen_name_warning":"أدخل اسمك",
    "registration_commercial_name_warning":"أدخل الاسم التجاري الخاص بك",

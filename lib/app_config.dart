@@ -13,7 +13,7 @@ class AppConfig {
   //Default language config
   static String default_language = "ar";
   static String mobile_app_code = "ar";
-  static bool app_language_rtl = false;
+  static bool app_language_rtl = true;
 
   //configure this
   static const bool HTTPS = true;

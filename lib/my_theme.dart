@@ -20,6 +20,8 @@ class MyTheme {
   static Color golden = Color(0xFFd7c27e);
   static Color shimmer_base = Colors.grey.shade50;
   static Color shimmer_highlighted = Colors.grey.shade200;
+  static Color wholesale_color = Color(0xFFcb6a35);
+  
 
   //testing shimmer
   /*static Color shimmer_base = Colors.redAccent;

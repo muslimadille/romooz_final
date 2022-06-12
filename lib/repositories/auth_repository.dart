@@ -38,8 +38,13 @@ class AuthRepository {
       {access_token = ""}) async {
     email = email == ("null") ? "" : email;
 
-    var post_body = jsonEncode(
-        {"name": "${name}", "email": email, "provider": "$provider","social_provider":"$social_provider","access_token":"$access_token"});
+    var post_body = jsonEncode({
+      "name": "${name}",
+      "email": email,
+      "provider": "$provider",
+      "social_provider": "$social_provider",
+      "access_token": "$access_token"
+    });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/social-login");
     final response = await http.post(url,
@@ -69,17 +74,28 @@ class AuthRepository {
   }
 
   Future<SignupResponse> getSignupResponse(
-      @required String name,
-      @required String email_or_phone,
-      @required String password,
-      @required String passowrd_confirmation,
-      @required String register_by) async {
+    @required String name,
+    @required String email_or_phone,
+    @required String password,
+    @required String passowrd_confirmation,
+    @required String register_by,
+    @required String customer_type,
+    @required String owner_name,
+    @required String commercial_name,
+    @required String commercial_registration_no,
+    @required String tax_number,
+  ) async {
     var post_body = jsonEncode({
       "name": "$name",
       "email_or_phone": "${email_or_phone}",
       "password": "$password",
       "password_confirmation": "${passowrd_confirmation}",
-      "register_by": "$register_by"
+      "register_by": "$register_by",
+      "customer_type": "$customer_type",
+      "owner_name": "$owner_name",
+      "commercial_name": "$commercial_name",
+      "commercial_registration_no": "$commercial_registration_no",
+      "tax_number": "$tax_number",
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/signup");
