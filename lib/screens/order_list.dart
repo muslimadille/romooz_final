@@ -1,3 +1,5 @@
+// ignore_for_file: missing_return
+
 import 'package:active_ecommerce_flutter/screens/order_details.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,6 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:one_context/one_context.dart';
 
-
 class PaymentStatus {
   String option_key;
   String name;
@@ -18,9 +19,12 @@ class PaymentStatus {
 
   static List<PaymentStatus> getPaymentStatusList() {
     return <PaymentStatus>[
-      PaymentStatus('', AppLocalizations.of(OneContext().context).order_list_screen_all),
-      PaymentStatus('paid', AppLocalizations.of(OneContext().context).order_list_screen_paid),
-      PaymentStatus('unpaid', AppLocalizations.of(OneContext().context).order_list_screen_unpaid),
+      PaymentStatus(
+          '', AppLocalizations.of(OneContext().context).order_list_screen_all),
+      PaymentStatus('paid',
+          AppLocalizations.of(OneContext().context).order_list_screen_paid),
+      PaymentStatus('unpaid',
+          AppLocalizations.of(OneContext().context).order_list_screen_unpaid),
     ];
   }
 }
@@ -33,10 +37,20 @@ class DeliveryStatus {
 
   static List<DeliveryStatus> getDeliveryStatusList() {
     return <DeliveryStatus>[
-      DeliveryStatus('', AppLocalizations.of(OneContext().context).order_list_screen_all),
-      DeliveryStatus('confirmed', AppLocalizations.of(OneContext().context).order_list_screen_confirmed),
-      DeliveryStatus('on_delivery', AppLocalizations.of(OneContext().context).order_list_screen_on_delivery),
-      DeliveryStatus('delivered', AppLocalizations.of(OneContext().context).order_list_screen_delivered),
+      DeliveryStatus(
+          '', AppLocalizations.of(OneContext().context).order_list_screen_all),
+      DeliveryStatus(
+          'confirmed',
+          AppLocalizations.of(OneContext().context)
+              .order_list_screen_confirmed),
+      DeliveryStatus(
+          'on_delivery',
+          AppLocalizations.of(OneContext().context)
+              .order_list_screen_on_delivery),
+      DeliveryStatus(
+          'delivered',
+          AppLocalizations.of(OneContext().context)
+              .order_list_screen_delivered),
     ];
   }
 }
@@ -235,7 +249,8 @@ class _OrderListState extends State<OrderList> {
       child: Center(
         child: Text(_totalData == _orderList.length
             ? AppLocalizations.of(context).order_list_screen_no_more_orders
-            : AppLocalizations.of(context).order_list_screen_loading_more_orders),
+            : AppLocalizations.of(context)
+                .order_list_screen_loading_more_orders),
       ),
     );
   }
@@ -244,7 +259,7 @@ class _OrderListState extends State<OrderList> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             decoration: BoxDecoration(
@@ -255,7 +270,6 @@ class _OrderListState extends State<OrderList> {
                         BorderSide(color: MyTheme.light_grey, width: 1))),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             height: 36,
-            width: MediaQuery.of(context).size.width * .3,
             child: new DropdownButton<PaymentStatus>(
               icon: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -455,7 +469,8 @@ class _OrderListState extends State<OrderList> {
         ),
       );
     } else if (_totalData == 0) {
-      return Center(child: Text(AppLocalizations.of(context).common_no_data_available));
+      return Center(
+          child: Text(AppLocalizations.of(context).common_no_data_available));
     } else {
       return Container(); // should never be happening
     }
