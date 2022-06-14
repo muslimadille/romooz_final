@@ -63,16 +63,17 @@ dependencies:
   rename: ^1.3.0
   permission_handler: ^6.1.3
   image_picker: ^0.8.4+2
-  flutter_facebook_auth: ^3.5.0
+  # flutter_facebook_auth: ^3.5.0
   google_sign_in: ^5.1.1
   google_maps_place_picker: ^2.1.0-nullsafety.3
-  firebase_messaging:
+  # firebase_messaging:
   one_context: ^1.1.1
   social_share: ^2.2.1
   flutter_typeahead: ^3.2.1
   photo_view: ^0.13.0
   intl: ^0.17.0
   twitter_login: ^4.0.1
+  #hyperpay: ^0.0.9-alpha
 
 dev_dependencies:
   flutter_test:

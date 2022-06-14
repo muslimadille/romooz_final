@@ -1,4 +1,4 @@
-package com.example.active_ecommerce_flutter
+package com.romooz.app.customer
 
 import io.flutter.embedding.android.FlutterActivity
 

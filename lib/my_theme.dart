@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class MyTheme {
   /*configurable colors stars*/
-  static Color accent_color = Color(0xFFc93246);
+  static Color accent_color = Color(0xFF42925b);
   static Color soft_accent_color = Color.fromRGBO(247, 189, 168, 1);
   static Color splash_screen_color =
-      Color(0xFF1e2a37); //z if not sure , use the same color as accent color
+      Color(0xFF42925b); //z if not sure , use the same color as accent color
   /*configurable colors ends*/
 
   /*If you are not a developer, do not change the bottom colors*/
@@ -21,7 +21,6 @@ class MyTheme {
   static Color shimmer_base = Colors.grey.shade50;
   static Color shimmer_highlighted = Colors.grey.shade200;
   static Color wholesale_color = Color(0xFFcb6a35);
-  
 
   //testing shimmer
   /*static Color shimmer_base = Colors.redAccent;

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/intl_phone_input.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:active_ecommerce_flutter/screens/registration.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
@@ -15,7 +15,7 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// s
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -119,41 +119,41 @@ class _LoginState extends State<Login> {
     }
   }
 
-  onPressedFacebookLogin() async {
-    final facebookLogin =
-        await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
+  // onPressedFacebookLogin() async {
+  //   final facebookLogin =
+  //       await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
 
-    if (facebookLogin.status == LoginStatus.success) {
-      // get the user data
-      // by default we get the userId, email,name and picture
-      final userData = await FacebookAuth.instance.getUserData();
-      var loginResponse = await AuthRepository().getSocialLoginResponse(
-          "facebook",
-          userData['name'].toString(),
-          userData['email'].toString(),
-          userData['id'].toString(),
-          access_token: facebookLogin.accessToken.token);
-      print("..........................${loginResponse.toString()}");
-      if (loginResponse.result == false) {
-        ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      } else {
-        ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-        AuthHelper().setUserData(loginResponse);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Main();
-        }));
-        FacebookAuth.instance.logOut();
-      }
-      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+  //   if (facebookLogin.status == LoginStatus.success) {
+  //     // get the user data
+  //     // by default we get the userId, email,name and picture
+  //     final userData = await FacebookAuth.instance.getUserData();
+  //     var loginResponse = await AuthRepository().getSocialLoginResponse(
+  //         "facebook",
+  //         userData['name'].toString(),
+  //         userData['email'].toString(),
+  //         userData['id'].toString(),
+  //         access_token: facebookLogin.accessToken.token);
+  //     print("..........................${loginResponse.toString()}");
+  //     if (loginResponse.result == false) {
+  //       ToastComponent.showDialog(loginResponse.message, context,
+  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+  //     } else {
+  //       ToastComponent.showDialog(loginResponse.message, context,
+  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+  //       AuthHelper().setUserData(loginResponse);
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //         return Main();
+  //       }));
+  //       FacebookAuth.instance.logOut();
+  //     }
+  //     // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
 
-    } else {
-      print("....Facebook auth Failed.........");
-      print(facebookLogin.status);
-      print(facebookLogin.message);
-    }
-  }
+  //   } else {
+  //     print("....Facebook auth Failed.........");
+  //     print(facebookLogin.status);
+  //     print(facebookLogin.message);
+  //   }
+  // }
 
   // onPressedGoogleLogin() async {
   //   try {
@@ -579,7 +579,7 @@ class _LoginState extends State<Login> {
                                     visible: allow_facebook_login.$,
                                     child: InkWell(
                                       onTap: () {
-                                        onPressedFacebookLogin();
+                                        // onPressedFacebookLogin();
                                       },
                                       child: Container(
                                         width: 28,
