@@ -1,48 +1,74 @@
-import 'package:active_ecommerce_flutter/screens/order_details.dart';
-import 'package:active_ecommerce_flutter/screens/main.dart';
-import 'package:flutter/material.dart';
-import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:active_ecommerce_flutter/repositories/order_repository.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:one_context/one_context.dart';
+// ignore_for_file: missing_return
 
+import 'package:active_ecommerce_flutter/screens/order_details.dart';
+
+import 'package:active_ecommerce_flutter/screens/main.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:active_ecommerce_flutter/my_theme.dart';
+
+import 'package:flutter_icons/flutter_icons.dart';
+
+import 'package:active_ecommerce_flutter/repositories/order_repository.dart';
+
+import 'package:shimmer/shimmer.dart';
+
+import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:one_context/one_context.dart';
 
 class PaymentStatus {
   String option_key;
+
   String name;
 
   PaymentStatus(this.option_key, this.name);
 
   static List<PaymentStatus> getPaymentStatusList() {
     return <PaymentStatus>[
-      PaymentStatus('', AppLocalizations.of(OneContext().context).order_list_screen_all),
-      PaymentStatus('paid', AppLocalizations.of(OneContext().context).order_list_screen_paid),
-      PaymentStatus('unpaid', AppLocalizations.of(OneContext().context).order_list_screen_unpaid),
+      PaymentStatus(
+          '', AppLocalizations.of(OneContext().context).order_list_screen_all),
+      PaymentStatus('paid',
+          AppLocalizations.of(OneContext().context).order_list_screen_paid),
+      PaymentStatus('unpaid',
+          AppLocalizations.of(OneContext().context).order_list_screen_unpaid),
     ];
   }
 }
 
 class DeliveryStatus {
   String option_key;
+
   String name;
 
   DeliveryStatus(this.option_key, this.name);
 
   static List<DeliveryStatus> getDeliveryStatusList() {
     return <DeliveryStatus>[
-      DeliveryStatus('', AppLocalizations.of(OneContext().context).order_list_screen_all),
-      DeliveryStatus('confirmed', AppLocalizations.of(OneContext().context).order_list_screen_confirmed),
-      DeliveryStatus('on_delivery', AppLocalizations.of(OneContext().context).order_list_screen_on_delivery),
-      DeliveryStatus('delivered', AppLocalizations.of(OneContext().context).order_list_screen_delivered),
+      DeliveryStatus(
+          '', AppLocalizations.of(OneContext().context).order_list_screen_all),
+      DeliveryStatus(
+          'confirmed',
+          AppLocalizations.of(OneContext().context)
+              .order_list_screen_confirmed),
+      DeliveryStatus(
+          'on_delivery',
+          AppLocalizations.of(OneContext().context)
+              .order_list_screen_on_delivery),
+      DeliveryStatus(
+          'delivered',
+          AppLocalizations.of(OneContext().context)
+              .order_list_screen_delivered),
     ];
   }
 }
 
 class OrderList extends StatefulWidget {
   OrderList({Key key, this.from_checkout = false}) : super(key: key);
+
   final bool from_checkout;
 
   @override
@@ -51,36 +77,49 @@ class OrderList extends StatefulWidget {
 
 class _OrderListState extends State<OrderList> {
   ScrollController _scrollController = ScrollController();
+
   ScrollController _xcrollController = ScrollController();
 
   List<PaymentStatus> _paymentStatusList = PaymentStatus.getPaymentStatusList();
+
   List<DeliveryStatus> _deliveryStatusList =
       DeliveryStatus.getDeliveryStatusList();
 
   PaymentStatus _selectedPaymentStatus;
+
   DeliveryStatus _selectedDeliveryStatus;
 
   List<DropdownMenuItem<PaymentStatus>> _dropdownPaymentStatusItems;
+
   List<DropdownMenuItem<DeliveryStatus>> _dropdownDeliveryStatusItems;
 
   //------------------------------------
+
   List<dynamic> _orderList = [];
+
   bool _isInitial = true;
+
   int _page = 1;
+
   int _totalData = 0;
+
   bool _showLoadingContainer = false;
+
   String _defaultPaymentStatusKey = '';
+
   String _defaultDeliveryStatusKey = '';
 
   @override
   void initState() {
     init();
+
     super.initState();
 
     fetchData();
 
     _xcrollController.addListener(() {
       //print("position: " + _xcrollController.position.pixels.toString());
+
       //print("max: " + _xcrollController.position.maxScrollExtent.toString());
 
       if (_xcrollController.position.pixels ==
@@ -88,7 +127,9 @@ class _OrderListState extends State<OrderList> {
         setState(() {
           _page++;
         });
+
         _showLoadingContainer = true;
+
         fetchData();
       }
     });
@@ -97,8 +138,11 @@ class _OrderListState extends State<OrderList> {
   @override
   void dispose() {
     // TODO: implement dispose
+
     _scrollController.dispose();
+
     _xcrollController.dispose();
+
     super.dispose();
   }
 
@@ -126,14 +170,19 @@ class _OrderListState extends State<OrderList> {
 
   reset() {
     _orderList.clear();
+
     _isInitial = true;
+
     _page = 1;
+
     _totalData = 0;
+
     _showLoadingContainer = false;
   }
 
   resetFilterKeys() {
     _defaultPaymentStatusKey = '';
+
     _defaultDeliveryStatusKey = '';
 
     setState(() {});
@@ -141,7 +190,9 @@ class _OrderListState extends State<OrderList> {
 
   Future<void> _onRefresh() async {
     reset();
+
     resetFilterKeys();
+
     for (int x = 0; x < _dropdownPaymentStatusItems.length; x++) {
       if (_dropdownPaymentStatusItems[x].value.option_key ==
           _defaultPaymentStatusKey) {
@@ -155,7 +206,9 @@ class _OrderListState extends State<OrderList> {
         _selectedDeliveryStatus = _dropdownDeliveryStatusItems[x].value;
       }
     }
+
     setState(() {});
+
     fetchData();
   }
 
@@ -164,17 +217,24 @@ class _OrderListState extends State<OrderList> {
         page: _page,
         payment_status: _selectedPaymentStatus.option_key,
         delivery_status: _selectedDeliveryStatus.option_key);
+
     //print("or:"+orderResponse.toJson().toString());
+
     _orderList.addAll(orderResponse.orders);
+
     _isInitial = false;
+
     _totalData = orderResponse.meta.total;
+
     _showLoadingContainer = false;
+
     setState(() {});
   }
 
   List<DropdownMenuItem<PaymentStatus>> buildDropdownPaymentStatusItems(
       List _paymentStatusList) {
     List<DropdownMenuItem<PaymentStatus>> items = List();
+
     for (PaymentStatus item in _paymentStatusList) {
       items.add(
         DropdownMenuItem(
@@ -183,12 +243,14 @@ class _OrderListState extends State<OrderList> {
         ),
       );
     }
+
     return items;
   }
 
   List<DropdownMenuItem<DeliveryStatus>> buildDropdownDeliveryStatusItems(
       List _deliveryStatusList) {
     List<DropdownMenuItem<DeliveryStatus>> items = List();
+
     for (DeliveryStatus item in _deliveryStatusList) {
       items.add(
         DropdownMenuItem(
@@ -197,6 +259,7 @@ class _OrderListState extends State<OrderList> {
         ),
       );
     }
+
     return items;
   }
 
@@ -235,7 +298,8 @@ class _OrderListState extends State<OrderList> {
       child: Center(
         child: Text(_totalData == _orderList.length
             ? AppLocalizations.of(context).order_list_screen_no_more_orders
-            : AppLocalizations.of(context).order_list_screen_loading_more_orders),
+            : AppLocalizations.of(context)
+                .order_list_screen_loading_more_orders),
       ),
     );
   }
@@ -244,7 +308,7 @@ class _OrderListState extends State<OrderList> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             decoration: BoxDecoration(
@@ -255,7 +319,6 @@ class _OrderListState extends State<OrderList> {
                         BorderSide(color: MyTheme.light_grey, width: 1))),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             height: 36,
-            width: MediaQuery.of(context).size.width * .3,
             child: new DropdownButton<PaymentStatus>(
               icon: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -276,7 +339,9 @@ class _OrderListState extends State<OrderList> {
                 setState(() {
                   _selectedPaymentStatus = selectedFilter;
                 });
+
                 reset();
+
                 fetchData();
               },
             ),
@@ -328,7 +393,9 @@ class _OrderListState extends State<OrderList> {
                 setState(() {
                   _selectedDeliveryStatus = selectedFilter;
                 });
+
                 reset();
+
                 fetchData();
               },
             ),
@@ -357,6 +424,7 @@ class _OrderListState extends State<OrderList> {
                 Padding(
                   padding: MediaQuery.of(context).viewPadding.top >
                           30 //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
+
                       ? const EdgeInsets.only(top: 36.0)
                       : const EdgeInsets.only(top: 14.0),
                   child: buildTopAppBarContainer(),
@@ -455,9 +523,11 @@ class _OrderListState extends State<OrderList> {
         ),
       );
     } else if (_totalData == 0) {
-      return Center(child: Text(AppLocalizations.of(context).common_no_data_available));
+      return Center(
+          child: Text(AppLocalizations.of(context).common_no_data_available));
     } else {
       return Container(); // should never be happening
+
     }
   }
 

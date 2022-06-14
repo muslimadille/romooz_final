@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+
 import 'package:active_ecommerce_flutter/my_theme.dart';
+
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
+
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+
 import 'package:toast/toast.dart';
+
 import 'package:active_ecommerce_flutter/screens/category_products.dart';
+
 import 'package:active_ecommerce_flutter/repositories/category_repository.dart';
+
 import 'package:shimmer/shimmer.dart';
+
 import 'package:active_ecommerce_flutter/app_config.dart';
+
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoryList extends StatefulWidget {
@@ -20,8 +30,11 @@ class CategoryList extends StatefulWidget {
       : super(key: key);
 
   final int parent_category_id;
+
   final String parent_category_name;
+
   final bool is_base_category;
+
   final bool is_top_category;
 
   @override
@@ -33,7 +46,7 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-     return Directionality(
+    return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
           key: _scaffoldKey,
@@ -104,7 +117,9 @@ class _CategoryListState extends State<CategoryList> {
 
   String getAppBarTitle() {
     String name = widget.parent_category_name == ""
-        ? (widget.is_top_category ? AppLocalizations.of(context).category_list_screen_top_categories : AppLocalizations.of(context).category_list_screen_categories)
+        ? (widget.is_top_category
+            ? AppLocalizations.of(context).category_list_screen_top_categories
+            : AppLocalizations.of(context).category_list_screen_categories)
         : widget.parent_category_name;
 
     return name;
@@ -115,19 +130,25 @@ class _CategoryListState extends State<CategoryList> {
         ? CategoryRepository().getTopCategories()
         : CategoryRepository()
             .getCategories(parent_id: widget.parent_category_id);
+
     return FutureBuilder(
         future: future,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             //snapshot.hasError
+
             print("category list error");
+
             print(snapshot.error.toString());
+
             return Container(
               height: 10,
             );
           } else if (snapshot.hasData) {
             //snapshot.hasData
+
             var categoryResponse = snapshot.data;
+
             return SingleChildScrollView(
               child: ListView.builder(
                 itemCount: categoryResponse.categories.length,
@@ -137,7 +158,7 @@ class _CategoryListState extends State<CategoryList> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(
-                        top: 4.0, bottom: 4.0, left: 16.0, right: 16.0),
+                        top: 4.0, bottom: 4.0, left: 10.0, right: 10.0),
                     child: buildCategoryItemCard(categoryResponse, index),
                   );
                 },
@@ -210,7 +231,7 @@ class _CategoryListState extends State<CategoryList> {
     return Card(
       shape: RoundedRectangleBorder(
         side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 0.0,
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
@@ -222,8 +243,7 @@ class _CategoryListState extends State<CategoryList> {
                     left: Radius.circular(16), right: Radius.zero),
                 child: FadeInImage.assetNetwork(
                   placeholder: 'assets/placeholder.png',
-                  image:
-                      categoryResponse.categories[index].banner,
+                  image: categoryResponse.categories[index].banner,
                   fit: BoxFit.cover,
                 ))),
         Container(
@@ -267,13 +287,16 @@ class _CategoryListState extends State<CategoryList> {
                           }));
                         } else {
                           ToastComponent.showDialog(
-                              AppLocalizations.of(context).category_list_screen_no_subcategories, context,
+                              AppLocalizations.of(context)
+                                  .category_list_screen_no_subcategories,
+                              context,
                               gravity: Toast.CENTER,
                               duration: Toast.LENGTH_LONG);
                         }
                       },
                       child: Text(
-                        AppLocalizations.of(context).category_list_screen_view_subcategories,
+                        AppLocalizations.of(context)
+                            .category_list_screen_view_subcategories,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -305,7 +328,8 @@ class _CategoryListState extends State<CategoryList> {
                         }));
                       },
                       child: Text(
-                        AppLocalizations.of(context).category_list_screen_view_products,
+                        AppLocalizations.of(context)
+                            .category_list_screen_view_products,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -331,7 +355,9 @@ class _CategoryListState extends State<CategoryList> {
       ),
 
       height: widget.is_base_category ? 0 : 80,
+
       //color: Colors.white,
+
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -343,18 +369,26 @@ class _CategoryListState extends State<CategoryList> {
                 height: 40,
                 child: FlatButton(
                   minWidth: MediaQuery.of(context).size.width,
+
                   //height: 50,
+
                   color: MyTheme.accent_color,
+
                   shape: RoundedRectangleBorder(
                       borderRadius:
                           const BorderRadius.all(Radius.circular(8.0))),
+
                   child: Text(
-                    AppLocalizations.of(context).category_list_screen_all_products_of + " " + widget.parent_category_name,
+                    AppLocalizations.of(context)
+                            .category_list_screen_all_products_of +
+                        " " +
+                        widget.parent_category_name,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.w600),
                   ),
+
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
