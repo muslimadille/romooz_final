@@ -74,6 +74,7 @@ dependencies:
   intl: ^0.17.0
   twitter_login: ^4.0.1
   hyperpay: ^0.0.9-alpha
+ # hyperpay: ^0.0.9-alpha
 
 dev_dependencies:
   flutter_test:
