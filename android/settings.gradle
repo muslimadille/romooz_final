@@ -1,4 +1,7 @@
-include ':app'
+include ':app' ,':oppwa.mobile'
+project(':oppwa.mobile').projectDir =
+        new File(rootProject.projectDir, './app/oppwa.mobile')
+
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
 def properties = new Properties()
