@@ -108,7 +108,7 @@ class _MainState extends State<Main> {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
               child: BottomNavigationBar(
-                type: BottomNavigationBarType.shifting,
+                type: BottomNavigationBarType.fixed,
                 onTap: onTapped,
                 currentIndex: _currentIndex,
                 backgroundColor: Colors.white.withOpacity(0.8),

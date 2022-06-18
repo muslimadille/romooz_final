@@ -3,6 +3,7 @@ import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyperpay/hyperpay.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 class CheckoutView extends StatefulWidget {
   const CheckoutView({
@@ -34,6 +35,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   setup() async {
     hyperpay = await HyperpayPlugin.setup(config: TestConfig());
+    print("hyperpay ==${TestConfig().creditcardEntityID}");
   }
 
   /// Initialize HyperPay session
@@ -41,11 +43,14 @@ class _CheckoutViewState extends State<CheckoutView> {
     BrandType brandType,
     double amount,
   ) async {
+    print("initPaymentSession ---$brandType --- $amount");
     CheckoutSettings _checkoutSettings = CheckoutSettings(
       brand: brandType,
       amount: amount,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':
+            'Bearer OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg=',
       },
       additionalParams: {
         'merchantTransactionId': '#123456',
@@ -53,7 +58,10 @@ class _CheckoutViewState extends State<CheckoutView> {
     );
 
     hyperpay.initSession(checkoutSetting: _checkoutSettings);
+    print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
+
     sessionCheckoutID = await hyperpay.getCheckoutID;
+    print("sessionCheckoutID ---$sessionCheckoutID ");
   }
 
   Future<void> onPay(context) async {
@@ -72,10 +80,12 @@ class _CheckoutViewState extends State<CheckoutView> {
         expiryMonth: expiryController.text.split('/')[0],
         expiryYear: '20' + expiryController.text.split('/')[1],
       );
+      print("card ==== ${cardNumberController.text.replaceAll(' ', '')}");
 
       try {
         // Start transaction
         if (sessionCheckoutID.isEmpty) {
+          print("sessionCheckoutID ==== empty");
           // Only get a new checkoutID if there is no previous session pending now
           await initPaymentSession(brandType, 1);
         }
@@ -167,6 +177,8 @@ class _CheckoutViewState extends State<CheckoutView> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    Text(
+                        "value .....${EnumToString.convertToString(brandType)}"),
                     // Number
                     TextFormField(
                       controller: cardNumberController,
@@ -175,7 +187,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                         hint: "0000 0000 0000 0000",
                         icon: brandType == BrandType.none
                             ? Icons.credit_card
-                            : 'assets/images/${brandType}.png',
+                            : '/assets/${EnumToString.convertToString(brandType)}.png',
                       ),
                       onChanged: (value) {
                         setState(() {

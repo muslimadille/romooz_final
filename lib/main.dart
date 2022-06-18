@@ -1,6 +1,7 @@
 import 'package:active_ecommerce_flutter/helpers/addons_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/business_setting_helper.dart';
+import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:active_ecommerce_flutter/other_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -107,7 +108,7 @@ class _MyAppState extends State<MyApp> {
             ],
             locale: provider.locale,
             supportedLocales: LangConfig().supportedLocales(),
-            home: Splash(),
+            home: CheckoutView(),
             //home: Main(),
           );
         },

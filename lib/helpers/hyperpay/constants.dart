@@ -32,13 +32,13 @@ class LiveConfig implements HyperpayConfig {
 String _host = 'eu-test.oppwa.com';
 
 Uri _checkoutEndpoint = Uri(
-  scheme: 'http',
+  scheme: 'https',
   host: _host,
-  path: '/v1/pay',
+  path: '/v1/checkouts',
 );
 
 Uri _statusEndpoint = Uri(
-  scheme: 'http',
+  scheme: 'https',
   host: _host,
   path: '/v1/checkouts',
 );
