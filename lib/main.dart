@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
             ],
             locale: provider.locale,
             supportedLocales: LangConfig().supportedLocales(),
-            home: CheckoutView(),
+            home: Splash(),
             //home: Main(),
           );
         },
