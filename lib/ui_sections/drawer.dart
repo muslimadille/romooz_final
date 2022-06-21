@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/screens/change_language.dart';
+import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -40,7 +41,7 @@ class _MainDrawerState extends State<MainDrawer> {
     // }
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
       return Main();
-    }),(route)=>false);
+    }), (route) => false);
   }
 
   @override
@@ -58,7 +59,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     ? ListTile(
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(
-                             "${avatar_original.$}",
+                            "${avatar_original.$}",
                           ),
                         ),
                         title: Text("${user_name.$}"),
@@ -157,6 +158,24 @@ class _MainDrawerState extends State<MainDrawer> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return Wishlist();
+                                }));
+                              }),
+                          ListTile(
+                              visualDensity:
+                                  VisualDensity(horizontal: -4, vertical: -4),
+                              leading: Image.asset("assets/comparison.png",
+                                  height: 16,
+                                  color: Color.fromRGBO(153, 153, 153, 1)),
+                              title: Text(
+                                  AppLocalizations.of(context)
+                                      .main_drawer_my_comparison_list,
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(153, 153, 153, 1),
+                                      fontSize: 14)),
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ComparisonList();
                                 }));
                               }),
                           ListTile(

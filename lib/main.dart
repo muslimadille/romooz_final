@@ -28,7 +28,7 @@ main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  print("app_mobile_language.1isEmpty${app_mobile_language.$.isEmpty}");
+  print("app_mobile_language main${app_mobile_language.$}");
   AddonsHelper().setAddonsData();
   BusinessSettingHelper().setBusinessSettingData();
   app_language.load();
@@ -109,7 +109,7 @@ class _MyAppState extends State<MyApp> {
             locale: provider.locale,
             supportedLocales: LangConfig().supportedLocales(),
             home: Splash(),
-            //home: Main(),
+            //home: CheckoutView(),
           );
         },
       ),

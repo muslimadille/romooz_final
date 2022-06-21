@@ -1,3 +1,4 @@
+import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/order_list.dart';
@@ -38,7 +39,7 @@ class Checkout extends StatefulWidget {
       this.manual_payment_from_order_details = false,
       this.list = "both",
       this.isWalletRecharge = false,
-      this.rechargeAmount =0.0,
+      this.rechargeAmount = 0.0,
       this.title})
       : super(key: key);
 
@@ -209,7 +210,7 @@ class _CheckoutState extends State<Checkout> {
       return;
     }
 
-    if (_selected_payment_method == "stripe_payment") {
+    if (_selected_payment_method == "hyperpay_payment") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -218,11 +219,7 @@ class _CheckoutState extends State<Checkout> {
       }
 
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return StripeScreen(
-          amount: _grandTotalValue,
-          payment_type: payment_type,
-          payment_method_key: _selected_payment_method_key,
-        );
+        return CheckoutView();
       })).then((value) {
         onPopped(value);
       });
@@ -442,7 +439,7 @@ class _CheckoutState extends State<Checkout> {
     loading();
     var orderCreateResponse = await PaymentRepository()
         .getOrderCreateResponseFromManualPayment(_selected_payment_method_key);
-Navigator.pop(loadingcontext);
+    Navigator.pop(loadingcontext);
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
@@ -471,163 +468,163 @@ Navigator.pop(loadingcontext);
 
   onPressDetails() {
     showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              contentPadding: EdgeInsets.only(
-                  top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
-              content: Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 16.0),
-                child: Container(
-                  height: 150,
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 120,
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .checkout_screen_subtotal,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: MyTheme.font_grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                _subTotalString,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 120,
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .checkout_screen_tax,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: MyTheme.font_grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                _taxString,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 120,
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .checkout_screen_shipping_cost,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: MyTheme.font_grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                _shippingCostString,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          )),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 120,
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .checkout_screen_discount,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: MyTheme.font_grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                _discountString,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          )),
-                      Divider(),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 120,
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .checkout_screen_grand_total,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: MyTheme.font_grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                _totalString,
-                                style: TextStyle(
-                                    color: MyTheme.accent_color,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  child: Text(
-                    AppLocalizations.of(context).common_close_in_all_lower,
-                    style: TextStyle(color: MyTheme.medium_grey),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                  },
-                ),
+      context: context,
+      builder: (_) => AlertDialog(
+        contentPadding:
+            EdgeInsets.only(top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
+        content: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 16.0),
+          child: Container(
+            height: 150,
+            child: Column(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .checkout_screen_subtotal,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color: MyTheme.font_grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          _subTotalString,
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    )),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          child: Text(
+                            AppLocalizations.of(context).checkout_screen_tax,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color: MyTheme.font_grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          _taxString,
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    )),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .checkout_screen_shipping_cost,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color: MyTheme.font_grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          _shippingCostString,
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    )),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .checkout_screen_discount,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color: MyTheme.font_grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          _discountString,
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    )),
+                Divider(),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 120,
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .checkout_screen_grand_total,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                color: MyTheme.font_grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          _totalString,
+                          style: TextStyle(
+                              color: MyTheme.accent_color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    )),
               ],
-            ),);
+            ),
+          ),
+        ),
+        actions: [
+          FlatButton(
+            child: Text(
+              AppLocalizations.of(context).common_close_in_all_lower,
+              style: TextStyle(color: MyTheme.medium_grey),
+            ),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -693,7 +690,6 @@ Navigator.pop(loadingcontext);
                                     )
                                   : Container(),
                               grandTotalSection(),
-
                             ],
                           ),
                         ),
@@ -881,8 +877,7 @@ Navigator.pop(loadingcontext);
                                   placeholder: 'assets/placeholder.png',
                                   image: _paymentTypeList[index].payment_type ==
                                           "manual_payment"
-                                      ?
-                                          _paymentTypeList[index].image
+                                      ? _paymentTypeList[index].image
                                       : _paymentTypeList[index].image,
                                   fit: BoxFit.fitWidth,
                                 ))),
@@ -977,9 +972,8 @@ Navigator.pop(loadingcontext);
     );
   }
 
-
-  Widget grandTotalSection(){
-   return Container(
+  Widget grandTotalSection() {
+    return Container(
       height: 40,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -990,33 +984,26 @@ Navigator.pop(loadingcontext);
         child: Row(
           children: [
             Padding(
-              padding:
-              const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.only(left: 16.0),
               child: Text(
-                AppLocalizations.of(context)
-                    .checkout_screen_total_amount,
-                style: TextStyle(
-                    color: MyTheme.font_grey,
-                    fontSize: 14),
+                AppLocalizations.of(context).checkout_screen_total_amount,
+                style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
               ),
             ),
             Visibility(
               visible: !widget.manual_payment_from_order_details,
               child: Padding(
-                padding:
-                const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: 8.0),
                 child: InkWell(
                   onTap: () {
                     onPressDetails();
                   },
                   child: Text(
-                    AppLocalizations.of(context)
-                        .common_see_details,
+                    AppLocalizations.of(context).common_see_details,
                     style: TextStyle(
                       color: MyTheme.font_grey,
                       fontSize: 12,
-                      decoration:
-                      TextDecoration.underline,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
@@ -1024,9 +1011,11 @@ Navigator.pop(loadingcontext);
             ),
             Spacer(),
             Padding(
-              padding:
-              const EdgeInsets.only(right: 16.0),
-              child: Text(widget.manual_payment_from_order_details?widget.rechargeAmount.toString():_totalString,
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Text(
+                  widget.manual_payment_from_order_details
+                      ? widget.rechargeAmount.toString()
+                      : _totalString,
                   style: TextStyle(
                       color: MyTheme.accent_color,
                       fontSize: 14,

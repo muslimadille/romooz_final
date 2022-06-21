@@ -25,7 +25,6 @@ import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Home extends StatefulWidget {
   Home({Key key, this.title, this.show_back_button = false, go_back = true})
       : super(key: key);
@@ -68,10 +67,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    print("app_mobile_language.en${app_mobile_language.$}");
-    print("app_language.${app_language.$}");
-    print("app_language_rtl${app_language_rtl.$}");
-
+    // print("app_mobile_language.en${app_mobile_language.$}");
+    // print("app_language.${app_language.$}");
+    // print("app_language_rtl${app_language_rtl.$}");
 
     // TODO: implement initState
     super.initState();
@@ -193,7 +191,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         return widget.go_back;
       },
       child: Directionality(
-        textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
+        textDirection:
+            app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
         child: Scaffold(
             key: _scaffoldKey,
             backgroundColor: Colors.white,
@@ -230,12 +229,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             left: 20,
                                             top: 0,
                                             child: AnimatedBuilder(
-                                                animation: pirated_logo_animation,
+                                                animation:
+                                                    pirated_logo_animation,
                                                 builder: (context, child) {
                                                   return Image.asset(
                                                     "assets/pirated_square.png",
-                                                    height: pirated_logo_animation
-                                                        .value,
+                                                    height:
+                                                        pirated_logo_animation
+                                                            .value,
                                                     color: Colors.white,
                                                   );
                                                 })),
@@ -289,7 +290,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  AppLocalizations.of(context).home_screen_featured_categories,
+                                  AppLocalizations.of(context)
+                                      .home_screen_featured_categories,
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -326,7 +328,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  AppLocalizations.of(context).home_screen_featured_products,
+                                  AppLocalizations.of(context)
+                                      .home_screen_featured_products,
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ],
@@ -397,7 +400,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         },
       );
     } else if (_totalProductData == 0) {
-      return Center(child: Text(AppLocalizations.of(context).common_no_product_is_available));
+      return Center(
+          child: Text(
+              AppLocalizations.of(context).common_no_product_is_available));
     } else {
       return Container(); // should never be happening
     }
@@ -461,8 +466,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   bottom: Radius.zero),
                               child: FadeInImage.assetNetwork(
                                 placeholder: 'assets/placeholder.png',
-                                image:
-                                    _featuredCategoryList[index].banner,
+                                image: _featuredCategoryList[index].banner,
                                 fit: BoxFit.cover,
                               ))),
                       Padding(
@@ -603,7 +607,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     )),
                 Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(AppLocalizations.of(context).home_screen_top_sellers,
+                    child: Text(
+                        AppLocalizations.of(context).home_screen_top_sellers,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
@@ -636,7 +641,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     )),
                 Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(AppLocalizations.of(context).home_screen_todays_deal,
+                    child: Text(
+                        AppLocalizations.of(context).home_screen_todays_deal,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
@@ -669,7 +675,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     )),
                 Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(AppLocalizations.of(context).home_screen_flash_deal,
+                    child: Text(
+                        AppLocalizations.of(context).home_screen_flash_deal,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
@@ -727,7 +734,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                           child: FadeInImage.assetNetwork(
                             placeholder: 'assets/placeholder_rectangle.png',
-                            image:  i,
+                            image: i,
                             fit: BoxFit.fill,
                           ))),
                   Align(
@@ -762,7 +769,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).home_screen_no_carousel_image_found,
+            AppLocalizations.of(context).home_screen_no_carousel_image_found,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     } else {
@@ -785,7 +792,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 builder: (context) => IconButton(
                     icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
                     onPressed: () {
-                      if(!widget.go_back){
+                      if (!widget.go_back) {
                         return;
                       }
                       return Navigator.of(context).pop();
@@ -813,7 +820,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
         child: Container(
           child: Padding(
-              padding: app_language_rtl.$ ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12) : const EdgeInsets.only(top: 14.0, bottom: 14, right: 12),
+              padding: app_language_rtl.$
+                  ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
+                  : const EdgeInsets.only(top: 14.0, bottom: 14, right: 12),
               // when notification bell will be shown , the right padding will cease to exist.
               child: GestureDetector(
                   onTap: () {
@@ -830,7 +839,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       actions: <Widget>[
         InkWell(
           onTap: () {
-            ToastComponent.showDialog(AppLocalizations.of(context).common_coming_soon, context,
+            ToastComponent.showDialog(
+                AppLocalizations.of(context).common_coming_soon, context,
                 gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
           },
           child: Visibility(

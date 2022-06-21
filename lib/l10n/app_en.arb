@@ -73,6 +73,7 @@
   "main_drawer_profile": "Profile",
   "main_drawer_orders": "Orders",
   "main_drawer_my_wishlist": "My Wishlist",
+  "main_drawer_my_comparison_list": "My Comparison List",
   "main_drawer_messages": "Messages",
   "main_drawer_wallet": "Wallet",
   "main_drawer_login": "Login",
@@ -80,6 +81,7 @@
   "home_screen_close_app": "Do you want close the app?",
   "home_screen_top_categories": "Top Categories",
   "home_screen_brands": "Brands",
+    "checkout_info":"Payment Information",
   "home_screen_top_sellers": "Top Sellers",
   "home_screen_todays_deal": "Todays Deal",
   "home_screen_flash_deal": "Flash Deal",
@@ -275,6 +277,8 @@
   "checkout_screen_checkout": "Checkout",
   "wishlist_screen_login_warning": "Please log in to see the wishlist items",
   "wishlist_screen_my_wishlist": "My Wishlist",
+"comparisonlist_screen_my_wishlist": "My Comparison List",
+  
   "login_screen_email_warning": "Enter email",
   "login_screen_phone_warning": "Enter phone number",
   "login_screen_password_warning": "Enter password",
@@ -452,6 +456,15 @@
     "registration_commercial_registration_no_warning": "Enter your Commercial Registration No" ,
 
      "registration_tax_number": "TAX Number",
-    "registration_tax_number_warning": "Enter your TAX Number"
+    "registration_tax_number_warning": "Enter your TAX Number" ,
+
+
+     "card_number": "Card Number" ,
+      "card_holder": "Card Holder" ,
+       "expiry_date": "Expiry Date" ,
+       "cvv": "CVV" ,
+        "pay": "PAY" ,
+          "payment_procccing": "Processing your request, please wait..." 
+
 
 }

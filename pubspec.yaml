@@ -100,7 +100,6 @@ flutter:
   generate: true
   assets:
     - assets/
-    - assets/images/
     - dummy_assets/
   fonts:
     - family: NotoKufiArabic

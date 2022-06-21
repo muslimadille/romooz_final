@@ -72,6 +72,7 @@
    "main_drawer_profile":"الحساب",
    "main_drawer_orders":"الطلبات",
    "main_drawer_my_wishlist":"قائمتى المفضلة",
+   "main_drawer_my_comparison_list":"قائمة المقارنة",
    "main_drawer_messages":"الرسائل",
    "main_drawer_wallet":"محفظتى",
    "main_drawer_login":"تسجيل الدخول",
@@ -272,8 +273,12 @@
    "checkout_screen_place_my_order":"اطلب الان",
    "checkout_screen_remove":"ازالة",
    "checkout_screen_checkout":"تسجيل خروج",
+    "checkout_info":"بيانات الدفع",
    "wishlist_screen_login_warning":"برجاء تسجيل الدخول لمشاهدة المفضلة",
    "wishlist_screen_my_wishlist":"المنتجات المفضلة",
+   "comparisonlist_screen_my_wishlist": "قائمة المقارنة",
+
+    
    "login_screen_email_warning":"أدخل البريد الالكتروني",
    "login_screen_phone_warning":"أدخل رقم التليفون",
    "login_screen_password_warning":"أدخل كلمة السر",
@@ -451,6 +456,11 @@
     "registration_commercial_registration_no_warning": "ادخل رقم السجل الضريبى" ,
 
      "registration_tax_number": "الرقم الضريبي",
-    "registration_tax_number_warning": "ادخل الرقم الضريبي"
-
+    "registration_tax_number_warning": "ادخل الرقم الضريبي" ,
+      "card_number": "رقم الكارت" ,
+      "card_holder": "اسم حامل البطاقة" ,
+       "expiry_date": "تاريخ الانتهاء" ,
+       "cvv": "الكود" ,
+        "pay": "دفع" ,
+         "payment_procccing": "جاري معالجة طلبك ، برجاء الانتظار ..." 
 }

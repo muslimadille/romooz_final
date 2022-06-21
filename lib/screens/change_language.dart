@@ -99,6 +99,7 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
       app_mobile_language.save();
       app_language_rtl.$ = _list[_selected_index].rtl;
       app_language_rtl.save();
+      print("app_mobile_language --${_list[_selected_index]}");
 
       // var local_provider = new LocaleProvider();
       // local_provider.setLocale(_list[_selected_index].code);

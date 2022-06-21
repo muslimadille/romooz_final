@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:active_ecommerce_flutter/data_model/wishlist_check_response.dart';
@@ -52,13 +54,17 @@ class WishListRepository {
         "${AppConfig.BASE_URL}/wishlists-add-product?product_id=${product_id}");
 
     print(url.toString());
-    final response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer ${access_token.$}",
-        "App-Language": app_language.$,
-      },
-    );
+    var post_body = jsonEncode({
+      "product_id": "${product_id}",
+    });
+
+    final response = await http.post(url,
+        headers: {
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$,
+          "Content-Type": "application/json",
+        },
+        body: post_body);
 
     return wishListChekResponseFromJson(response.body);
   }

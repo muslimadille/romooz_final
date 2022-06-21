@@ -1,9 +1,11 @@
 import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
+import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyperpay/hyperpay.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckoutView extends StatefulWidget {
   const CheckoutView({
@@ -35,7 +37,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   setup() async {
     hyperpay = await HyperpayPlugin.setup(config: TestConfig());
-    print("hyperpay ==${TestConfig().creditcardEntityID}");
+    print("hyperpay ==${hyperpay}");
   }
 
   /// Initialize HyperPay session
@@ -91,6 +93,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         }
 
         final result = await hyperpay.pay(card);
+        print("result${result}");
 
         switch (result) {
           case PaymentStatus.init:
@@ -154,9 +157,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Checkout"),
-      ),
+      appBar: buildAppBar(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -171,23 +172,23 @@ class _CheckoutViewState extends State<CheckoutView> {
                     TextFormField(
                       controller: holderNameController,
                       decoration: _inputDecoration(
-                        label: "Card Holder",
+                        label: AppLocalizations.of(context).card_holder,
                         hint: "Jane Jones",
                         icon: Icons.account_circle_rounded,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                        "value .....${EnumToString.convertToString(brandType)}"),
+                    // Text(
+                    //     "value .....${EnumToString.convertToString(brandType)}"),
                     // Number
                     TextFormField(
                       controller: cardNumberController,
                       decoration: _inputDecoration(
-                        label: "Card Number",
+                        label: AppLocalizations.of(context).card_number,
                         hint: "0000 0000 0000 0000",
                         icon: brandType == BrandType.none
                             ? Icons.credit_card
-                            : '/assets/${EnumToString.convertToString(brandType)}.png',
+                            : "assets/${EnumToString.convertToString(brandType)}.png",
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -207,7 +208,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     TextFormField(
                       controller: expiryController,
                       decoration: _inputDecoration(
-                        label: "Expiry Date",
+                        label: AppLocalizations.of(context).expiry_date,
                         hint: "MM/YY",
                         icon: Icons.date_range_rounded,
                       ),
@@ -224,7 +225,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     TextFormField(
                       controller: cvvController,
                       decoration: _inputDecoration(
-                        label: "CVV",
+                        label: AppLocalizations.of(context).cvv,
                         hint: "000",
                         icon: Icons.confirmation_number_rounded,
                       ),
@@ -239,11 +240,17 @@ class _CheckoutViewState extends State<CheckoutView> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: MyTheme.accent_color,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 20),
+                            textStyle: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                         onPressed: isLoading ? null : () => onPay(context),
                         child: Text(
                           isLoading
-                              ? 'Processing your request, please wait...'
-                              : 'PAY',
+                              ? AppLocalizations.of(context).payment_procccing
+                              : AppLocalizations.of(context).pay,
                         ),
                       ),
                     ),
@@ -261,9 +268,25 @@ class _CheckoutViewState extends State<CheckoutView> {
     return InputDecoration(
       hintText: hint,
       labelText: label,
+      labelStyle: TextStyle(
+        color: MyTheme.accent_color,
+      ),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+        borderSide: BorderSide(
+          color: MyTheme.accent_color,
+          width: 2.0,
+        ),
+      ),
       prefixIcon: icon is IconData
-          ? Icon(icon)
+          ? Icon(
+              icon,
+              color: MyTheme.accent_color,
+            )
           : Container(
               padding: const EdgeInsets.all(6),
               width: 10,
@@ -271,4 +294,27 @@ class _CheckoutViewState extends State<CheckoutView> {
             ),
     );
   }
+}
+
+AppBar buildAppBar(BuildContext context) {
+  return AppBar(
+    backgroundColor: Colors.white,
+    centerTitle: true,
+    leading: Builder(
+      builder: (context) => IconButton(
+        icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    ),
+    title: Column(
+      children: [
+        Text(
+          AppLocalizations.of(context).checkout_info,
+          style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+        ),
+      ],
+    ),
+    elevation: 0.0,
+    titleSpacing: 0,
+  );
 }
