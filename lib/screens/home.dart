@@ -16,6 +16,7 @@ import 'package:active_ecommerce_flutter/repositories/sliders_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/category_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
@@ -819,20 +820,81 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             (MediaQuery.of(context).viewPadding.top > 40 ? 16.0 : 16.0),
         //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
         child: Container(
-          child: Padding(
-              padding: app_language_rtl.$
-                  ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
-                  : const EdgeInsets.only(top: 14.0, bottom: 14, right: 12),
-              // when notification bell will be shown , the right padding will cease to exist.
-              child: GestureDetector(
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: FlatButton(
+                      onPressed: () {},
+                      child: Icon(
+                        FontAwesome.bell_o,
+                        size: 15,
+                      ),
+                      textColor: Colors.black,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: FlatButton(
+                      onPressed: () {},
+                      child: Text(
+                        AppLocalizations.of(context).track_order,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      textColor: Colors.black,
+                      color: MyTheme.light_grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: app_language_rtl.$
+                    ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
+                    : const EdgeInsets.only(top: 14.0, bottom: 14, right: 12),
+                // when notification bell will be shown , the right padding will cease to exist.
+                child: GestureDetector(
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return Filter();
                     }));
                   },
-                  child: buildHomeSearchBox(context))),
-        ),
+                  child: buildHomeSearchBox(context),
+                ),
+              ),
+            ),
+          ],
+        )
+            // child: Padding(
+            //   padding: app_language_rtl.$
+            //       ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
+            //       : const EdgeInsets.only(top: 14.0, bottom: 14, right: 12),
+            //   // when notification bell will be shown , the right padding will cease to exist.
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //         return Filter();
+            //       }));
+            //     },
+            //     child: buildHomeSearchBox(context),
+            //   ),
+            // ),
+            ),
       ),
       elevation: 0.0,
       titleSpacing: 0,

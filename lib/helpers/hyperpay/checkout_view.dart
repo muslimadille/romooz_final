@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
+import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,9 +51,9 @@ class _CheckoutViewState extends State<CheckoutView> {
       brand: brandType,
       amount: amount,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization':
-            'Bearer OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg=',
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
       },
       additionalParams: {
         'merchantTransactionId': '#123456',
