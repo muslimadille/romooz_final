@@ -2,6 +2,7 @@ import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/screens/order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyperpay/hyperpay.dart';
@@ -52,8 +53,8 @@ class _CheckoutViewState extends State<CheckoutView> {
       amount: amount,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${access_token.$}",
-        "App-Language": app_language.$,
+        "Accept": "application/json",
+        "Authorization": "Bearer ${access_token.$}"
       },
       additionalParams: {
         'merchantTransactionId': '#123456',
@@ -125,6 +126,11 @@ class _CheckoutViewState extends State<CheckoutView> {
                 backgroundColor: Colors.green,
               ),
             );
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OrderList(from_checkout: true);
+            }));
+
+            /////// pushing
             break;
 
           default:

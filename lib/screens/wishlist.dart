@@ -37,7 +37,7 @@ class _WishlistState extends State<Wishlist> {
   }
 
   fetchWishlistItems() async {
-    var wishlistResponse = await WishListRepository().getUserWishlist();
+    var wishlistResponse = await WishListRepository().getUserWishlist(1);
     _wishlistItems.addAll(wishlistResponse.wishlist_items);
     _wishlistInit = false;
     setState(() {});
@@ -60,7 +60,7 @@ class _WishlistState extends State<Wishlist> {
     setState(() {});
 
     var wishlistDeleteResponse =
-        await WishListRepository().delete(wishlist_id: wishlist_id);
+        await WishListRepository().delete(wishlist_id: wishlist_id, value: 1);
 
     if (wishlistDeleteResponse.result == true) {
       ToastComponent.showDialog(wishlistDeleteResponse.message, context,

@@ -37,7 +37,7 @@ class _ComparisonListState extends State<ComparisonList> {
   }
 
   fetchWishlistItems() async {
-    var wishlistResponse = await WishListRepository().getUserWishlist();
+    var wishlistResponse = await WishListRepository().getUserWishlist(2);
     _wishlistItems.addAll(wishlistResponse.wishlist_items);
     _wishlistInit = false;
     setState(() {});
@@ -60,7 +60,7 @@ class _ComparisonListState extends State<ComparisonList> {
     setState(() {});
 
     var wishlistDeleteResponse =
-        await WishListRepository().delete(wishlist_id: wishlist_id);
+        await WishListRepository().delete(wishlist_id: wishlist_id, value: 2);
 
     if (wishlistDeleteResponse.result == true) {
       ToastComponent.showDialog(wishlistDeleteResponse.message, context,
@@ -105,7 +105,7 @@ class _ComparisonListState extends State<ComparisonList> {
         ),
       ),
       title: Text(
-        AppLocalizations.of(context).wishlist_screen_my_wishlist,
+        AppLocalizations.of(context).comparisonlist_screen_my_wishlist,
         style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
       ),
       elevation: 0.0,

@@ -9,8 +9,10 @@ import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class WishListRepository {
-  Future<WishlistResponse> getUserWishlist() async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/wishlists");
+  Future<WishlistResponse> getUserWishlist(int value) async {
+    Uri url = value == 1
+        ? Uri.parse("${AppConfig.BASE_URL}/wishlists")
+        : Uri.parse("${AppConfig.BASE_URL}/comp_prods");
     final response = await http.get(
       url,
       headers: {
@@ -21,18 +23,30 @@ class WishListRepository {
     return wishlistResponseFromJson(response.body);
   }
 
-  Future<WishlistDeleteResponse> delete({
-    @required int wishlist_id = 0,
-  }) async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/wishlists/${wishlist_id}");
-    final response = await http.delete(
-      url,
-      headers: {
-        "Authorization": "Bearer ${access_token.$}",
-        "App-Language": app_language.$,
-      },
-    );
-    return wishlistDeleteResponseFromJson(response.body);
+  Future<WishlistDeleteResponse> delete(
+      {@required int wishlist_id = 0, int value}) async {
+    if (value == 1) {
+      Uri url = Uri.parse("${AppConfig.BASE_URL}/wishlists/${wishlist_id}");
+      final response = await http.delete(
+        url,
+        headers: {
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$,
+        },
+      );
+      return wishlistDeleteResponseFromJson(response.body);
+    } else {
+      Uri url = Uri.parse(
+          "${AppConfig.BASE_URL}/comp_prods-remove-product?product_id=115");
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$,
+        },
+      );
+      return wishlistDeleteResponseFromJson(response.body);
+    }
   }
 
   Future<WishListChekResponse> isProductInUserWishList(

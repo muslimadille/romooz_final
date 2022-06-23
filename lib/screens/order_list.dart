@@ -20,20 +20,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:one_context/one_context.dart';
 
-class PaymentStatus {
+class PaymentStatusOrder {
   String option_key;
 
   String name;
 
-  PaymentStatus(this.option_key, this.name);
+  PaymentStatusOrder(this.option_key, this.name);
 
-  static List<PaymentStatus> getPaymentStatusList() {
-    return <PaymentStatus>[
-      PaymentStatus(
+  static List<PaymentStatusOrder> getPaymentStatusList() {
+    return <PaymentStatusOrder>[
+      PaymentStatusOrder(
           '', AppLocalizations.of(OneContext().context).order_list_screen_all),
-      PaymentStatus('paid',
+      PaymentStatusOrder('paid',
           AppLocalizations.of(OneContext().context).order_list_screen_paid),
-      PaymentStatus('unpaid',
+      PaymentStatusOrder('unpaid',
           AppLocalizations.of(OneContext().context).order_list_screen_unpaid),
     ];
   }
@@ -80,16 +80,17 @@ class _OrderListState extends State<OrderList> {
 
   ScrollController _xcrollController = ScrollController();
 
-  List<PaymentStatus> _paymentStatusList = PaymentStatus.getPaymentStatusList();
+  List<PaymentStatusOrder> _paymentStatusList =
+      PaymentStatusOrder.getPaymentStatusList();
 
   List<DeliveryStatus> _deliveryStatusList =
       DeliveryStatus.getDeliveryStatusList();
 
-  PaymentStatus _selectedPaymentStatus;
+  PaymentStatusOrder _selectedPaymentStatus;
 
   DeliveryStatus _selectedDeliveryStatus;
 
-  List<DropdownMenuItem<PaymentStatus>> _dropdownPaymentStatusItems;
+  List<DropdownMenuItem<PaymentStatusOrder>> _dropdownPaymentStatusItems;
 
   List<DropdownMenuItem<DeliveryStatus>> _dropdownDeliveryStatusItems;
 
@@ -231,11 +232,11 @@ class _OrderListState extends State<OrderList> {
     setState(() {});
   }
 
-  List<DropdownMenuItem<PaymentStatus>> buildDropdownPaymentStatusItems(
+  List<DropdownMenuItem<PaymentStatusOrder>> buildDropdownPaymentStatusItems(
       List _paymentStatusList) {
-    List<DropdownMenuItem<PaymentStatus>> items = List();
+    List<DropdownMenuItem<PaymentStatusOrder>> items = List();
 
-    for (PaymentStatus item in _paymentStatusList) {
+    for (PaymentStatusOrder item in _paymentStatusList) {
       items.add(
         DropdownMenuItem(
           value: item,
@@ -319,7 +320,7 @@ class _OrderListState extends State<OrderList> {
                         BorderSide(color: MyTheme.light_grey, width: 1))),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             height: 36,
-            child: new DropdownButton<PaymentStatus>(
+            child: new DropdownButton<PaymentStatusOrder>(
               icon: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Icon(Icons.expand_more, color: Colors.black54),
@@ -335,7 +336,7 @@ class _OrderListState extends State<OrderList> {
               underline: SizedBox(),
               value: _selectedPaymentStatus,
               items: _dropdownPaymentStatusItems,
-              onChanged: (PaymentStatus selectedFilter) {
+              onChanged: (PaymentStatusOrder selectedFilter) {
                 setState(() {
                   _selectedPaymentStatus = selectedFilter;
                 });
