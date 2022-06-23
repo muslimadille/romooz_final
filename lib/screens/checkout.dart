@@ -218,11 +218,12 @@ class _CheckoutState extends State<Checkout> {
         return;
       }
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return CheckoutView();
-      })).then((value) {
-        onPopped(value);
-      });
+      pay_by_cod_hyperpay();
+      // Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //   return CheckoutView();
+      // })).then((value) {
+      //   onPopped(value);
+      // });
     } else if (_selected_payment_method == "paypal_payment") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
@@ -432,6 +433,25 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return OrderList(from_checkout: true);
+    }));
+  }
+
+  pay_by_cod_hyperpay() async {
+    loading();
+
+    var orderCreateResponse = await PaymentRepository()
+        .getOrderCreateResponseFromCod(_selected_payment_method_key);
+    Navigator.of(loadingcontext).pop();
+    if (orderCreateResponse.result == false) {
+      ToastComponent.showDialog(orderCreateResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      Navigator.of(context).pop();
+      return;
+    }
+    print("orderCreateResponse${orderCreateResponse.orders_id}");
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return CheckoutView(order_id: orderCreateResponse.orders_id);
     }));
   }
 

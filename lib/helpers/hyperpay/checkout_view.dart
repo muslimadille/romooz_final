@@ -10,9 +10,9 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckoutView extends StatefulWidget {
-  const CheckoutView({
-    Key key,
-  }) : super(key: key);
+  CheckoutView({Key key, this.order_id = "0"}) : super(key: key);
+
+  final String order_id;
 
   @override
   _CheckoutViewState createState() => _CheckoutViewState();
@@ -34,6 +34,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   @override
   void initState() {
     super.initState();
+    print("orderCreateResponse${widget.order_id}");
     setup();
   }
 
@@ -47,10 +48,10 @@ class _CheckoutViewState extends State<CheckoutView> {
     BrandType brandType,
     double amount,
   ) async {
-    print("initPaymentSession ---$brandType --- $amount");
     CheckoutSettings _checkoutSettings = CheckoutSettings(
       brand: brandType,
       amount: amount,
+      orderId: widget.order_id,
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -60,6 +61,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         'merchantTransactionId': '#123456',
       },
     );
+    print("initPaymentSession ---$brandType --- ${_checkoutSettings.orderId}");
 
     hyperpay.initSession(checkoutSetting: _checkoutSettings);
     print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
