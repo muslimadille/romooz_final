@@ -75,6 +75,7 @@ dependencies:
   twitter_login: ^4.0.1
   hyperpay: ^0.0.9-alpha
   enum_to_string: ^2.0.1
+  badges:
  # hyperpay: ^0.0.9-alpha
 
 dev_dependencies:

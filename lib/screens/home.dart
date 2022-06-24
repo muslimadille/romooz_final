@@ -10,6 +10,7 @@ import 'package:active_ecommerce_flutter/screens/top_selling_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:active_ecommerce_flutter/repositories/sliders_repository.dart';
@@ -819,41 +820,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             statusBarHeight -
             (MediaQuery.of(context).viewPadding.top > 40 ? 16.0 : 16.0),
         //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
-        child: Container(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Row(
           children: <Widget>[
             Expanded(
               flex: 2,
               child: Row(
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: FlatButton(
-                      onPressed: () {},
-                      child: Icon(
-                        FontAwesome.bell_o,
-                        size: 15,
-                      ),
-                      textColor: Colors.black,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: FlatButton(
-                      onPressed: () {},
-                      child: Text(
-                        AppLocalizations.of(context).track_order,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      textColor: Colors.black,
-                      color: MyTheme.light_grey,
-                    ),
-                  ),
+                  // IconHeader(Icons.shopping_cart_outlined, 3),
+                  IconHeader(FontAwesome.heart_o, 3),
+                  IconHeader(Icons.compare_arrows_outlined, 7),
+                  // IconHeader(FontAwesome.bell_o, 13),
                 ],
               ),
             ),
@@ -861,7 +837,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               width: 5,
             ),
             Expanded(
-              flex: 6,
+              flex: 4,
               child: Padding(
                 padding: app_language_rtl.$
                     ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
@@ -878,23 +854,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
               ),
             ),
+            IconHeader(FontAwesome.bell_o, 13),
           ],
-        )
-            // child: Padding(
-            //   padding: app_language_rtl.$
-            //       ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
-            //       : const EdgeInsets.only(top: 14.0, bottom: 14, right: 12),
-            //   // when notification bell will be shown , the right padding will cease to exist.
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-            //         return Filter();
-            //       }));
-            //     },
-            //     child: buildHomeSearchBox(context),
-            //   ),
-            // ),
-            ),
+        ),
       ),
       elevation: 0.0,
       titleSpacing: 0,
@@ -919,6 +881,51 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Expanded IconHeader(IconData icon, int number) {
+    return Expanded(
+      flex: 1,
+      child: FlatButton(
+        onPressed: () {},
+        child: Badge(
+          child: Icon(
+            icon,
+            size: 20,
+            color: Colors.black,
+          ), //icon style
+          badgeContent: SizedBox(
+            width: 8,
+            height: 8, //badge size
+            child: Center(
+              //aligh badge content to center
+              child: Text(
+                "$number",
+                style: TextStyle(
+                    color: Colors.white, //badge font color
+                    fontSize: 10 //badge font size
+                    ),
+              ),
+            ),
+          ),
+          badgeColor: MyTheme.accent_color, //badge background color
+        ),
+        // child: Badge(
+
+        //   child: Icon(
+        //     FontAwesome.bell_o,
+        //     size: 15,
+        //   ),
+        //   badgeContent: Text("3"),
+        // ),
+        // child:  Icon(
+        //   FontAwesome.bell_o,
+        //   size: 15,
+        // ),
+        textColor: Colors.black,
+      ),
     );
   }
 

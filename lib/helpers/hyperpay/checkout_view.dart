@@ -51,7 +51,7 @@ class _CheckoutViewState extends State<CheckoutView> {
     CheckoutSettings _checkoutSettings = CheckoutSettings(
       brand: brandType,
       amount: amount,
-      orderId: widget.order_id,
+      orderId: widget.order_id ?? "0",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
