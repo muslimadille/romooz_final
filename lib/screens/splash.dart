@@ -4,6 +4,7 @@ import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -76,8 +77,10 @@ class _SplashState extends State<Splash> {
         ),
       ),
       image: Image.asset("assets/splash_screen_logo.png"),
-      backgroundImage:
-          Image.asset("assets/splash_login_registration_background_image.png"),
+      backgroundImage: SvgPicture.asset(
+        "assets/fruits-svgrepo-com.svg",
+        color: MyTheme.splash_screen_color2,
+      ),
       backgroundColor: MyTheme.splash_screen_color,
       photoSize: 60.0,
       backgroundPhotoSize: 140.0,
@@ -115,7 +118,7 @@ class CustomSplashScreen extends StatefulWidget {
   /// Main image mainly used for logos and like that
   final Image image;
 
-  final Image backgroundImage;
+  final Widget backgroundImage;
 
   /// Loading text, default: "Loading"
   final Text loadingText;

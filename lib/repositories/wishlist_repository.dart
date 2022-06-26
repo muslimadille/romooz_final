@@ -25,28 +25,32 @@ class WishListRepository {
 
   Future<WishlistDeleteResponse> delete(
       {@required int wishlist_id = 0, int value}) async {
-    if (value == 1) {
-      Uri url = Uri.parse("${AppConfig.BASE_URL}/wishlists/${wishlist_id}");
-      final response = await http.delete(
-        url,
-        headers: {
-          "Authorization": "Bearer ${access_token.$}",
-          "App-Language": app_language.$,
-        },
-      );
-      return wishlistDeleteResponseFromJson(response.body);
-    } else {
-      Uri url = Uri.parse(
-          "${AppConfig.BASE_URL}/comp_prods-remove-product?product_id=115");
-      final response = await http.get(
-        url,
-        headers: {
-          "Authorization": "Bearer ${access_token.$}",
-          "App-Language": app_language.$,
-        },
-      );
-      return wishlistDeleteResponseFromJson(response.body);
-    }
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/wishlists/${wishlist_id}");
+    final response = await http.delete(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+    );
+    return wishlistDeleteResponseFromJson(response.body);
+  }
+
+  Future<WishlistDeleteResponse> deleteProducutInComprsion(
+      // ignore: invalid_required_named_param
+      {@required int product_id = 0,
+      int value}) async {
+    Uri url = Uri.parse(
+        "${AppConfig.BASE_URL}/comp_prods-remove-product?product_id=${product_id}");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+    );
+    print("deleteProducutInComprsion${response.body}");
+    return wishlistDeleteResponseFromJson(response.body);
   }
 
   Future<WishListChekResponse> isProductInUserWishList(
@@ -80,6 +84,28 @@ class WishListRepository {
         },
         body: post_body);
 
+    return wishListChekResponseFromJson(response.body);
+  }
+
+  Future<WishListChekResponse> addToComparsionList(
+      {@required product_id = 0}) async {
+    Uri url = Uri.parse(
+        "${AppConfig.BASE_URL}/comp_prods-add-product?product_id=${product_id}");
+
+    print(url.toString());
+    var post_body = jsonEncode({
+      "product_id": "${product_id}",
+    });
+
+    final response = await http.post(url,
+        headers: {
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$,
+          "Content-Type": "application/json",
+        },
+        body: post_body);
+
+    print("addToComparsionList${response.body}");
     return wishListChekResponseFromJson(response.body);
   }
 

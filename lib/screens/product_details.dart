@@ -52,6 +52,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   //init values
   bool _isInWishList = false;
+  bool _isInCompareList = false;
   var _productDetailsFetched = false;
   var _productDetails = null;
   var _productImageList = [];
@@ -210,6 +211,43 @@ class _ProductDetailsState extends State<ProductDetails> {
     }
   }
 
+  addToCompareList() async {
+    var wishListCheckResponse =
+        await WishListRepository().addToComparsionList(product_id: widget.id);
+
+    print("p&u:${wishListCheckResponse}");
+    _isInCompareList = wishListCheckResponse.is_in_comp_prods;
+    //setState(() {});
+  }
+
+  // removeFromCompareList() async {
+  //   var wishListCheckResponse =
+  //       await WishListRepository().remove(product_id: widget.id);
+
+  //   //print("p&u:" + widget.id.toString() + " | " + _user_id.toString());
+  //   _isInCompareList = wishListCheckResponse.is_in_wishlist;
+  //   setState(() {});
+  // }
+
+  onCompareTap() {
+    if (is_logged_in.$ == false) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).common_login_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
+    if (_isInCompareList) {
+      _isInCompareList = false;
+      setState(() {});
+      //removeFromWishList();
+    } else {
+      _isInCompareList = true;
+      setState(() {});
+      addToCompareList();
+    }
+  }
+
   fetchAndSetVariantWiseInfo({bool change_appbar_string = true}) async {
     var color_string = _colorList.length > 0
         ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
@@ -266,6 +304,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     _quantity = 1;
     _productDetailsFetched = false;
     _isInWishList = false;
+    _isInCompareList = false;
     sellerChatTitleController.clear();
     setState(() {});
   }
@@ -1896,10 +1935,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         Container(
           child: InkWell(
             onTap: () {
-              onWishTap();
+              onCompareTap();
             },
             child: Icon(
-              FontAwesome.ravelry,
+              Icons.compare_rounded,
               color: MyTheme.golden,
               size: 20,
             ),

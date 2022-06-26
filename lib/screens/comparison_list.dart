@@ -55,12 +55,12 @@ class _ComparisonListState extends State<ComparisonList> {
   }
 
   Future<void> _onPressRemove(index) async {
-    var wishlist_id = _wishlistItems[index].id;
+    var product_id = _wishlistItems[index].product;
     _wishlistItems.removeAt(index);
     setState(() {});
 
-    var wishlistDeleteResponse =
-        await WishListRepository().delete(wishlist_id: wishlist_id, value: 2);
+    var wishlistDeleteResponse = await WishListRepository()
+        .deleteProducutInComprsion(product_id: product_id.id, value: 2);
 
     if (wishlistDeleteResponse.result == true) {
       ToastComponent.showDialog(wishlistDeleteResponse.message, context,

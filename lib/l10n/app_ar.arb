@@ -83,6 +83,8 @@
    "home_screen_top_sellers":"كبار الباعة",
    "home_screen_todays_deal":"صفقة تودلز",
    "home_screen_flash_deal":"اتفاق فلاش",
+   "home_screen_packges": "الباقات",
+
    "home_screen_featured_categories":"التصنيفات التي تم عرضها",
    "home_screen_featured_products":"المنتجات المتميزة",
    "home_screen_search":"بحث",
@@ -109,7 +111,7 @@
    "profile_screen_orders":"الطلبات",
    "profile_screen_profile":"الحساب",
    "profile_screen_address":"العنوان",
-   "profile_screen_notification":"الاشعار",
+   "profile_screen_notification":"الاشعارات",
    "profile_screen_purchase_history":"السجل التاريخي للشراء",
    "profile_screen_earning_points":"السجل التاريخي لنقاط التخصيص",
    "profile_screen_refund_requests":"طلبات رد",

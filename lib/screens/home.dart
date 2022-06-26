@@ -1,14 +1,17 @@
 import 'package:active_ecommerce_flutter/custom/CommonFunctoins.dart';
+import 'package:active_ecommerce_flutter/data_model/notification_count.dart';
 import 'package:active_ecommerce_flutter/helpers/addons_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/business_setting_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
+import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
 import 'package:active_ecommerce_flutter/screens/filter.dart';
 import 'package:active_ecommerce_flutter/screens/flash_deal_list.dart';
 import 'package:active_ecommerce_flutter/screens/todays_deal_products.dart';
 import 'package:active_ecommerce_flutter/screens/top_selling_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
+import 'package:active_ecommerce_flutter/screens/wishlist.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
@@ -58,11 +61,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Animation pirated_logo_animation;
 
   var _carouselImageList = [];
+  NotificationCount _notificatio_count_data;
   var _featuredCategoryList = [];
   var _featuredProductList = [];
   bool _isProductInitial = true;
   bool _isCategoryInitial = true;
   bool _isCarouselInitial = true;
+  bool _isNotificationInitial = true;
   int _totalProductData = 0;
   int _productPage = 1;
   bool _showProductLoadingContainer = false;
@@ -71,7 +76,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     // print("app_mobile_language.en${app_mobile_language.$}");
     // print("app_language.${app_language.$}");
-    // print("app_language_rtl${app_language_rtl.$}");
+    print("is_logged_in  --- ${is_logged_in.$}");
 
     // TODO: implement initState
     super.initState();
@@ -101,6 +106,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     fetchCarouselImages();
     fetchFeaturedCategories();
     fetchFeaturedProducts();
+    if (is_logged_in.$ == true) {
+      fetchNotificationCount();
+    }
+
     // AddonsHelper().setAddonsData();
     // BusinessSettingHelper().setBusinessSettingData();
   }
@@ -111,6 +120,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       _carouselImageList.add(slider.photo);
     });
     _isCarouselInitial = false;
+    setState(() {});
+  }
+
+  fetchNotificationCount() async {
+    var carouselResponse = await SlidersRepository().getNotificationCount();
+    _notificatio_count_data = carouselResponse.data;
+    _isNotificationInitial = false;
+    print("fetchNotificationCount${_notificatio_count_data.wishlist_count}");
     setState(() {});
   }
 
@@ -135,9 +152,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   reset() {
     _carouselImageList.clear();
+    _notificatio_count_data = null;
     _featuredCategoryList.clear();
     _isCarouselInitial = true;
     _isCategoryInitial = true;
+    _isNotificationInitial = true;
 
     setState(() {});
 
@@ -198,7 +217,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         child: Scaffold(
             key: _scaffoldKey,
             backgroundColor: Colors.white,
-            appBar: buildAppBar(statusBarHeight, context),
+            appBar: is_logged_in.$ == true
+                ? buildAppBarLogin(statusBarHeight, context)
+                : buildAppBar(statusBarHeight, context),
             drawer: MainDrawer(),
             body: Stack(
               children: [
@@ -655,9 +676,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return FlashDealList();
-            }));
+            if (customer_type.$ == 'retail' || customer_type.$ == "null") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return FlashDealList();
+              }));
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return FlashDealList();
+              }));
+            }
           },
           child: Container(
             height: 100,
@@ -678,7 +705,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                        AppLocalizations.of(context).home_screen_flash_deal,
+                        (customer_type.$ == 'retail' ||
+                                customer_type.$ == "null")
+                            ? AppLocalizations.of(context)
+                                .home_screen_flash_deal
+                            : AppLocalizations.of(context).home_screen_packges,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),
@@ -827,8 +858,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               child: Row(
                 children: [
                   // IconHeader(Icons.shopping_cart_outlined, 3),
-                  IconHeader(FontAwesome.heart_o, 3),
-                  IconHeader(Icons.compare_arrows_outlined, 7),
+                  IconHeader(FontAwesome.heart_o, 0, () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Wishlist();
+                    }));
+                  }, AppLocalizations.of(context).wishlist_screen_my_wishlist),
+                  IconHeader(Icons.compare_rounded, 0, () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ComparisonList();
+                    }));
+                  },
+                      AppLocalizations.of(context)
+                          .comparisonlist_screen_my_wishlist),
                   // IconHeader(FontAwesome.bell_o, 13),
                 ],
               ),
@@ -837,7 +880,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               width: 5,
             ),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: Padding(
                 padding: app_language_rtl.$
                     ? const EdgeInsets.only(top: 14.0, bottom: 14, left: 12)
@@ -854,7 +897,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            IconHeader(FontAwesome.bell_o, 13),
+            IconHeader(FontAwesome.bell_o, 13, () {},
+                AppLocalizations.of(context).profile_screen_notification),
           ],
         ),
       ),
@@ -884,47 +928,176 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Expanded IconHeader(IconData icon, int number) {
-    return Expanded(
-      flex: 1,
-      child: FlatButton(
-        onPressed: () {},
-        child: Badge(
-          child: Icon(
-            icon,
-            size: 20,
-            color: Colors.black,
-          ), //icon style
-          badgeContent: SizedBox(
-            width: 8,
-            height: 8, //badge size
-            child: Center(
-              //aligh badge content to center
-              child: Text(
-                "$number",
-                style: TextStyle(
-                    color: Colors.white, //badge font color
-                    fontSize: 10 //badge font size
+  AppBar buildAppBarLogin(double statusBarHeight, BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      leading: GestureDetector(
+        onTap: () {
+          _scaffoldKey.currentState.openDrawer();
+        },
+        child: widget.show_back_button
+            ? Builder(
+                builder: (context) => IconButton(
+                    icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+                    onPressed: () {
+                      if (!widget.go_back) {
+                        return;
+                      }
+                      return Navigator.of(context).pop();
+                    }),
+              )
+            : Builder(
+                builder: (context) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 18.0, horizontal: 0.0),
+                  child: Container(
+                    child: Image.asset(
+                      'assets/hamburger.png',
+                      height: 16,
+                      //color: MyTheme.dark_grey,
+                      color: MyTheme.dark_grey,
                     ),
+                  ),
+                ),
+              ),
+      ),
+      title: _isNotificationInitial
+          ? Container(
+              color: MyTheme.light_grey,
+            )
+          : Container(
+              height: kToolbarHeight +
+                  statusBarHeight -
+                  (MediaQuery.of(context).viewPadding.top > 40 ? 16.0 : 16.0),
+              //MediaQuery.of(context).viewPadding.top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Row(
+                      children: [
+                        // IconHeader(Icons.shopping_cart_outlined, 3),
+                        IconHeader(FontAwesome.heart_o,
+                            _notificatio_count_data.wishlist_count ?? 0, () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return Wishlist();
+                          }));
+                        },
+                            AppLocalizations.of(context)
+                                .wishlist_screen_my_wishlist),
+                        IconHeader(Icons.compare_rounded,
+                            _notificatio_count_data.comparisons_count ?? 0, () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ComparisonList();
+                          }));
+                        },
+                            AppLocalizations.of(context)
+                                .comparisonlist_screen_my_wishlist),
+                        // IconHeader(FontAwesome.bell_o, 13),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
+                      padding: app_language_rtl.$
+                          ? const EdgeInsets.only(
+                              top: 14.0, bottom: 14, left: 12)
+                          : const EdgeInsets.only(
+                              top: 14.0, bottom: 14, right: 12),
+                      // when notification bell will be shown , the right padding will cease to exist.
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return Filter();
+                          }));
+                        },
+                        child: buildHomeSearchBox(context),
+                      ),
+                    ),
+                  ),
+                  IconHeader(FontAwesome.bell_o, 13, () {},
+                      AppLocalizations.of(context).profile_screen_notification),
+                ],
+              ),
+            ),
+      elevation: 0.0,
+      titleSpacing: 0,
+      actions: <Widget>[
+        InkWell(
+          onTap: () {
+            ToastComponent.showDialog(
+                AppLocalizations.of(context).common_coming_soon, context,
+                gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          },
+          child: Visibility(
+            visible: false,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 12.0),
+              child: Image.asset(
+                'assets/bell.png',
+                height: 16,
+                color: MyTheme.dark_grey,
               ),
             ),
           ),
-          badgeColor: MyTheme.accent_color, //badge background color
         ),
-        // child: Badge(
+      ],
+    );
+  }
 
-        //   child: Icon(
-        //     FontAwesome.bell_o,
-        //     size: 15,
-        //   ),
-        //   badgeContent: Text("3"),
-        // ),
-        // child:  Icon(
-        //   FontAwesome.bell_o,
-        //   size: 15,
-        // ),
-        textColor: Colors.black,
+  // ignore: non_constant_identifier_names
+  Expanded IconHeader(IconData icon, int number, Function onTap, String title) {
+    return Expanded(
+      flex: 1,
+      // ignore: deprecated_member_use
+      child: Tooltip(
+        message: title,
+        child: FlatButton(
+          onPressed: onTap,
+          child: Badge(
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.black,
+            ), //icon style
+            badgeContent: SizedBox(
+              width: 6,
+              height: 6, //badge size
+              child: Center(
+                //aligh badge content to center
+                child: Text(
+                  "$number",
+                  style: TextStyle(
+                      color: Colors.white, //badge font color
+                      fontSize: 10 //badge font size
+                      ),
+                ),
+              ),
+            ),
+            badgeColor: MyTheme.accent_color2, //badge background color
+          ),
+          // child: Badge(
+
+          //   child: Icon(
+          //     FontAwesome.bell_o,
+          //     size: 15,
+          //   ),
+          //   badgeContent: Text("3"),
+          // ),
+          // child:  Icon(
+          //   FontAwesome.bell_o,
+          //   size: 15,
+          // ),
+          textColor: Colors.black,
+        ),
       ),
     );
   }
