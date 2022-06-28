@@ -87,9 +87,16 @@
   "home_screen_flash_deal": "Flash Deal",
 
   "home_screen_packges": "Packages",
+ "home_screen_packges_item": "Items Packages",
+"add_packges": "Add custom packages",
+      "title_packges": "Package Title",
+      "title_add_packges": "Add Package Title",
+
 
   "home_screen_featured_categories": "Featured Categories",
   "home_screen_featured_products": "Featured Products",
+    "romooz_packges": "Roomoz packages",
+     "my_packges": "My Packages",
   "home_screen_search": "Search",
   "home_screen_no_carousel_image_found": "No carousel image found",
   "home_screen_no_category_found": "No category found",

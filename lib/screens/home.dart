@@ -7,6 +7,7 @@ import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
 import 'package:active_ecommerce_flutter/screens/filter.dart';
 import 'package:active_ecommerce_flutter/screens/flash_deal_list.dart';
+import 'package:active_ecommerce_flutter/screens/package_list.dart';
 import 'package:active_ecommerce_flutter/screens/todays_deal_products.dart';
 import 'package:active_ecommerce_flutter/screens/top_selling_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_products.dart';
@@ -606,40 +607,40 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return TopSellingProducts();
-            }));
-          },
-          child: Container(
-            height: 100,
-            width: MediaQuery.of(context).size.width / 5 - 4,
-            child: Column(
-              children: [
-                Container(
-                    height: 57,
-                    width: 57,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border:
-                            Border.all(color: MyTheme.light_grey, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Image.asset("assets/top_sellers.png"),
-                    )),
-                Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                        AppLocalizations.of(context).home_screen_top_sellers,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
-              ],
-            ),
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //       return TopSellingProducts();
+        //     }));
+        //   },
+        //   child: Container(
+        //     height: 100,
+        //     width: MediaQuery.of(context).size.width / 5 - 4,
+        //     child: Column(
+        //       children: [
+        //         Container(
+        //             height: 57,
+        //             width: 57,
+        //             decoration: BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 border:
+        //                     Border.all(color: MyTheme.light_grey, width: 1)),
+        //             child: Padding(
+        //               padding: const EdgeInsets.all(16.0),
+        //               child: Image.asset("assets/top_sellers.png"),
+        //             )),
+        //         Padding(
+        //             padding: const EdgeInsets.only(top: 8),
+        //             child: Text(
+        //                 AppLocalizations.of(context).home_screen_top_sellers,
+        //                 textAlign: TextAlign.center,
+        //                 style: TextStyle(
+        //                     color: Color.fromRGBO(132, 132, 132, 1),
+        //                     fontWeight: FontWeight.w300))),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -678,11 +679,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           onTap: () {
             if (customer_type.$ == 'retail' || customer_type.$ == "null") {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return FlashDealList();
+                return PackagesList();
               }));
             } else {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return FlashDealList();
+                return PackagesList();
               }));
             }
           },
