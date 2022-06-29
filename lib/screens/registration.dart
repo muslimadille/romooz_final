@@ -296,7 +296,8 @@ class _RegistrationState extends State<Registration> {
         owner_name,
         commercial_name,
         commercial_registration_no,
-        tax_number);
+        tax_number,
+        "1");
 
     if (signupResponse.result == false) {
       ToastComponent.showDialog(signupResponse.message, context,

@@ -7,7 +7,7 @@ import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
 import 'package:active_ecommerce_flutter/screens/filter.dart';
 import 'package:active_ecommerce_flutter/screens/flash_deal_list.dart';
-import 'package:active_ecommerce_flutter/screens/package_list.dart';
+import 'package:active_ecommerce_flutter/screens/package_admin_list.dart';
 import 'package:active_ecommerce_flutter/screens/todays_deal_products.dart';
 import 'package:active_ecommerce_flutter/screens/top_selling_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_products.dart';

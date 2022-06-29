@@ -91,6 +91,7 @@
 "add_packges": "Add custom packages",
       "title_packges": "Package Title",
       "title_add_packges": "Add Package Title",
+         "desc_add_packges": "Add Package Description",
 
 
   "home_screen_featured_categories": "Featured Categories",
@@ -262,6 +263,9 @@
   "loading_text": "Please Wait...",
   "chat_screen_type_message_here": "Type your message here ...",
   "wallet_screen_amount_warning": "Amount cannot be empty",
+  "packages_screen_name_warning": "Package Name cannot be empty",
+  "packages_screen_desc_warning": "Package Description cannot be empty",
+
   "wallet_screen_my_wallet": "My Wallet",
   "wallet_screen_no_recharges_yet": "No recharges yet",
   "wallet_screen_payment_method": "Payment Method",

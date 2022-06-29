@@ -1,11 +1,11 @@
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/helpers/reg_ex_inpur_formatter.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
+import 'package:active_ecommerce_flutter/screens/package_details.dart';
+import 'package:active_ecommerce_flutter/screens/package_user_list.dart';
 import 'package:active_ecommerce_flutter/ui_elements/package_card.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
-import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
@@ -19,6 +19,8 @@ class PackagesList extends StatefulWidget {
 class _PackagesListState extends State<PackagesList> {
   ScrollController _scrollController;
   TextEditingController _packageController = TextEditingController();
+  TextEditingController _packageDescController = TextEditingController();
+
   final _packageValidator = RegExInputFormatter.withRegex(
       '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$');
 
@@ -34,34 +36,45 @@ class _PackagesListState extends State<PackagesList> {
     );
   }
 
-  onPressProceed() {
-    var amount_String = _packageController.text.toString();
+  onPressProceed() async {
+    var title = _packageController.text.toString();
+    var desc = _packageDescController.text.toString();
 
-    if (amount_String == "") {
+    if (title == "") {
       ToastComponent.showDialog(
-          AppLocalizations.of(context).wallet_screen_amount_warning, context,
+          AppLocalizations.of(context).packages_screen_name_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+    if (desc == "") {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).packages_screen_desc_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
 
-    // var addressAddResponse = await AddressRepository().getAddressAddResponse(
-    //       address: address,
-    //       country_id: _selected_country.id,
-    //       state_id: _selected_state.id,
-    //       city_id: _selected_city.id,
-    //       postal_code: postal_code,
-    //       phone: phone);
+    var addPackageReponse =
+        await PackagesRepository().createPackage(name: title, desc: desc);
 
-    // if (addressAddResponse.result == false) {
-    //   ToastComponent.showDialog(addressAddResponse.message, context,
-    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-    //   return;
-    // }
+    if (addPackageReponse.package == null) {
+      ToastComponent.showDialog(addPackageReponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+    print("addPackageReponse${addPackageReponse.packageId}");
 
-    // ToastComponent.showDialog(addressAddResponse.message, context,
-    //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    ToastComponent.showDialog(addPackageReponse.message, context,
+        gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
     Navigator.of(context, rootNavigator: true).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return PackagesUserList();
+        },
+      ),
+    );
   }
 
   // Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -143,6 +156,40 @@ class _PackagesListState extends State<PackagesList> {
                                 EdgeInsets.symmetric(horizontal: 8.0)),
                       ),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Container(
+                      height: 40,
+                      child: TextField(
+                        controller: _packageDescController,
+                        autofocus: false,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        // inputFormatters: [_packageValidator],
+                        decoration: InputDecoration(
+                            hintText:
+                                AppLocalizations.of(context).desc_add_packges,
+                            hintStyle: TextStyle(
+                                fontSize: 12.0, color: MyTheme.textfield_grey),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyTheme.textfield_grey, width: 0.5),
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(8.0),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: MyTheme.textfield_grey, width: 1.0),
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(8.0),
+                              ),
+                            ),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 8.0)),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -193,8 +240,16 @@ class _PackagesListState extends State<PackagesList> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600),
                     ),
-                    onPressed: () {
-                      onPressProceed();
+                    onPressed: () async {
+                      if (is_logged_in.$ == true) {
+                        onPressProceed();
+                      } else {
+                        ToastComponent.showDialog(
+                            AppLocalizations.of(context).common_login_warning,
+                            context,
+                            gravity: Toast.CENTER,
+                            duration: Toast.LENGTH_LONG);
+                      }
                     },
                   ),
                 )
@@ -217,96 +272,77 @@ class _PackagesListState extends State<PackagesList> {
             return Container();
           } else if (snapshot.hasData) {
             var packageResponse = snapshot.data;
-            return SingleChildScrollView(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      16.0,
-                      16.0,
-                      16.0,
-                      0.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).romooz_packges,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    16.0,
+                    16.0,
+                    16.0,
+                    0.0,
                   ),
-                  ListView.builder(
-                    itemCount: packageResponse.data.length,
-                    scrollDirection: Axis.vertical,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return PackageCard(
-                        id: packageResponse.data[index].id,
-                        image: "",
-                        name: packageResponse.data[index].name,
-                        main_price: packageResponse.data[index].price,
-                        desc: packageResponse.data[index].desc,
-                        has_discount: false,
-                      );
-                    },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).romooz_packges,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      16.0,
-                      16.0,
-                      16.0,
-                      0.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).my_packges,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 16.0, right: 16.0, left: 16.0),
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: MyTheme.textfield_grey, width: 1),
+                ),
+                ListView.builder(
+                  itemCount: packageResponse.data.length,
+                  scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return PackageCard(
+                      id: packageResponse.data[index].id,
+                      image: "",
+                      name: packageResponse.data[index].name,
+                      main_price: packageResponse.data[index].price,
+                      desc: packageResponse.data[index].desc,
+                      has_discount: false,
+                    );
+                  },
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: MyTheme.textfield_grey, width: 1),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8.0))),
+                    child: FlatButton(
+                      minWidth: MediaQuery.of(context).size.width,
+                      //height: 50,
+                      color: Color.fromRGBO(252, 252, 252, 1),
+                      shape: RoundedRectangleBorder(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8.0))),
-                      child: FlatButton(
-                        minWidth: MediaQuery.of(context).size.width,
-                        //height: 50,
-                        color: Color.fromRGBO(252, 252, 252, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8.0))),
-                        child: Text(
-                          AppLocalizations.of(context).add_packges,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              height: 1.6,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        onPressed: () {
-                          buildShowAddFormDialog(context);
-                        },
+                      child: Text(
+                        AppLocalizations.of(context).add_packges,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
                       ),
+                      onPressed: () {
+                        buildShowAddFormDialog(context);
+                      },
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           } else {
             return SingleChildScrollView(

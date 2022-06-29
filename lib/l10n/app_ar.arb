@@ -91,6 +91,7 @@
     "add_packges": "اضافة باقة خاصة بي",
       "title_packges": "عنوان باقاتك",
       "title_add_packges": "اضف عنوان باقاتك",
+            "desc_add_packges": "اضف وصف باقاتك",
 
    "home_screen_featured_categories":"التصنيفات التي تم عرضها",
    "home_screen_featured_products":"المنتجات المتميزة",
@@ -259,6 +260,11 @@
    "loading_text":"برجاء الانتظار ...",
    "chat_screen_type_message_here":"أدخل الرسالة الخاصة بك هنا ...",
    "wallet_screen_amount_warning":"لا يمكن أن يكون المقدار خاليا",
+
+     "packages_screen_name_warning": "لايمكن ان يكون لاسم خاليا",
+  "packages_screen_desc_warning": "لايمكن ان يكون الوصف خاليا",
+
+
    "wallet_screen_my_wallet":"محفظتى",
    "wallet_screen_no_recharges_yet":"لم يتم اعادة تحميل بعد",
    "wallet_screen_payment_method":"طريقة السداد",

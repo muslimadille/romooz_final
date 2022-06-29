@@ -84,6 +84,7 @@ class AuthRepository {
     @required String commercial_name,
     @required String commercial_registration_no,
     @required String tax_number,
+    @required String city_id,
   ) async {
     var post_body = jsonEncode({
       "name": "$name",
@@ -96,7 +97,10 @@ class AuthRepository {
       "commercial_name": "$commercial_name",
       "commercial_registration_no": "$commercial_registration_no",
       "tax_number": "$tax_number",
+      "city_id": "$city_id",
     });
+
+    print("response sign up${post_body}");
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/signup");
     final response = await http.post(url,
@@ -105,6 +109,7 @@ class AuthRepository {
           "App-Language": app_language.$,
         },
         body: post_body);
+    print("response sign up${response.body} ${post_body}");
 
     return signupResponseFromJson(response.body);
   }

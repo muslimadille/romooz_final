@@ -32,8 +32,9 @@ class ProductMiniResponse {
 
   factory ProductMiniResponse.fromJson(Map<String, dynamic> json) =>
       ProductMiniResponse(
-        products:
-            List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
+        products: json["data"] == null
+            ? null
+            : List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
         meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
         success: json["success"],
         status: json["status"],
@@ -41,6 +42,9 @@ class ProductMiniResponse {
 
   Map<String, dynamic> toJson() => {
         "data": List<dynamic>.from(products.map((x) => x.toJson())),
+        "products": products == null
+            ? null
+            : List<dynamic>.from(products.map((x) => x.toJson())),
         "meta": meta == null ? null : meta.toJson(),
         "success": success,
         "status": status,
@@ -87,10 +91,10 @@ class Product {
         main_price: json["main_price"],
         stroked_price: json["stroked_price"],
         has_discount: json["has_discount"],
-        rating: json["rating"].toInt(),
+        rating: json["rating"] == null ? null : json["rating"],
         sales: json["sales"],
         links: Links.fromJson(json["links"]),
-        unit: Unit.fromJson(json["unit"]),
+        unit: json["unit"] == null ? null : json["unit"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -100,10 +104,10 @@ class Product {
         "main_price": main_price,
         "stroked_price": stroked_price,
         "has_discount": has_discount,
-        "rating": rating,
+        "rating": rating == null ? null : rating,
         "sales": sales,
         "links": links.toJson(),
-        "unit": unit.toJson(),
+        "unit": unit == null ? [] : unit.toJson(),
       };
 }
 
@@ -133,13 +137,13 @@ class Unit {
   String name;
 
   factory Unit.fromJson(Map<String, dynamic> json) => Unit(
-        id: json["id"],
-        name: json["name"],
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
       };
 }
 

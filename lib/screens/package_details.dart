@@ -29,8 +29,9 @@ class _PackageItemsState extends State<PackageItems> {
   @override
   void initState() {
     if (is_logged_in.$ == true) {
-      fetchWishlistItems();
+      fetchWishlistItemsLogin();
     }
+    fetchWishlistItems();
 
     super.initState();
   }
@@ -43,9 +44,19 @@ class _PackageItemsState extends State<PackageItems> {
 
   fetchWishlistItems() async {
     var packageResponse =
+        await PackagesRepository().getUserPackagesDetails(widget.id);
+    _packagetems.addAll(packageResponse.packageItems);
+    _packageInit = false;
+    print("packageResponse$packageResponse");
+    setState(() {});
+  }
+
+  fetchWishlistItemsLogin() async {
+    var packageResponse =
         await PackagesRepository().getAdminPackagesDetails(widget.id);
     _packagetems.addAll(packageResponse.packageItems);
     _packageInit = false;
+    print("packageResponse$packageResponse");
     setState(() {});
   }
 
@@ -120,15 +131,17 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   buildWishlist() {
-    if (is_logged_in.$ == false) {
-      return Container(
-          height: 100,
-          child: Center(
-              child: Text(
-            AppLocalizations.of(context).wishlist_screen_login_warning,
-            style: TextStyle(color: MyTheme.font_grey),
-          )));
-    } else if (_packageInit == true && _packagetems.length == 0) {
+    // if (is_logged_in.$ == false) {
+    //   // return Container(
+    //   //     height: 100,
+    //   //     child: Center(
+    //   //         child: Text(
+    //   //       AppLocalizations.of(context).wishlist_screen_login_warning,
+    //   //       style: TextStyle(color: MyTheme.font_grey),
+    //   //     )));
+
+    // } else
+    if (_packageInit == true && _packagetems.length == 0) {
       return SingleChildScrollView(
         child: ShimmerHelper().buildListShimmer(item_count: 10),
       );

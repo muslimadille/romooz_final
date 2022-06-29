@@ -35,11 +35,16 @@ class _PackageCardState extends State<PackageCard> {
     return InkWell(
       onTap: () {
         print("ProductCard ${widget.id}");
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return PackageItems(
-            id: widget.id,
-          );
-        }));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return PackageItems(
+                id: widget.id,
+              );
+            },
+          ),
+        );
       },
       child: Card(
         //clipBehavior: Clip.antiAliasWithSaveLayer,
