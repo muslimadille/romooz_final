@@ -97,7 +97,7 @@ class AuthRepository {
       "commercial_name": "$commercial_name",
       "commercial_registration_no": "$commercial_registration_no",
       "tax_number": "$tax_number",
-      "city_id": "$city_id",
+      "city_id": 1
     });
 
     print("response sign up${post_body}");

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/intl_phone_input.dart';
+import 'package:flutter_svg/svg.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:active_ecommerce_flutter/screens/registration.dart';
@@ -17,7 +18,7 @@ import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 // s
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
-import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
+// import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:twitter_login/twitter_login.dart';
 
@@ -28,8 +29,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   String _login_by = "email"; //phone or email
-  String initialCountry = 'US';
-  PhoneNumber phoneCode = PhoneNumber(isoCode: 'US', dialCode: "+1");
+  String initialCountry = 'SA';
+  PhoneNumber phoneCode = PhoneNumber(isoCode: 'SA', dialCode: "+966");
   String _phone = "";
 
   //controllers
@@ -236,8 +237,10 @@ class _LoginState extends State<Login> {
           children: [
             Container(
               width: _screen_width * (3 / 4),
-              child: Image.asset(
-                  "assets/splash_login_registration_background_image.png"),
+              child: SvgPicture.asset(
+                "assets/fruits-svgrepo-com.svg",
+                color: MyTheme.splash_screen_color2,
+              ),
             ),
             Container(
               width: double.infinity,
@@ -302,24 +305,24 @@ class _LoginState extends State<Login> {
                                             hint_text: "johndoe@example.com"),
                                   ),
                                 ),
-                                otp_addon_installed.$
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _login_by = "phone";
-                                          });
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context)
-                                              .login_screen_or_login_with_phone,
-                                          style: TextStyle(
-                                              color: MyTheme.accent_color,
-                                              fontStyle: FontStyle.italic,
-                                              decoration:
-                                                  TextDecoration.underline),
-                                        ),
-                                      )
-                                    : Container()
+                                // otp_addon_installed.$
+                                //     ? GestureDetector(
+                                //         onTap: () {
+                                //           setState(() {
+                                //             _login_by = "phone";
+                                //           });
+                                //         },
+                                //         child: Text(
+                                //           AppLocalizations.of(context)
+                                //               .login_screen_or_login_with_phone,
+                                //           style: TextStyle(
+                                //               color: MyTheme.accent_color,
+                                //               fontStyle: FontStyle.italic,
+                                //               decoration:
+                                //                   TextDecoration.underline),
+                                //         ),
+                                //       )
+                                //     : Container()
                               ],
                             ),
                           )
@@ -365,21 +368,21 @@ class _LoginState extends State<Login> {
                                     },
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _login_by = "email";
-                                    });
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .login_screen_or_login_with_email,
-                                    style: TextStyle(
-                                        color: MyTheme.accent_color,
-                                        fontStyle: FontStyle.italic,
-                                        decoration: TextDecoration.underline),
-                                  ),
-                                )
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     setState(() {
+                                //       _login_by = "email";
+                                //     });
+                                //   },
+                                //   child: Text(
+                                //     AppLocalizations.of(context)
+                                //         .login_screen_or_login_with_email,
+                                //     style: TextStyle(
+                                //         color: MyTheme.accent_color,
+                                //         fontStyle: FontStyle.italic,
+                                //         decoration: TextDecoration.underline),
+                                //   ),
+                                // )
                               ],
                             ),
                           ),

@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/screens/change_language.dart';
 import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
+import 'package:active_ecommerce_flutter/screens/package_user_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -176,6 +177,23 @@ class _MainDrawerState extends State<MainDrawer> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return ComparisonList();
+                                }));
+                              }),
+                          ListTile(
+                              visualDensity:
+                                  VisualDensity(horizontal: -4, vertical: -4),
+                              leading: Image.asset("assets/package.png",
+                                  height: 16,
+                                  color: Color.fromRGBO(153, 153, 153, 1)),
+                              title: Text(
+                                  AppLocalizations.of(context).my_packges,
+                                  style: TextStyle(
+                                      color: Color.fromRGBO(153, 153, 153, 1),
+                                      fontSize: 14)),
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return PackagesUserList();
                                 }));
                               }),
                           ListTile(

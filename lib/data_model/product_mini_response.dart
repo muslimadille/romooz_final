@@ -82,7 +82,8 @@ class Product {
 
   Links links;
 
-  Unit unit;
+  //Unit unit;
+  String unit;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -107,7 +108,8 @@ class Product {
         "rating": rating == null ? null : rating,
         "sales": sales,
         "links": links.toJson(),
-        "unit": unit == null ? [] : unit.toJson(),
+        "unit": unit == null ? null : unit,
+        // "unit": unit == null ? [] : unit.toJson(),
       };
 }
 

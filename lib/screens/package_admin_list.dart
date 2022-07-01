@@ -130,8 +130,8 @@ class _PackagesListState extends State<PackagesList> {
                       child: TextField(
                         controller: _packageController,
                         autofocus: false,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                        // keyboardType:
+                        //     TextInputType.numberWithOptions(decimal: true),
                         // inputFormatters: [_packageValidator],
                         decoration: InputDecoration(
                             hintText:
@@ -164,8 +164,8 @@ class _PackagesListState extends State<PackagesList> {
                       child: TextField(
                         controller: _packageDescController,
                         autofocus: false,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                        // keyboardType:
+                        //     TextInputType.numberWithOptions(decimal: true),
                         // inputFormatters: [_packageValidator],
                         decoration: InputDecoration(
                             hintText:

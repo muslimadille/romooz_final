@@ -191,6 +191,8 @@
   "product_details_screen_chat_with_seller" : "Chat with seller",
   "product_details_screen_available" : "available",
   "product_details_screen_button_add_to_cart" : "Add to Cart",
+  "product_details_screen_button_add_to_package" : "Add to Package",
+
   "product_details_screen_button_buy_now" : "Buy Now",
   "product_details_screen_no_top_selling_product" : "No top selling products from this seller",
   "product_details_screen_no_related_product" : "No related products",
@@ -382,9 +384,13 @@
   "address_screen_addresses_of_user": "Addresses of user",
   "address_screen_addresses_to_make_default": "Double tap on an address to make it default",
   "address_screen_no_country_available": "No country available",
+  "address_screen_no_pack_available": "No Packages available",
+
   "address_screen_no_state_available": "No state available",
   "address_screen_no_city_available": "No city available",
   "address_screen_loading_countries": "Loading Countries ...",
+  "address_screen_pack_countries": "Loading Packages ...",
+
   "address_screen_loading_states": "Loading States ...",
   "address_screen_loading_cities": "Loading Cities ...",
   "address_screen_select_a_country_first": "Select a country first",

@@ -188,6 +188,9 @@
    "product_details_screen_chat_with_seller":"محادثة مع البائع",
    "product_details_screen_available":"المتاحة",
    "product_details_screen_button_add_to_cart":"اضافة الى العربة",
+
+   "product_details_screen_button_add_to_package" : "اضف الى باقاتك",
+
    "product_details_screen_button_buy_now":"اشتر الآن",
    "product_details_screen_no_top_selling_product":"لا توجد منتجات بيع كبيرة من هذا البائع",
    "product_details_screen_no_related_product":"لا توجد منتجات متعلقة",
@@ -383,9 +386,13 @@
    "address_screen_addresses_of_user":"عناوين المستخدم",
    "address_screen_addresses_to_make_default":"اضغط مرتين على العنوان لجعله مفترضا",
    "address_screen_no_country_available":"لا يوجد بلد متاح",
+     "address_screen_no_pack_available": "لاتوجد باقات متاحة",
+
    "address_screen_no_state_available":"لا توجد حالة متاحة",
    "address_screen_no_city_available":"لا توجد مدينة متاحة",
    "address_screen_loading_countries":"تحميل البلدان ...",
+   "address_screen_pack_countries": "تحميل الباقات ...",
+
    "address_screen_loading_states":"تحميل الولايات ...",
    "address_screen_loading_cities":"تحميل المدن ...",
    "address_screen_select_a_country_first":"قم باختيار بلد أولا",

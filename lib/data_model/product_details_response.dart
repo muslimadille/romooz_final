@@ -63,7 +63,7 @@ class DetailedProduct {
       this.calculable_price,
       this.currency_symbol,
       this.current_stock,
-      this.unit,
+      //this.unit,
       this.rating,
       this.rating_count,
       this.earn_point,
@@ -148,7 +148,7 @@ class DetailedProduct {
         calculable_price: json["calculable_price"],
         currency_symbol: json["currency_symbol"],
         current_stock: json["current_stock"],
-        unit: Unit.fromJson(json["unit"]),
+        // unit: Unit.fromJson(json["unit"]),
         rating: json["rating"].toInt(),
         rating_count: json["rating_count"],
         earn_point: json["earn_point"].toInt(),
@@ -181,7 +181,7 @@ class DetailedProduct {
         "calculable_price": calculable_price,
         "currency_symbol": currency_symbol,
         "current_stock": current_stock,
-        "unit": unit.toJson(),
+        //"unit": unit.toJson(),
         "rating": rating,
         "rating_count": rating_count,
         "earn_point": earn_point,
@@ -249,13 +249,13 @@ class Unit {
   String name;
 
   factory Unit.fromJson(Map<String, dynamic> json) => Unit(
-        id: json["id"],
-        name: json["name"],
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
       };
 }
 

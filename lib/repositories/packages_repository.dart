@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/package_delete_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_add_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
@@ -78,8 +79,22 @@ class PackagesRepository {
           "Content-Type": "application/json",
         },
         body: post_body);
-    print("package${response.body}");
 
     return packageAddResponseFromJson(response.body);
+  }
+
+  Future<PackageItemDeleteResponse> delete(
+      {@required int item_id = 0, int value}) async {
+    Uri url =
+        Uri.parse("${AppConfig.BASE_URL}/user/package/item/remove/${item_id}");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+    );
+    print("remove${response.body}");
+    return packageItemDeleteResponseFromJson(response.body);
   }
 }

@@ -1,3 +1,6 @@
+import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
+import 'package:active_ecommerce_flutter/data_model/state_response.dart';
+import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
@@ -22,6 +25,7 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/repositories/chat_repository.dart';
 import 'package:active_ecommerce_flutter/screens/chat.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:toast/toast.dart';
 import 'package:social_share/social_share.dart';
 import 'dart:async';
@@ -72,6 +76,15 @@ class _ProductDetailsState extends State<ProductDetails> {
   List<dynamic> _topProducts = [];
   bool _topProductInit = false;
 
+  bool _packageInit = true;
+  List<dynamic> _packageItems = [];
+
+  TextEditingController _packageController = TextEditingController();
+
+  Package _selected_package;
+
+  MyState _selected_state;
+
   @override
   void initState() {
     fetchAll();
@@ -91,6 +104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     fetchProductDetails();
     if (is_logged_in.$ == true) {
       fetchWishListCheckInfo();
+      fetchPackageItems();
     }
     fetchRelatedProducts();
     fetchTopProducts();
@@ -117,6 +131,14 @@ class _ProductDetailsState extends State<ProductDetails> {
     _relatedProducts.addAll(relatedProductResponse.products);
     _relatedProductInit = true;
 
+    setState(() {});
+  }
+
+  fetchPackageItems() async {
+    var packageResponse = await PackagesRepository().getUserPackages();
+    print("packageResponse${packageResponse.data}");
+    _packageItems.addAll(packageResponse.data);
+    _packageInit = false;
     setState(() {});
   }
 
@@ -291,6 +313,25 @@ class _ProductDetailsState extends State<ProductDetails> {
     setState(() {});
   }
 
+  onSelectPackageDuringAdd(package) {
+    if (_selected_package != null && package.id == _selected_package.id) {
+      //setModalState(() {
+      _packageController.text = package.name;
+      //});
+      return;
+    }
+    _selected_package = package;
+    _selected_state = null;
+
+    setState(() {});
+
+    // setModalState(() {
+    //   _countryController.text = country.name;
+    //   _stateController.text = "";
+    //   _cityController.text = "";
+    // });
+  }
+
   reset() {
     restProductDetailValues();
     _productImageList.clear();
@@ -306,6 +347,9 @@ class _ProductDetailsState extends State<ProductDetails> {
     _isInWishList = false;
     _isInCompareList = false;
     sellerChatTitleController.clear();
+
+    _packageInit = false;
+    _packageItems.clear();
     setState(() {});
   }
 
@@ -480,9 +524,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
-                      padding: app_language_rtl.$
-                          ? EdgeInsets.only(left: 8.0)
-                          : EdgeInsets.only(right: 8.0),
+                      padding: const EdgeInsets.only(right: 8.0),
                       child: FlatButton(
                         minWidth: 75,
                         height: 30,
@@ -490,7 +532,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                             side: BorderSide(
-                                color: MyTheme.font_grey, width: 1.0)),
+                                color: MyTheme.light_grey, width: 1.0)),
                         child: Text(
                           "CLOSE",
                           style: TextStyle(
@@ -502,6 +544,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                         },
                       ),
                     ),
+                    SizedBox(
+                      width: 1,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 28.0),
+                      child: FlatButton(
+                        minWidth: 75,
+                        height: 30,
+                        color: MyTheme.accent_color,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side: BorderSide(
+                                color: MyTheme.light_grey, width: 1.0)),
+                        child: Text(
+                          "ADD",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () {
+                          //onAddressAdd(context);
+                        },
+                      ),
+                    )
                   ],
                 )
               ],
@@ -1827,10 +1894,30 @@ class _ProductDetailsState extends State<ProductDetails> {
           color: Colors.transparent,
           height: 50,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               FlatButton(
-                minWidth: MediaQuery.of(context).size.width / 2 - .5,
+                height: 50,
+                color: MyTheme.splash_screen_color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                ),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .product_details_screen_button_add_to_package,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+                onPressed: () {
+                  showMyPackages();
+                },
+              ),
+              // SizedBox(
+              //   width: 1,
+              // ),
+              FlatButton(
                 height: 50,
                 color: MyTheme.golden,
                 shape: RoundedRectangleBorder(
@@ -1848,11 +1935,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                   onPressAddToCart(context, _addedToCartSnackbar);
                 },
               ),
-              SizedBox(
-                width: 1,
-              ),
+              // SizedBox(
+              //   width: 1,
+              // ),
               FlatButton(
-                minWidth: MediaQuery.of(context).size.width / 2 - .5,
                 height: 50,
                 color: MyTheme.accent_color,
                 shape: RoundedRectangleBorder(
@@ -1875,6 +1961,130 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       );
     });
+  }
+
+  showMyPackages() {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              insetPadding: EdgeInsets.symmetric(horizontal: 10),
+              contentPadding: EdgeInsets.only(
+                  top: 36.0, left: 36.0, right: 36.0, bottom: 2.0),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                          "${AppLocalizations.of(context).home_screen_packges} *",
+                          style: TextStyle(
+                              color: MyTheme.font_grey, fontSize: 12)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Container(
+                        height: 40,
+                        child: TypeAheadField(
+                          suggestionsCallback: (name) async {
+                            var packResponse =
+                                await PackagesRepository().getUserPackages();
+                            return packResponse.data;
+                          },
+                          loadingBuilder: (context) {
+                            return Container(
+                              height: 50,
+                              child: Center(
+                                  child: Text(
+                                      AppLocalizations.of(context)
+                                          .address_screen_pack_countries,
+                                      style: TextStyle(
+                                          color: MyTheme.medium_grey))),
+                            );
+                          },
+                          itemBuilder: (context, package) {
+                            //print(suggestion.toString());
+                            return ListTile(
+                              dense: true,
+                              title: Text(
+                                package.name,
+                                style: TextStyle(color: MyTheme.font_grey),
+                              ),
+                            );
+                          },
+                          noItemsFoundBuilder: (context) {
+                            return Container(
+                              height: 50,
+                              child: Center(
+                                  child: Text(
+                                      AppLocalizations.of(context)
+                                          .address_screen_no_pack_available,
+                                      style: TextStyle(
+                                          color: MyTheme.medium_grey))),
+                            );
+                          },
+                          onSuggestionSelected: (package) {
+                            onSelectPackageDuringAdd(package);
+                          },
+                          textFieldConfiguration: TextFieldConfiguration(
+                            onTap: () {},
+                            //autofocus: true,
+                            controller: _packageController,
+                            onSubmitted: (txt) {
+                              // keep this blank
+                            },
+                            decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)
+                                    .home_screen_packges,
+                                hintStyle: TextStyle(
+                                    fontSize: 12.0,
+                                    color: MyTheme.textfield_grey),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: MyTheme.textfield_grey,
+                                      width: 0.5),
+                                  borderRadius: const BorderRadius.all(
+                                    const Radius.circular(8.0),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: MyTheme.textfield_grey,
+                                      width: 1.0),
+                                  borderRadius: const BorderRadius.all(
+                                    const Radius.circular(8.0),
+                                  ),
+                                ),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 8.0)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                FlatButton(
+                  child: Text(
+                    AppLocalizations.of(context).common_cancel_ucfirst,
+                    style: TextStyle(color: MyTheme.medium_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+                FlatButton(
+                  color: MyTheme.soft_accent_color,
+                  child: Text(
+                    AppLocalizations.of(context).common_confirm_ucfirst,
+                    style: TextStyle(color: MyTheme.dark_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+              ],
+            ));
   }
 
   buildRatingAndWishButtonRow() {

@@ -11,7 +11,6 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Cart extends StatefulWidget {
   Cart({Key key, this.has_bottomnav}) : super(key: key);
   final bool has_bottomnav;
@@ -51,9 +50,8 @@ class _CartState extends State<Cart> {
   }
 
   fetchData() async {
-
     var cartResponseList =
-    await CartRepository().getCartResponseList(user_id.$);
+        await CartRepository().getCartResponseList(user_id.$);
 
     if (cartResponseList != null && cartResponseList.length > 0) {
       _shopList = cartResponseList;
@@ -69,9 +67,11 @@ class _CartState extends State<Cart> {
       _shopList.forEach((shop) {
         if (shop.cart_items.length > 0) {
           shop.cart_items.forEach((cart_item) {
-            _cartTotal +=
-                double.parse(((cart_item.price + cart_item.tax) * cart_item.quantity).toStringAsFixed(2));
-            _cartTotalString = "${cart_item.currency_symbol}${_cartTotal.toStringAsFixed(2)}";
+            _cartTotal += double.parse(
+                ((cart_item.price + cart_item.tax) * cart_item.quantity)
+                    .toStringAsFixed(2));
+            _cartTotalString =
+                "${cart_item.currency_symbol}${_cartTotal.toStringAsFixed(2)}";
           });
         }
       });
@@ -86,7 +86,8 @@ class _CartState extends State<Cart> {
     if (_shopList[index].cart_items.length > 0) {
       _shopList[index].cart_items.forEach((cart_item) {
         partialTotal += (cart_item.price + cart_item.tax) * cart_item.quantity;
-        partialTotalString = "${cart_item.currency_symbol}${partialTotal.toStringAsFixed(2)}";
+        partialTotalString =
+            "${cart_item.currency_symbol}${partialTotal.toStringAsFixed(2)}";
       });
     }
 
@@ -127,45 +128,45 @@ class _CartState extends State<Cart> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          contentPadding: EdgeInsets.only(
-              top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
-          content: Padding(
-            padding:
-            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              AppLocalizations.of(context).cart_screen_sure_remove_item,
-              maxLines: 3,
-              style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
-            ),
-          ),
-          actions: [
-            FlatButton(
-              child: Text(
-                AppLocalizations.of(context).cart_screen_cancel,
-                style: TextStyle(color: MyTheme.medium_grey),
+              contentPadding: EdgeInsets.only(
+                  top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
+              content: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Text(
+                  AppLocalizations.of(context).cart_screen_sure_remove_item,
+                  maxLines: 3,
+                  style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
+                ),
               ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            FlatButton(
-              color: MyTheme.soft_accent_color,
-              child: Text(
-                AppLocalizations.of(context).cart_screen_confirm,
-                style: TextStyle(color: MyTheme.dark_grey),
-              ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-                confirmDelete(cart_id);
-              },
-            ),
-          ],
-        ));
+              actions: [
+                FlatButton(
+                  child: Text(
+                    AppLocalizations.of(context).cart_screen_cancel,
+                    style: TextStyle(color: MyTheme.medium_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+                FlatButton(
+                  color: MyTheme.soft_accent_color,
+                  child: Text(
+                    AppLocalizations.of(context).cart_screen_confirm,
+                    style: TextStyle(color: MyTheme.dark_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    confirmDelete(cart_id);
+                  },
+                ),
+              ],
+            ));
   }
 
   confirmDelete(cart_id) async {
     var cartDeleteResponse =
-    await CartRepository().getCartDeleteResponse(cart_id);
+        await CartRepository().getCartDeleteResponse(cart_id);
 
     if (cartDeleteResponse.result == true) {
       ToastComponent.showDialog(cartDeleteResponse.message, context,
@@ -202,7 +203,8 @@ class _CartState extends State<Cart> {
     }
 
     if (cart_ids.length == 0) {
-      ToastComponent.showDialog(AppLocalizations.of(context).cart_screen_cart_empty, context,
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).cart_screen_cart_empty, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
@@ -228,8 +230,7 @@ class _CartState extends State<Cart> {
         fetchData();
       } else if (mode == "proceed_to_shipping") {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ShippingInfo(
-          );
+          return ShippingInfo();
         })).then((value) {
           onPopped(value);
         });
@@ -295,7 +296,10 @@ class _CartState extends State<Cart> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: buildBottomContainer(),
-              )
+              ),
+              SizedBox(
+                height: 100,
+              ),
             ],
           )),
     );
@@ -310,7 +314,7 @@ class _CartState extends State<Cart> {
                 )*/
       ),
 
-      height: widget.has_bottomnav ? 200 : 120,
+      height: widget.has_bottomnav ? 230 : 120,
       //color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -331,7 +335,7 @@ class _CartState extends State<Cart> {
                       child: Text(
                         AppLocalizations.of(context).cart_screen_total_amount,
                         style:
-                        TextStyle(color: MyTheme.font_grey, fontSize: 14),
+                            TextStyle(color: MyTheme.font_grey, fontSize: 14),
                       ),
                     ),
                     Spacer(),
@@ -357,38 +361,39 @@ class _CartState extends State<Cart> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border:
-                        Border.all(color: MyTheme.textfield_grey, width: 1),
-                        borderRadius: app_language_rtl.$ ?
-                        const BorderRadius.only(
-                          topLeft: const Radius.circular(0.0),
-                          bottomLeft: const Radius.circular(0.0),
-                          topRight: const Radius.circular(8.0),
-                          bottomRight: const Radius.circular(8.0),
-                        ): const BorderRadius.only(
-                          topLeft: const Radius.circular(8.0),
-                          bottomLeft: const Radius.circular(8.0),
-                          topRight: const Radius.circular(0.0),
-                          bottomRight: const Radius.circular(0.0),
-                        )),
+                            Border.all(color: MyTheme.textfield_grey, width: 1),
+                        borderRadius: app_language_rtl.$
+                            ? const BorderRadius.only(
+                                topLeft: const Radius.circular(0.0),
+                                bottomLeft: const Radius.circular(0.0),
+                                topRight: const Radius.circular(8.0),
+                                bottomRight: const Radius.circular(8.0),
+                              )
+                            : const BorderRadius.only(
+                                topLeft: const Radius.circular(8.0),
+                                bottomLeft: const Radius.circular(8.0),
+                                topRight: const Radius.circular(0.0),
+                                bottomRight: const Radius.circular(0.0),
+                              )),
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
                       color: MyTheme.light_grey,
-                      shape: app_language_rtl.$?
-                      RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(0.0),
-                            bottomLeft: const Radius.circular(0.0),
-                            topRight: const Radius.circular(8.0),
-                            bottomRight: const Radius.circular(8.0),
-                          ))
+                      shape: app_language_rtl.$
+                          ? RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(0.0),
+                              bottomLeft: const Radius.circular(0.0),
+                              topRight: const Radius.circular(8.0),
+                              bottomRight: const Radius.circular(8.0),
+                            ))
                           : RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(8.0),
-                            bottomLeft: const Radius.circular(8.0),
-                            topRight: const Radius.circular(0.0),
-                            bottomRight: const Radius.circular(0.0),
-                          )),
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(8.0),
+                              bottomLeft: const Radius.circular(8.0),
+                              topRight: const Radius.circular(0.0),
+                              bottomRight: const Radius.circular(0.0),
+                            )),
                       child: Text(
                         AppLocalizations.of(context).cart_screen_update_cart,
                         style: TextStyle(
@@ -410,40 +415,42 @@ class _CartState extends State<Cart> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border:
-                        Border.all(color: MyTheme.textfield_grey, width: 1),
-                        borderRadius:app_language_rtl.$ ?
-                        const BorderRadius.only(
-                          topLeft: const Radius.circular(8.0),
-                          bottomLeft: const Radius.circular(8.0),
-                          topRight: const Radius.circular(0.0),
-                          bottomRight: const Radius.circular(0.0),
-                        ): const BorderRadius.only(
-                          topLeft: const Radius.circular(0.0),
-                          bottomLeft: const Radius.circular(0.0),
-                          topRight: const Radius.circular(8.0),
-                          bottomRight: const Radius.circular(8.0),
-                        )),
+                            Border.all(color: MyTheme.textfield_grey, width: 1),
+                        borderRadius: app_language_rtl.$
+                            ? const BorderRadius.only(
+                                topLeft: const Radius.circular(8.0),
+                                bottomLeft: const Radius.circular(8.0),
+                                topRight: const Radius.circular(0.0),
+                                bottomRight: const Radius.circular(0.0),
+                              )
+                            : const BorderRadius.only(
+                                topLeft: const Radius.circular(0.0),
+                                bottomLeft: const Radius.circular(0.0),
+                                topRight: const Radius.circular(8.0),
+                                bottomRight: const Radius.circular(8.0),
+                              )),
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
                       color: MyTheme.accent_color,
-                      shape: app_language_rtl.$ ?
-                      RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(8.0),
-                            bottomLeft: const Radius.circular(8.0),
-                            topRight: const Radius.circular(0.0),
-                            bottomRight: const Radius.circular(0.0),
-                          ))
+                      shape: app_language_rtl.$
+                          ? RoundedRectangleBorder(
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(8.0),
+                              bottomLeft: const Radius.circular(8.0),
+                              topRight: const Radius.circular(0.0),
+                              bottomRight: const Radius.circular(0.0),
+                            ))
                           : RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: const Radius.circular(0.0),
-                            bottomLeft: const Radius.circular(0.0),
-                            topRight: const Radius.circular(8.0),
-                            bottomRight: const Radius.circular(8.0),
-                          )),
+                              borderRadius: const BorderRadius.only(
+                              topLeft: const Radius.circular(0.0),
+                              bottomLeft: const Radius.circular(0.0),
+                              topRight: const Radius.circular(8.0),
+                              bottomRight: const Radius.circular(8.0),
+                            )),
                       child: Text(
-                        AppLocalizations.of(context).cart_screen_proceed_to_shipping,
+                        AppLocalizations.of(context)
+                            .cart_screen_proceed_to_shipping,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
@@ -456,7 +463,7 @@ class _CartState extends State<Cart> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -474,7 +481,7 @@ class _CartState extends State<Cart> {
         child: Builder(
           builder: (context) => Padding(
             padding:
-            const EdgeInsets.symmetric(vertical: 18.0, horizontal: 0.0),
+                const EdgeInsets.symmetric(vertical: 18.0, horizontal: 0.0),
             child: Container(
               child: Image.asset(
                 'assets/hamburger.png',
@@ -494,17 +501,15 @@ class _CartState extends State<Cart> {
     );
   }
 
-
-
   buildCartSellerList() {
     if (is_logged_in.$ == false) {
       return Container(
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).cart_screen_please_log_in,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).cart_screen_please_log_in,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     } else if (_isInitial && _shopList.length == 0) {
       return SingleChildScrollView(
           child: ShimmerHelper()
@@ -526,9 +531,8 @@ class _CartState extends State<Cart> {
                     padding: const EdgeInsets.only(bottom: 0.0, top: 16.0),
                     child: Row(
                       children: [
-
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
                             _shopList[index].name,
                             style: TextStyle(color: MyTheme.font_grey),
@@ -558,9 +562,9 @@ class _CartState extends State<Cart> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).cart_screen_cart_empty,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).cart_screen_cart_empty,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     }
   }
 
@@ -596,8 +600,7 @@ class _CartState extends State<Cart> {
                 padding: const EdgeInsets.all(16.0),
                 child: FadeInImage.assetNetwork(
                   placeholder: 'assets/placeholder.png',
-                  image:
-                  _shopList[seller_index]
+                  image: _shopList[seller_index]
                       .cart_items[item_index]
                       .product_thumbnail_image,
                   fit: BoxFit.fitWidth,
@@ -630,14 +633,14 @@ class _CartState extends State<Cart> {
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
                             _shopList[seller_index]
-                                .cart_items[item_index]
-                                .currency_symbol +
-                                (_shopList[seller_index]
                                     .cart_items[item_index]
-                                    .price *
-                                    _shopList[seller_index]
-                                        .cart_items[item_index]
-                                        .quantity)
+                                    .currency_symbol +
+                                (_shopList[seller_index]
+                                            .cart_items[item_index]
+                                            .price *
+                                        _shopList[seller_index]
+                                            .cart_items[item_index]
+                                            .quantity)
                                     .toStringAsFixed(2),
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,

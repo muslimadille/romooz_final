@@ -18,6 +18,7 @@ import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class Registration extends StatefulWidget {
   Registration({@required this.customer_type});
 
@@ -28,10 +29,9 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-  String _register_by = "email"; //phone or email
-  String initialCountry = 'US';
-  PhoneNumber phoneCode = PhoneNumber(isoCode: 'US', dialCode: "+1");
-
+  String _register_by = "phone"; //phone or email
+  String initialCountry = 'SA';
+  PhoneNumber phoneCode = PhoneNumber(isoCode: 'SA', dialCode: "+966");
   String _phone = "";
 
   //controllers
@@ -887,24 +887,24 @@ class _RegistrationState extends State<Registration> {
                                             hint_text: "johndoe@example.com"),
                                   ),
                                 ),
-                                otp_addon_installed.$
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _register_by = "phone";
-                                          });
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context)
-                                              .registration_screen_or_register_with_phone,
-                                          style: TextStyle(
-                                              color: MyTheme.accent_color,
-                                              fontStyle: FontStyle.italic,
-                                              decoration:
-                                                  TextDecoration.underline),
-                                        ),
-                                      )
-                                    : Container()
+                                // otp_addon_installed.$
+                                //     ? GestureDetector(
+                                //         onTap: () {
+                                //           setState(() {
+                                //             _register_by = "phone";
+                                //           });
+                                //         },
+                                //         child: Text(
+                                //           AppLocalizations.of(context)
+                                //               .registration_screen_or_register_with_phone,
+                                //           style: TextStyle(
+                                //               color: MyTheme.accent_color,
+                                //               fontStyle: FontStyle.italic,
+                                //               decoration:
+                                //                   TextDecoration.underline),
+                                //         ),
+                                //       )
+                                //     : Container()
                               ],
                             ),
                           )
@@ -948,21 +948,21 @@ class _RegistrationState extends State<Registration> {
                                     },
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _register_by = "email";
-                                    });
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .registration_screen_or_register_with_email,
-                                    style: TextStyle(
-                                        color: MyTheme.accent_color,
-                                        fontStyle: FontStyle.italic,
-                                        decoration: TextDecoration.underline),
-                                  ),
-                                )
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     setState(() {
+                                //       _register_by = "email";
+                                //     });
+                                //   },
+                                //   child: Text(
+                                //     AppLocalizations.of(context)
+                                //         .registration_screen_or_register_with_email,
+                                //     style: TextStyle(
+                                //         color: MyTheme.accent_color,
+                                //         fontStyle: FontStyle.italic,
+                                //         decoration: TextDecoration.underline),
+                                //   ),
+                                // )
                               ],
                             ),
                           ),
