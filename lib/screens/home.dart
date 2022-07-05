@@ -1,15 +1,10 @@
 import 'package:active_ecommerce_flutter/custom/CommonFunctoins.dart';
 import 'package:active_ecommerce_flutter/data_model/notification_count.dart';
-import 'package:active_ecommerce_flutter/helpers/addons_helper.dart';
-import 'package:active_ecommerce_flutter/helpers/business_setting_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:active_ecommerce_flutter/providers/locale_provider.dart';
 import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
 import 'package:active_ecommerce_flutter/screens/filter.dart';
-import 'package:active_ecommerce_flutter/screens/flash_deal_list.dart';
 import 'package:active_ecommerce_flutter/screens/package_admin_list.dart';
 import 'package:active_ecommerce_flutter/screens/todays_deal_products.dart';
-import 'package:active_ecommerce_flutter/screens/top_selling_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
 import 'package:active_ecommerce_flutter/screens/wishlist.dart';
@@ -22,7 +17,6 @@ import 'package:active_ecommerce_flutter/repositories/category_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
@@ -489,7 +483,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   top: Radius.circular(16),
                                   bottom: Radius.zero),
                               child: FadeInImage.assetNetwork(
-                                placeholder: 'assets/placeholder.png',
+                                placeholder: 'assets/categoy-placeholder.png',
                                 image: _featuredCategoryList[index].banner,
                                 fit: BoxFit.cover,
                               ))),
@@ -767,7 +761,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                           child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/placeholder_rectangle.png',
+                            placeholder: 'assets/slider-placeholder.png',
                             image: i,
                             fit: BoxFit.fill,
                           ))),

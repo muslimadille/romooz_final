@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/package_add_item_response.dart';
 import 'package:active_ecommerce_flutter/data_model/package_delete_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_add_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
@@ -96,5 +97,33 @@ class PackagesRepository {
     );
     print("remove${response.body}");
     return packageItemDeleteResponseFromJson(response.body);
+  }
+
+  Future<PackageAddItemResponse> addItemInPackage({
+    @required int product_id,
+    int package_id,
+  }) async {
+    Uri url = Uri.parse(
+        "${AppConfig.BASE_URL}/user/package/items?product_id=${product_id}&package_id=${package_id}&qty=1");
+
+    print(url.toString());
+    // var post_body = jsonEncode({
+    //   "name": "${name}",
+    //   "desc": "${desc}",
+    // });
+    // print("post_body${post_body}");
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+        "Content-Type": "application/json",
+      },
+    );
+    print("addItemInPackage${response.body}");
+    print(
+        "${AppConfig.BASE_URL}/user/package/items?product_id=${product_id}&package_id=${package_id}&qty=1");
+    return packageAddItemResponseFromJson(response.body);
   }
 }

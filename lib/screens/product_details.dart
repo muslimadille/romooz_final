@@ -323,13 +323,9 @@ class _ProductDetailsState extends State<ProductDetails> {
     _selected_package = package;
     _selected_state = null;
 
-    setState(() {});
-
-    // setModalState(() {
-    //   _countryController.text = country.name;
-    //   _stateController.text = "";
-    //   _cityController.text = "";
-    // });
+    setState(() {
+      _packageController.text = package.name;
+    });
   }
 
   reset() {
@@ -2079,8 +2075,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                     AppLocalizations.of(context).common_confirm_ucfirst,
                     style: TextStyle(color: MyTheme.dark_grey),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    var addPackageReponse = await PackagesRepository()
+                        .addItemInPackage(
+                            product_id: widget.id,
+                            package_id: _selected_package.id);
+
+                    print("addPackageReponse${addPackageReponse.itemId}");
+                    if (addPackageReponse.itemId != null) {
+                      ToastComponent.showDialog(
+                          addPackageReponse.message, context,
+                          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                      return;
+                    }
+
+                    ToastComponent.showDialog(
+                        addPackageReponse.message, context,
+                        gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
+                    setState(() {
+                      _selected_package = null;
+                      _packageController.text = "";
+                    });
                     Navigator.of(context, rootNavigator: true).pop();
+
+                    //Navigator.of(context, rootNavigator: true).pop();
                   },
                 ),
               ],

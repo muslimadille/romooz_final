@@ -65,7 +65,10 @@ class _SplashState extends State<Splash> {
       title: Text(
         "V " + _packageInfo.version,
         style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 14.0, color: Colors.white),
+          fontWeight: FontWeight.bold,
+          fontSize: 14.0,
+          color: MyTheme.dark_grey,
+        ),
       ),
       useLoader: false,
       loadingText: Text(
@@ -73,16 +76,16 @@ class _SplashState extends State<Splash> {
         style: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 13.0,
-          color: Colors.white,
+          color: MyTheme.dark_grey,
         ),
       ),
-      image: Image.asset("assets/splash_screen_logo.png"),
-      backgroundImage: SvgPicture.asset(
-        "assets/fruits-svgrepo-com.svg",
-        color: MyTheme.splash_screen_color2,
+      image: Image.asset(
+        "assets/black-logo.png",
       ),
-      backgroundColor: MyTheme.splash_screen_color,
+
       photoSize: 60.0,
+      imageBackground:
+          Image.asset("assets/splash_fr.png", fit: BoxFit.fitHeight),
       backgroundPhotoSize: 140.0,
     );
   }
@@ -124,7 +127,7 @@ class CustomSplashScreen extends StatefulWidget {
   final Text loadingText;
 
   ///  Background image for the entire screen
-  final ImageProvider imageBackground;
+  final Widget imageBackground;
 
   /// Background gradient for the entire screen
   final Gradient gradientBackground;
@@ -177,7 +180,7 @@ class CustomSplashScreen extends StatefulWidget {
           dynamic navigateAfterSeconds,
           Text title,
           TextStyle styleTextUnderTheLoader,
-          ImageProvider imageBackground,
+          Widget imageBackground,
           Gradient gradientBackground,
           bool useLoader,
           String routeName}) =>
@@ -212,7 +215,7 @@ class CustomSplashScreen extends StatefulWidget {
           dynamic navigateAfterSeconds,
           Text title,
           TextStyle styleTextUnderTheLoader,
-          ImageProvider imageBackground,
+          Widget imageBackground,
           Gradient gradientBackground,
           bool useLoader,
           String routeName}) =>
@@ -303,16 +306,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
             fit: StackFit.expand,
             children: <Widget>[
               Container(
-                decoration: BoxDecoration(
-                  image: widget.imageBackground == null
-                      ? null
-                      : DecorationImage(
-                          fit: BoxFit.cover,
-                          image: widget.imageBackground,
-                        ),
-                  gradient: widget.gradientBackground,
-                  color: widget.backgroundColor,
-                ),
+                child: widget.imageBackground,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,

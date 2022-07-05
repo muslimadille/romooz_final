@@ -20,6 +20,8 @@ class MyTheme {
   static Color font_grey = Color.fromRGBO(73, 73, 73, 1);
   static Color textfield_grey = Color.fromRGBO(209, 209, 209, 1);
   static Color golden = Color(0xFFd7c27e);
+  static Color purpel = Color(0xFF553F86);
+
   static Color shimmer_base = Colors.grey.shade50;
   static Color shimmer_highlighted = Colors.grey.shade200;
   static Color wholesale_color = Color(0xFFcb6a35);

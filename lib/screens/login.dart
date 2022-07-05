@@ -236,10 +236,10 @@ class _LoginState extends State<Login> {
         body: Stack(
           children: [
             Container(
-              width: _screen_width * (3 / 4),
-              child: SvgPicture.asset(
-                "assets/fruits-svgrepo-com.svg",
-                color: MyTheme.splash_screen_color2,
+              child: Image.asset(
+                "assets/splash_fr.png",
+                fit: BoxFit.fitHeight,
+                color: MyTheme.light_grey,
               ),
             ),
             Container(
@@ -255,8 +255,7 @@ class _LoginState extends State<Login> {
                       height: 75,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                            'assets/login_registration_form_logo.png'),
+                        child: Image.asset('assets/black-logo.png'),
                       ),
                     ),
                   ),
@@ -444,7 +443,7 @@ class _LoginState extends State<Login> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                              color: MyTheme.golden,
+                              color: MyTheme.purpel,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/intl_phone_input.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:active_ecommerce_flutter/screens/otp.dart';
@@ -96,13 +97,12 @@ class _RegistrationState extends State<Registration> {
     _selected_country = country;
     _selected_state = null;
     _selected_city = null;
-    setState(() {});
 
-    // setModalState(() {
-    //   _countryController.text = country.name;
-    //   _stateController.text = "";
-    //   _cityController.text = "";
-    // });
+    setState(() {
+      _countryController.text = country.name;
+      _stateController.text = "";
+      _cityController.text = "";
+    });
   }
 
   onSelectStateDuringAdd(
@@ -116,75 +116,84 @@ class _RegistrationState extends State<Registration> {
     }
     _selected_state = state;
     _selected_city = null;
-    setState(() {});
+    setState(() {
+      _stateController.text = state.name;
+      _cityController.text = "";
+    });
     //setModalState(() {
-    _stateController.text = state.name;
-    _cityController.text = "";
+
     // });
   }
 
   onSelectCityDuringAdd(city) {
     if (_selected_city != null && city.id == _selected_city.id) {
+      setState(() {
+        _cityController.text = city.name;
+      });
       // setModalState(() {
-      _cityController.text = city.name;
+
       // });
       return;
     }
     _selected_city = city;
-    //setModalState(() {
-    _cityController.text = city.name;
-    // });
+    setState(() {
+      _cityController.text = city.name;
+    });
   }
 
   onSelectCountryDuringUpdate(index, country) {
     if (_selected_country_list_for_update[index] != null &&
         country.id == _selected_country_list_for_update[index].id) {
-      // setModalState(() {
-      _countryControllerListForUpdate[index].text = country.name;
-      //});
+      setState(() {
+        _countryControllerListForUpdate[index].text = country.name;
+      });
       return;
     }
     _selected_country_list_for_update[index] = country;
     _selected_state_list_for_update[index] = null;
     _selected_city_list_for_update[index] = null;
-    setState(() {});
+    setState(() {
+      _countryControllerListForUpdate[index].text = country.name;
+      _stateControllerListForUpdate[index].text = "";
+      _cityControllerListForUpdate[index].text = "";
+    });
 
     // setModalState(() {
-    _countryControllerListForUpdate[index].text = country.name;
-    _stateControllerListForUpdate[index].text = "";
-    _cityControllerListForUpdate[index].text = "";
+
     // });
   }
 
   onSelectStateDuringUpdate(index, state) {
     if (_selected_state_list_for_update[index] != null &&
         state.id == _selected_state_list_for_update[index].id) {
-      //  setModalState(() {
-      _stateControllerListForUpdate[index].text = state.name;
-      // });
+      setState(() {
+        _stateControllerListForUpdate[index].text = state.name;
+      });
       return;
     }
     _selected_state_list_for_update[index] = state;
     _selected_city_list_for_update[index] = null;
-    setState(() {});
+    setState(() {
+      _stateControllerListForUpdate[index].text = state.name;
+      _cityControllerListForUpdate[index].text = "";
+    });
     //setModalState(() {
-    _stateControllerListForUpdate[index].text = state.name;
-    _cityControllerListForUpdate[index].text = "";
+
     //});
   }
 
   onSelectCityDuringUpdate(index, city) {
     if (_selected_city_list_for_update[index] != null &&
         city.id == _selected_city_list_for_update[index].id) {
-      //setModalState(() {
-      _cityControllerListForUpdate[index].text = city.name;
-      // });
+      setState(() {
+        _cityControllerListForUpdate[index].text = city.name;
+      });
       return;
     }
     _selected_city_list_for_update[index] = city;
-    //setModalState(() {
-    _cityControllerListForUpdate[index].text = city.name;
-    // });
+    setState(() {
+      _cityControllerListForUpdate[index].text = city.name;
+    });
   }
 
   @override
@@ -297,7 +306,7 @@ class _RegistrationState extends State<Registration> {
         commercial_name,
         commercial_registration_no,
         tax_number,
-        "1");
+        _selected_city.id.toString());
 
     if (signupResponse.result == false) {
       ToastComponent.showDialog(signupResponse.message, context,
@@ -326,9 +335,11 @@ class _RegistrationState extends State<Registration> {
         body: Stack(
           children: [
             Container(
-              width: _screen_width * (3 / 4),
               child: Image.asset(
-                  "assets/splash_login_registration_background_image.png"),
+                "assets/splash_fr.png",
+                fit: BoxFit.fitHeight,
+                color: MyTheme.light_grey,
+              ),
             ),
             Container(
               width: double.infinity,
@@ -341,8 +352,7 @@ class _RegistrationState extends State<Registration> {
                     child: Container(
                       width: 75,
                       height: 75,
-                      child: Image.asset(
-                          'assets/login_registration_form_logo.png'),
+                      child: Image.asset('assets/black-logo.png'),
                     ),
                   ),
                   Padding(
@@ -387,6 +397,9 @@ class _RegistrationState extends State<Registration> {
 
                         ///// Comercial name
                         Visibility(
+                          maintainSize: false,
+                          maintainAnimation: false,
+                          maintainState: false,
                           visible: widget.customer_type == "wholesale"
                               ? true
                               : false,
@@ -770,10 +783,12 @@ class _RegistrationState extends State<Registration> {
                                     },
                                     onSuggestionSelected: (city) {
                                       onSelectCityDuringAdd(city);
+                                      print("city....${city.id}");
                                     },
                                     textFieldConfiguration:
                                         TextFieldConfiguration(
                                       onTap: () {},
+
                                       //autofocus: true,
                                       controller: _cityController,
                                       onSubmitted: (txt) {
@@ -1082,7 +1097,7 @@ class _RegistrationState extends State<Registration> {
                             child: FlatButton(
                               minWidth: MediaQuery.of(context).size.width,
                               //height: 50,
-                              color: MyTheme.golden,
+                              color: MyTheme.purpel,
                               shape: RoundedRectangleBorder(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),

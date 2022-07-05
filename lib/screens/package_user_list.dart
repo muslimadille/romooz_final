@@ -1,14 +1,11 @@
-import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/helpers/reg_ex_inpur_formatter.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
-import 'package:active_ecommerce_flutter/screens/package_details.dart';
 import 'package:active_ecommerce_flutter/ui_elements/package_card.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:toast/toast.dart';
 
 class PackagesUserList extends StatefulWidget {
   @override
@@ -164,23 +161,43 @@ class _PackagesUserListState extends State<PackagesUserList> {
             return Container();
           } else if (snapshot.hasData) {
             var packageResponse = snapshot.data;
-            return SingleChildScrollView(
-              child: ListView.builder(
-                itemCount: packageResponse.data.length,
-                scrollDirection: Axis.vertical,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return PackageCard(
-                    id: packageResponse.data[index].id,
-                    image: "",
-                    name: packageResponse.data[index].name,
-                    main_price: packageResponse.data[index].price,
-                    desc: packageResponse.data[index].desc,
-                    has_discount: false,
-                  );
-                },
-              ),
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    16.0,
+                    16.0,
+                    16.0,
+                    0.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).romooz_packges,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: packageResponse.data.length,
+                  scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return PackageCard(
+                      id: packageResponse.data[index].id,
+                      image: "",
+                      name: packageResponse.data[index].name,
+                      main_price: packageResponse.data[index].price,
+                      desc: packageResponse.data[index].desc,
+                      has_discount: false,
+                    );
+                  },
+                ),
+              ],
             );
           } else {
             return SingleChildScrollView(
