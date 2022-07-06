@@ -28,7 +28,7 @@ class _PackageItemsState extends State<PackageItems> {
   bool _isInitial = true;
   var _cartTotal = 0.00;
   var _cartTotalString = ". . .";
-  List<PackageItem> _shopList;
+  List<PackageItem> _shopList = [];
 
   @override
   void initState() {
@@ -58,29 +58,29 @@ class _PackageItemsState extends State<PackageItems> {
     var cartResponseList = cartResponseData.packageItems;
 
     print("cartResponseList${cartResponseList}");
-    if (cartResponseData != null) {
+    // if (cartResponseData != null) {
+    //   _shopList = cartResponseList;
+    // }
+    if (cartResponseList != null && cartResponseList.length > 0) {
       _shopList = cartResponseList;
     }
     _isInitial = false;
-    getSetCartTotal();
+    _cartTotal = 0.00;
+    // getSetCartTotal();
     setState(() {});
   }
 
   getSetCartTotal() {
     _cartTotal = 0.00;
-    // if (_shopList.length > 0) {
-    //   _shopList.forEach((shop) {
-    //     if (shop.cart_items.length > 0) {
-    //       shop.cart_items.forEach((cart_item) {
-    //         _cartTotal += double.parse(
-    //             ((cart_item.price + cart_item.tax) * cart_item.quantity)
-    //                 .toStringAsFixed(2));
-    //         _cartTotalString =
-    //             "${cart_item.currency_symbol}${_cartTotal.toStringAsFixed(2)}";
-    //       });
-    //     }
-    //   });
-    // }
+    if (_shopList.length > 0) {
+      _shopList.forEach((package_item) {
+        // _cartTotal += double.parse(
+        //     ((package_item.product. + cart_item.tax) * cart_item.quantity)
+        //         .toStringAsFixed(2));
+        // _cartTotalString =
+        //     "${package_item.currency_symbol}${_cartTotal.toStringAsFixed(2)}";
+      });
+    }
 
     setState(() {});
   }
@@ -99,34 +99,37 @@ class _PackageItemsState extends State<PackageItems> {
     return partialTotalString;
   }
 
-  onQuantityIncrease(seller_index, item_index) {
-    // if (_shopList[seller_index].cart_items[item_index].quantity <
-    //     _shopList[seller_index].cart_items[item_index].upper_limit) {
-    //   _shopList[seller_index].cart_items[item_index].quantity++;
-    //   getSetCartTotal();
-    //   setState(() {});
-    // } else {
-    //   ToastComponent.showDialog(
-    //       "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} ${_shopList[seller_index].cart_items[item_index].upper_limit} ${AppLocalizations.of(context).cart_screen_items_of_this}",
-    //       context,
-    //       gravity: Toast.CENTER,
-    //       duration: Toast.LENGTH_LONG);
-    // }
+  onQuantityIncrease(item_index) {
+    if (_shopList[item_index].qty < 200) {
+      _shopList[item_index].qty++;
+      getSetCartTotal();
+      setState(() {});
+    } else {
+      ToastComponent.showDialog(
+          "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} 200 ${AppLocalizations.of(context).cart_screen_items_of_this}",
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    }
+    // ${_shopList[item_index].upper_limit}
   }
 
   onQuantityDecrease(seller_index, item_index) {
-    // if (_shopList[seller_index].cart_items[item_index].quantity >
-    //     _shopList[seller_index].cart_items[item_index].lower_limit) {
-    //   _shopList[seller_index].cart_items[item_index].quantity--;
-    //   getSetCartTotal();
-    //   setState(() {});
-    // } else {
-    //   ToastComponent.showDialog(
-    //       "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} ${_shopList[seller_index].cart_items[item_index].lower_limit} ${AppLocalizations.of(context).cart_screen_items_of_this}",
-    //       context,
-    //       gravity: Toast.CENTER,
-    //       duration: Toast.LENGTH_LONG);
-    // }
+    if (_shopList[item_index].qty > 1) {
+      _shopList[item_index].qty--;
+      getSetCartTotal();
+      setState(() {});
+    } else {
+      //_shopList[item_index].lower_limit
+
+      //_shopList[item_index].upper_limit
+
+      ToastComponent.showDialog(
+          "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} 1 ${AppLocalizations.of(context).cart_screen_items_of_this}",
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    }
   }
 
   onPressDelete(cart_id) {
@@ -207,12 +210,12 @@ class _PackageItemsState extends State<PackageItems> {
     //   });
     // }
 
-    if (cart_ids.length == 0) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).cart_screen_cart_empty, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
-    }
+    // if (cart_ids.length == 0) {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context).cart_screen_cart_empty, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
 
     var cart_ids_string = cart_ids.join(',').toString();
     var cart_quantities_string = cart_quantities.join(',').toString();
@@ -548,7 +551,7 @@ class _PackageItemsState extends State<PackageItems> {
                 padding: const EdgeInsets.all(16.0),
                 child: FadeInImage.assetNetwork(
                   placeholder: 'assets/placeholder.png',
-                  image: "",
+                  image: "${_shopList[item_index].product.thumbnailImage}",
                   fit: BoxFit.fitWidth,
                 ))),
         Container(
@@ -634,7 +637,7 @@ class _PackageItemsState extends State<PackageItems> {
                   ),
                   color: Colors.white,
                   onPressed: () {
-                    // onQuantityIncrease(seller_index, item_index);
+                    onQuantityIncrease(item_index);
                   },
                 ),
               ),
