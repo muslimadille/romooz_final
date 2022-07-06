@@ -298,6 +298,7 @@ class _PackagesListState extends State<PackagesList> {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
+                    print("PackageCard${packageResponse.data[index].id}");
                     return PackageCard(
                       id: packageResponse.data[index].id,
                       image: "",

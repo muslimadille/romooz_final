@@ -1,9 +1,6 @@
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/package_details.dart';
-import 'package:active_ecommerce_flutter/screens/wishlist.dart';
 import 'package:flutter/material.dart';
-import 'package:active_ecommerce_flutter/screens/product_details.dart';
-import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PackageCard extends StatefulWidget {
@@ -39,9 +36,7 @@ class _PackageCardState extends State<PackageCard> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return PackageItems(
-                id: widget.id,
-              );
+              return PackageItems(has_bottomnav: false);
             },
           ),
         );
@@ -110,9 +105,7 @@ class _PackageCardState extends State<PackageCard> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return PackageItems(
-                                id: widget.id,
-                              );
+                              return PackageItems(has_bottomnav: false);
                             }));
                           },
                           child: Text(

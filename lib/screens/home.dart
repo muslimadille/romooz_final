@@ -483,7 +483,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   top: Radius.circular(16),
                                   bottom: Radius.zero),
                               child: FadeInImage.assetNetwork(
-                                placeholder: 'assets/categoy-placeholder.png',
+                                placeholder: 'assets/placeholder.png',
                                 image: _featuredCategoryList[index].banner,
                                 fit: BoxFit.cover,
                               ))),
@@ -761,7 +761,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                           child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/slider-placeholder.png',
+                            placeholder: 'assets/placeholder.png',
                             image: i,
                             fit: BoxFit.fill,
                           ))),
