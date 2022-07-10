@@ -9,6 +9,7 @@ class PackageCard extends StatefulWidget {
   String name;
   String main_price;
   String desc;
+  String type;
   bool has_discount;
 
   PackageCard(
@@ -18,6 +19,7 @@ class PackageCard extends StatefulWidget {
       this.name,
       this.main_price,
       this.desc,
+      this.type,
       this.has_discount})
       : super(key: key);
 
@@ -36,7 +38,11 @@ class _PackageCardState extends State<PackageCard> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return PackageItems(has_bottomnav: false);
+              return PackageItems(
+                has_bottomnav: false,
+                packageId: widget.id,
+                packageType: widget.type,
+              );
             },
           ),
         );
@@ -48,83 +54,85 @@ class _PackageCardState extends State<PackageCard> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         elevation: 0.0,
-        child: Expanded(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(
+                children: [
+                  Text(
+                    widget.name,
+                    textAlign: TextAlign.justify,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        height: 1.6,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    widget.main_price,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: MyTheme.accent_color,
+                        fontSize: 14,
+                        height: 1.6,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      widget.name,
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          height: 1.6,
-                          fontWeight: FontWeight.w600),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16, 8, 8, 0),
+                      child: Text(
+                        widget.desc,
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.font_grey,
+                            fontSize: 14,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
                     ),
-                    Text(
-                      widget.main_price,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                          color: MyTheme.accent_color,
-                          fontSize: 14,
-                          height: 1.6,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16, 8, 8, 0),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(32, 8, 8, 4),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return PackageItems(
+                              has_bottomnav: false,
+                              packageId: widget.id,
+                              packageType: widget.type,
+                            );
+                          }));
+                        },
                         child: Text(
-                          widget.desc,
+                          AppLocalizations.of(context)
+                              .category_list_screen_view_products,
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 14,
-                              height: 1.6,
-                              fontWeight: FontWeight.w600),
+                              color: MyTheme.medium_grey,
+                              decoration: TextDecoration.underline),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(32, 8, 8, 4),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return PackageItems(has_bottomnav: false);
-                            }));
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .category_list_screen_view_products,
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: MyTheme.medium_grey,
-                                decoration: TextDecoration.underline),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ]),
-        ),
+              ),
+            ]),
       ),
     );
   }

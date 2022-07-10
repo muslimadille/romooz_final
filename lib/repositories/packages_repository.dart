@@ -35,6 +35,7 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
+    print("get-admin-package${response.body}");
     return packageDetailsResponseFromJson(response.body);
   }
 

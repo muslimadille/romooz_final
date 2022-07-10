@@ -8,14 +8,17 @@ import 'package:flutter/widgets.dart';
 import 'package:active_ecommerce_flutter/repositories/cart_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
-import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PackageItems extends StatefulWidget {
-  PackageItems({Key key, this.has_bottomnav}) : super(key: key);
+  PackageItems({Key key, this.has_bottomnav, this.packageId, this.packageType})
+      : super(key: key);
   final bool has_bottomnav;
+
+  final int packageId;
+  final String packageType;
 
   @override
   _PackageItemsState createState() => _PackageItemsState();
@@ -40,8 +43,11 @@ class _PackageItemsState extends State<PackageItems> {
     print(access_token.value);
     print(user_id.$);
     print(user_name.$);*/
+    print("package --- ${widget.packageType} ${widget.packageId}");
 
-    if (is_logged_in.$ == true) {
+    if (is_logged_in.$ == true && widget.packageType == 'user') {
+      fetchData2();
+    } else {
       fetchData();
     }
   }
@@ -54,7 +60,25 @@ class _PackageItemsState extends State<PackageItems> {
 
   fetchData() async {
     var cartResponseData =
-        await PackagesRepository().getAdminPackagesDetails(2);
+        await PackagesRepository().getAdminPackagesDetails(widget.packageId);
+    var cartResponseList = cartResponseData.packageItems;
+
+    print("cartResponseList${cartResponseList}");
+    // if (cartResponseData != null) {
+    //   _shopList = cartResponseList;
+    // }
+    if (cartResponseList != null && cartResponseList.length > 0) {
+      _shopList = cartResponseList;
+    }
+    _isInitial = false;
+    _cartTotal = 0.00;
+    // getSetCartTotal();
+    setState(() {});
+  }
+
+  fetchData2() async {
+    var cartResponseData =
+        await PackagesRepository().getUserPackagesDetails(widget.packageId);
     var cartResponseList = cartResponseData.packageItems;
 
     print("cartResponseList${cartResponseList}");
@@ -106,7 +130,7 @@ class _PackageItemsState extends State<PackageItems> {
       setState(() {});
     } else {
       ToastComponent.showDialog(
-          "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} 200 ${AppLocalizations.of(context).cart_screen_items_of_this}",
+          "${AppLocalizations.of(context).package_screen_cannot_order_more_than} 200 ${AppLocalizations.of(context).package_screen_items_of_this}",
           context,
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
@@ -125,7 +149,7 @@ class _PackageItemsState extends State<PackageItems> {
       //_shopList[item_index].upper_limit
 
       ToastComponent.showDialog(
-          "${AppLocalizations.of(context).cart_screen_cannot_order_more_than} 1 ${AppLocalizations.of(context).cart_screen_items_of_this}",
+          "${AppLocalizations.of(context).package_screen_cannot_order_more_than} 1 ${AppLocalizations.of(context).package_screen_items_of_this}",
           context,
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
@@ -142,7 +166,7 @@ class _PackageItemsState extends State<PackageItems> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Text(
-                  AppLocalizations.of(context).cart_screen_sure_remove_item,
+                  AppLocalizations.of(context).package_screen_sure_remove_item,
                   maxLines: 3,
                   style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
                 ),
@@ -150,7 +174,7 @@ class _PackageItemsState extends State<PackageItems> {
               actions: [
                 FlatButton(
                   child: Text(
-                    AppLocalizations.of(context).cart_screen_cancel,
+                    AppLocalizations.of(context).package_screen_cancel,
                     style: TextStyle(color: MyTheme.medium_grey),
                   ),
                   onPressed: () {
@@ -160,7 +184,7 @@ class _PackageItemsState extends State<PackageItems> {
                 FlatButton(
                   color: MyTheme.soft_accent_color,
                   child: Text(
-                    AppLocalizations.of(context).cart_screen_confirm,
+                    AppLocalizations.of(context).package_screen_confirm,
                     style: TextStyle(color: MyTheme.dark_grey),
                   ),
                   onPressed: () {
@@ -212,7 +236,7 @@ class _PackageItemsState extends State<PackageItems> {
 
     // if (cart_ids.length == 0) {
     //   ToastComponent.showDialog(
-    //       AppLocalizations.of(context).cart_screen_cart_empty, context,
+    //       AppLocalizations.of(context).package_screen_cart_empty, context,
     //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     //   return;
     // }
@@ -341,7 +365,8 @@ class _PackageItemsState extends State<PackageItems> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        AppLocalizations.of(context).cart_screen_total_amount,
+                        AppLocalizations.of(context)
+                            .package_screen_total_amount,
                         style:
                             TextStyle(color: MyTheme.font_grey, fontSize: 14),
                       ),
@@ -403,7 +428,8 @@ class _PackageItemsState extends State<PackageItems> {
                               bottomRight: const Radius.circular(0.0),
                             )),
                       child: Text(
-                        AppLocalizations.of(context).cart_screen_update_cart,
+                        AppLocalizations.of(context)
+                            .package_screen_update_package,
                         style: TextStyle(
                             color: MyTheme.medium_grey,
                             fontSize: 13,
@@ -458,7 +484,7 @@ class _PackageItemsState extends State<PackageItems> {
                             )),
                       child: Text(
                         AppLocalizations.of(context)
-                            .cart_screen_proceed_to_shipping,
+                            .package_screen_proceed_to_shipping,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
@@ -503,7 +529,7 @@ class _PackageItemsState extends State<PackageItems> {
           height: 100,
           child: Center(
               child: Text(
-            AppLocalizations.of(context).cart_screen_please_log_in,
+            AppLocalizations.of(context).package_screen_please_log_in,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     } else if (_isInitial && _shopList.length == 0) {
@@ -530,7 +556,7 @@ class _PackageItemsState extends State<PackageItems> {
           height: 100,
           child: Center(
               child: Text(
-            AppLocalizations.of(context).cart_screen_cart_empty,
+            AppLocalizations.of(context).package_screen_cart_empty,
             style: TextStyle(color: MyTheme.font_grey),
           )));
     }

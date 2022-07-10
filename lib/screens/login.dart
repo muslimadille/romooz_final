@@ -1,12 +1,12 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:active_ecommerce_flutter/other_config.dart';
 import 'package:active_ecommerce_flutter/social_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/intl_phone_input.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:active_ecommerce_flutter/screens/registration.dart';
@@ -28,7 +28,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _login_by = "email"; //phone or email
+  String _login_by = "phone"; //phone or email
   String initialCountry = 'SA';
   PhoneNumber phoneCode = PhoneNumber(isoCode: 'SA', dialCode: "+966");
   String _phone = "";
@@ -120,77 +120,73 @@ class _LoginState extends State<Login> {
     }
   }
 
-  // onPressedFacebookLogin() async {
-  //   final facebookLogin =
-  //       await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
+  onPressedFacebookLogin() async {
+    final facebookLogin = await FacebookAuth.instance
+        .login(loginBehavior: LoginBehavior.deviceAuth);
 
-  //   if (facebookLogin.status == LoginStatus.success) {
-  //     // get the user data
-  //     // by default we get the userId, email,name and picture
-  //     final userData = await FacebookAuth.instance.getUserData();
-  //     var loginResponse = await AuthRepository().getSocialLoginResponse(
-  //         "facebook",
-  //         userData['name'].toString(),
-  //         userData['email'].toString(),
-  //         userData['id'].toString(),
-  //         access_token: facebookLogin.accessToken.token);
-  //     print("..........................${loginResponse.toString()}");
-  //     if (loginResponse.result == false) {
-  //       ToastComponent.showDialog(loginResponse.message, context,
-  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-  //     } else {
-  //       ToastComponent.showDialog(loginResponse.message, context,
-  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-  //       AuthHelper().setUserData(loginResponse);
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-  //         return Main();
-  //       }));
-  //       FacebookAuth.instance.logOut();
-  //     }
-  //     // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+    if (facebookLogin.status == LoginStatus.success) {
+      // get the user data
+      // by default we get the userId, email,name and picture
+      final userData = await FacebookAuth.instance.getUserData();
+      var loginResponse = await AuthRepository().getSocialLoginResponse(
+          "facebook",
+          userData['name'].toString(),
+          userData['email'].toString(),
+          userData['id'].toString(),
+          access_token: facebookLogin.accessToken.token);
+      print("..........................${loginResponse.toString()}");
+      if (loginResponse.result == false) {
+        ToastComponent.showDialog(loginResponse.message, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      } else {
+        ToastComponent.showDialog(loginResponse.message, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        AuthHelper().setUserData(loginResponse);
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Main();
+        }));
+        FacebookAuth.instance.logOut();
+      }
+      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
 
-  //   } else {
-  //     print("....Facebook auth Failed.........");
-  //     print(facebookLogin.status);
-  //     print(facebookLogin.message);
-  //   }
-  // }
+    } else {
+      print("....Facebook auth Failed.........");
+      print(facebookLogin.status);
+      print(facebookLogin.message);
+    }
+  }
 
-  // onPressedGoogleLogin() async {
-  //   try {
-  //     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-  //
-  //
-  //     print(googleUser.toString());
-  //
-  //     GoogleSignInAuthentication googleSignInAuthentication =
-  //     await googleUser.authentication;
-  //     String accessToken = googleSignInAuthentication.accessToken;
-  //
-  //
-  //     var loginResponse = await AuthRepository().getSocialLoginResponse("google",
-  //         googleUser.displayName, googleUser.email, googleUser.id,access_token: accessToken);
-  //
-  //     if (loginResponse.result == false) {
-  //       ToastComponent.showDialog(loginResponse.message, context,
-  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-  //     } else {
-  //       ToastComponent.showDialog(loginResponse.message, context,
-  //           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-  //       AuthHelper().setUserData(loginResponse);
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-  //         return Main();
-  //       }));
-  //     }
-  //     GoogleSignIn().disconnect();
-  //   } on Exception catch (e) {
-  //     print("error is ....... $e");
-  //     // TODO
-  //   }
-  //
-  //
-  //
-  // }
+  onPressedGoogleLogin() async {
+    try {
+      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+      print(googleUser.toString());
+
+      GoogleSignInAuthentication googleSignInAuthentication =
+          await googleUser.authentication;
+      String accessToken = googleSignInAuthentication.accessToken;
+
+      var loginResponse = await AuthRepository().getSocialLoginResponse(
+          "google", googleUser.displayName, googleUser.email, googleUser.id,
+          access_token: accessToken);
+
+      if (loginResponse.result == false) {
+        ToastComponent.showDialog(loginResponse.message, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      } else {
+        ToastComponent.showDialog(loginResponse.message, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        AuthHelper().setUserData(loginResponse);
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Main();
+        }));
+      }
+      GoogleSignIn().disconnect();
+    } on Exception catch (e) {
+      print("error is ....... $e");
+      // TODO
+    }
+  }
 
   onPressedTwitterLogin() async {
     try {
@@ -542,8 +538,9 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Visibility(
-                          visible:
-                              allow_google_login.$ || allow_facebook_login.$,
+                          visible: true,
+                          // visible:
+                          //     allow_google_login.$ || allow_facebook_login.$,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Center(
@@ -561,14 +558,14 @@ class _LoginState extends State<Login> {
                             child: Container(
                               width: 120,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Visibility(
-                                    visible: allow_google_login.$,
+                                    // visible: allow_google_login.$,
+                                    visible: true,
                                     child: InkWell(
                                       onTap: () {
-                                        //onPressedGoogleLogin();
+                                        onPressedGoogleLogin();
                                       },
                                       child: Container(
                                         width: 28,
@@ -578,7 +575,8 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: allow_facebook_login.$,
+                                    visible: false,
+                                    // visible: allow_facebook_login.$,
                                     child: InkWell(
                                       onTap: () {
                                         // onPressedFacebookLogin();

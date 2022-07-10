@@ -115,6 +115,8 @@
   "cart_screen_cart_empty": "Cart is empty",
   "cart_screen_total_amount": "Total Amount",
   "cart_screen_update_cart": "UPDATE CART",
+  "package_screen_update_package":"UPDATE Package",
+
   "cart_screen_proceed_to_shipping": "PROCEED TO SHIPPING",
   "cart_screen_shopping_cart": "Shopping Cart",
   "cart_screen_please_log_in": "Please log in to see the cart items",
@@ -485,7 +487,19 @@
        "cvv": "CVV" ,
         "pay": "PAY" ,
           "payment_procccing": "Processing your request, please wait..." ,
-           "track_order": "Track Order" 
+           "track_order": "Track Order" ,
+
+            "package_screen_cannot_order_more_than": "Cannot order more than",
+  "package_screen_items_of_this": "item(s) of this",
+  "package_screen_sure_remove_item": "Are you sure to remove this item ?",
+  "package_screen_cancel": "Cancel",
+  "package_screen_confirm": "Confirm",
+  "package_screen_cart_empty": "Package is empty",
+  "package_screen_total_amount": "Total Amount",
+  "package_screen_proceed_to_shipping": "PROCEED TO SHIPPING",
+  "package_screen_shopping_cart": "Package",
+  "package_screen_please_log_in": "Please log in to see the package items"
+
 
 
 }

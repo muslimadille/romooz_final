@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "51842256260",
-    "project_id": "romoozapp-18baa",
-    "storage_bucket": "romoozapp-18baa.appspot.com"
+    "project_number": "310543301172",
+    "project_id": "romooz-7b8c2",
+    "storage_bucket": "romooz-7b8c2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:51842256260:android:df24b0d10e7b3b32f3e1d1",
+        "mobilesdk_app_id": "1:310543301172:android:9c82c5ebce27f53b84e861",
         "android_client_info": {
           "package_name": "com.romooz.app.customer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "51842256260-jgg9s6mi5qh2um0fl2n7n48f29pt9ibq.apps.googleusercontent.com",
+          "client_id": "310543301172-hbs39cdq4tir1770b5p69snsbpg6jemc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAee5J_A-K_5GsHYpUDe24S7BSqZxyT5Nw"
+          "current_key": "AIzaSyA5cknEngc66KYnUsIPdhVo1GPjToA3sQs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "51842256260-jgg9s6mi5qh2um0fl2n7n48f29pt9ibq.apps.googleusercontent.com",
+              "client_id": "310543301172-hbs39cdq4tir1770b5p69snsbpg6jemc.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "51842256260-p1tlbjlroep0pu5ucvrk08otcgb2v1r2.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.romooz.app.customer"
-              }
             }
           ]
         }

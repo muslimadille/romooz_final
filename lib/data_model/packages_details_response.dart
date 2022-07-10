@@ -47,9 +47,11 @@ class PackageDetailsResponse {
         price: json["price"],
         qty: json["qty"],
         createdAt: json["created_at"],
-        packageItems: List<PackageItem>.from(
-            json["package_items"].map((x) => PackageItem.fromJson(x))),
-        success: json["success"],
+        packageItems: json["package_items"] == null
+            ? []
+            : List<PackageItem>.from(
+                json["package_items"].map((x) => PackageItem.fromJson(x))),
+        success: json["success"] == null ? null : json["success"],
         status: json["status"],
       );
 
@@ -62,9 +64,10 @@ class PackageDetailsResponse {
         "price": price,
         "qty": qty,
         "created_at": createdAt,
-        "package_items":
-            List<dynamic>.from(packageItems.map((x) => x.toJson())),
-        "success": success,
+        "package_items": packageItems == null
+            ? []
+            : List<dynamic>.from(packageItems.map((x) => x.toJson())),
+        "success": success == null ? null : success,
         "status": status,
       };
 }

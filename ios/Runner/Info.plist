@@ -27,7 +27,9 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb950110338385665</string>
+				<!-- TODO Replace this value: -->
+				<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+				<string>com.googleusercontent.apps.310543301172-f8io81ucdc0smdfcmd2abm23k94mc04h</string>
 			</array>
 		</dict>
 		<dict>

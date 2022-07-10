@@ -302,6 +302,7 @@ class _PackagesListState extends State<PackagesList> {
                     return PackageCard(
                       id: packageResponse.data[index].id,
                       image: "",
+                      type: "admin",
                       name: packageResponse.data[index].name,
                       main_price: packageResponse.data[index].price,
                       desc: packageResponse.data[index].desc,
