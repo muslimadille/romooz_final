@@ -1,3 +1,4 @@
+import 'package:active_ecommerce_flutter/data_model/daily_time_delivery_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/screens/shipping_info.dart';
@@ -11,6 +12,7 @@ import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class PackageItems extends StatefulWidget {
   PackageItems({Key key, this.has_bottomnav, this.packageId, this.packageType})
@@ -27,16 +29,22 @@ class PackageItems extends StatefulWidget {
 class _PackageItemsState extends State<PackageItems> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   ScrollController _mainScrollController = ScrollController();
+  TimeOfDay selectedTime = TimeOfDay.now();
   // var _shopList = [];
   bool _isInitial = true;
   var _cartTotal = 0.00;
   var _cartTotalString = ". . .";
   List<PackageItem> _shopList = [];
 
+  List<Day> _dayList = [];
+
+  List<Day> _selectedDay = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getTimeDateDelivery();
 
     /*print("user data");
     print(is_logged_in.$);
@@ -62,8 +70,8 @@ class _PackageItemsState extends State<PackageItems> {
     var cartResponseData =
         await PackagesRepository().getAdminPackagesDetails(widget.packageId);
     var cartResponseList = cartResponseData.packageItems;
-
-    print("cartResponseList${cartResponseList}");
+    _cartTotalString = cartResponseData.price;
+    print("cartResponseList${_cartTotalString}");
     // if (cartResponseData != null) {
     //   _shopList = cartResponseList;
     // }
@@ -80,8 +88,9 @@ class _PackageItemsState extends State<PackageItems> {
     var cartResponseData =
         await PackagesRepository().getUserPackagesDetails(widget.packageId);
     var cartResponseList = cartResponseData.packageItems;
+    _cartTotalString = cartResponseData.price;
 
-    print("cartResponseList${cartResponseList}");
+    print("cartResponseList${cartResponseData.price}");
     // if (cartResponseData != null) {
     //   _shopList = cartResponseList;
     // }
@@ -90,6 +99,23 @@ class _PackageItemsState extends State<PackageItems> {
     }
     _isInitial = false;
     _cartTotal = 0.00;
+    // getSetCartTotal();
+    setState(() {});
+  }
+
+  getTimeDateDelivery() async {
+    var timeResponseData =
+        await PackagesRepository().getDailyTimeDeliveryResponse();
+    var timeResponseDataList = timeResponseData.days;
+
+    print("timeResponseDataList${timeResponseDataList}");
+    // if (cartResponseData != null) {
+    //   _shopList = cartResponseList;
+    // }
+    if (timeResponseDataList != null && timeResponseDataList.length > 0) {
+      _dayList = timeResponseDataList;
+    }
+
     // getSetCartTotal();
     setState(() {});
   }
@@ -411,7 +437,7 @@ class _PackageItemsState extends State<PackageItems> {
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
-                      color: MyTheme.light_grey,
+                      color: Colors.greenAccent,
                       shape: app_language_rtl.$
                           ? RoundedRectangleBorder(
                               borderRadius: const BorderRadius.only(
@@ -431,12 +457,13 @@ class _PackageItemsState extends State<PackageItems> {
                         AppLocalizations.of(context)
                             .package_screen_update_package,
                         style: TextStyle(
-                            color: MyTheme.medium_grey,
+                            color: Colors.black,
                             fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {
-                        onPressUpdate();
+                        //onPressUpdate();
+                        chooseTimeData();
                       },
                     ),
                   ),
@@ -502,6 +529,52 @@ class _PackageItemsState extends State<PackageItems> {
         ),
       ),
     );
+  }
+
+  chooseTimeData() {
+    showDialog(
+      context: context,
+      builder: (context) => Directionality(
+        textDirection:
+            app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
+        child: AlertDialog(
+          content: MultiSelectDialogField<Day>(
+            backgroundColor: MyTheme.dark_grey,
+            selectedColor: MyTheme.white,
+            unselectedColor: MyTheme.golden,
+            items: _dayList.map((e) => MultiSelectItem(e, e.name)).toList(),
+            listType: MultiSelectListType.CHIP,
+            onConfirm: (values) {
+              _selectedDay = values;
+              print("_selectedDay${_selectedDay}");
+            },
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {},
+                child: Text(AppLocalizations.of(context).common_yes)),
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(AppLocalizations.of(context).common_no)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  selectTime(BuildContext context) async {
+    final TimeOfDay timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      initialEntryMode: TimePickerEntryMode.dial,
+    );
+    if (timeOfDay != null && timeOfDay != selectedTime) {
+      setState(() {
+        selectedTime = timeOfDay;
+      });
+    }
   }
 
   AppBar buildAppBar(BuildContext context) {

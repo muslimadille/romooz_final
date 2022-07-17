@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/daily_time_delivery_response.dart';
 import 'package:active_ecommerce_flutter/data_model/package_add_item_response.dart';
 import 'package:active_ecommerce_flutter/data_model/package_delete_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_add_response.dart';
@@ -126,5 +127,17 @@ class PackagesRepository {
     print(
         "${AppConfig.BASE_URL}/user/package/items?product_id=${product_id}&package_id=${package_id}&qty=1");
     return packageAddItemResponseFromJson(response.body);
+  }
+
+  Future<DailyTimeDeliveryResponse> getDailyTimeDeliveryResponse() async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/get-daily-time-delivery");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+    );
+    return dailyTimeDeliveryResponseFromJson(response.body);
   }
 }

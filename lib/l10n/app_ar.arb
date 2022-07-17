@@ -113,7 +113,7 @@
    "cart_screen_total_amount":"اجمالي المقدار",
    "cart_screen_update_cart":"تعديل عربة التسوق",
 
-    "package_screen_update_package":"تعديل الباقة",
+    "package_screen_update_package":"الاشتراك فى الباقة",
 
    "cart_screen_proceed_to_shipping":"استمر في الشحن",
    "cart_screen_shopping_cart":"عربة التسوق",
@@ -497,7 +497,7 @@
    "package_screen_confirm":"تأكيد",
    "package_screen_cart_empty":"الباقة فارغة",
    "package_screen_total_amount":"اجمالي المقدار" ,
-   "package_screen_proceed_to_shipping":"استمر في الشحن",
+   "package_screen_proceed_to_shipping":"استمر في الشحن و دفع الباقة",
    "package_screen_shopping_cart":"الباقة",
    "package_screen_please_log_in":"برجاء تسجيل الدخول لمشاهدة الباقة"
 

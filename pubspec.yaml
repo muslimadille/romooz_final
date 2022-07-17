@@ -76,6 +76,7 @@ dependencies:
   hyperpay: ^0.0.9-alpha
   enum_to_string: ^2.0.1
   badges:
+  multi_select_flutter:
  # hyperpay: ^0.0.9-alpha
 
 dev_dependencies:
