@@ -53,7 +53,7 @@ class _RegistrationState extends State<Registration> {
   ///
   ///
   ///int _default_shipping_address = 0;
-  City _selected_city;
+  City _selected_city = null;
   Country _selected_country;
   MyState _selected_state;
 
@@ -306,7 +306,7 @@ class _RegistrationState extends State<Registration> {
         commercial_name,
         commercial_registration_no,
         tax_number,
-        _selected_city.id.toString());
+        _selected_city == null ? "0" : _selected_city.id.toString());
 
     if (signupResponse.result == false) {
       ToastComponent.showDialog(signupResponse.message, context,

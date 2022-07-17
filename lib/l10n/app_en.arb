@@ -496,7 +496,7 @@
   "package_screen_confirm": "Confirm",
   "package_screen_cart_empty": "Package is empty",
   "package_screen_total_amount": "Total Amount",
-  "package_screen_proceed_to_shipping": "PROCEED TO SHIPPING",
+  "package_screen_proceed_to_shipping": "PROCEED TO SUBSCRIBE",
   "package_screen_shopping_cart": "Package",
   "package_screen_please_log_in": "Please log in to see the package items",
    "package_screen_time_choose":"Choose Delivery Time"
