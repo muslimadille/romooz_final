@@ -39,6 +39,7 @@ class _PackageItemsState extends State<PackageItems> {
   List<Day> _dayList = [];
 
   List<Day> _selectedDay = [];
+  String _selectedDayString = null;
 
   @override
   void initState() {
@@ -372,12 +373,46 @@ class _PackageItemsState extends State<PackageItems> {
                 )*/
       ),
 
-      height: widget.has_bottomnav ? 230 : 120,
+      height: widget.has_bottomnav ? 230 : 180,
       //color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Container(
+              height: 40,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: MyTheme.soft_accent_color),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "${selectedTime.format(context)}",
+                        style:
+                            TextStyle(color: MyTheme.font_grey, fontSize: 14),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text("${selectedTime}",
+                          style: TextStyle(
+                              color: MyTheme.accent_color,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
             Container(
               height: 40,
               width: double.infinity,
@@ -463,7 +498,7 @@ class _PackageItemsState extends State<PackageItems> {
                       ),
                       onPressed: () {
                         //onPressUpdate();
-                        chooseTimeData();
+                        _showMultiSelect(context);
                       },
                     ),
                   ),
@@ -531,50 +566,96 @@ class _PackageItemsState extends State<PackageItems> {
     );
   }
 
-  chooseTimeData() {
-    showDialog(
-      context: context,
-      builder: (context) => Directionality(
-        textDirection:
-            app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
-        child: AlertDialog(
-          content: MultiSelectDialogField<Day>(
-            backgroundColor: MyTheme.dark_grey,
-            selectedColor: MyTheme.white,
-            unselectedColor: MyTheme.golden,
-            items: _dayList.map((e) => MultiSelectItem(e, e.name)).toList(),
-            listType: MultiSelectListType.CHIP,
-            onConfirm: (values) {
-              _selectedDay = values;
-              print("_selectedDay${_selectedDay}");
-            },
-          ),
-          actions: [
-            FlatButton(
-                onPressed: () {},
-                child: Text(AppLocalizations.of(context).common_yes)),
-            FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(AppLocalizations.of(context).common_no)),
-          ],
-        ),
-      ),
-    );
+  void _showMultiSelect(BuildContext context) async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.3,
+            child: Container(
+              child: Column(
+                children: [
+                  Container(
+                    child: MultiSelectDialogField<Day>(
+                      items: _dayList
+                          .map((e) => MultiSelectItem(e, e.name))
+                          .toList(),
+                      listType: MultiSelectListType.LIST,
+                      selectedColor: MyTheme.accent_color,
+                      onConfirm: (values) {
+                        _selectedDay = values;
+                        print("_selectedDay${_selectedDay}");
+                        var concatenate = StringBuffer();
+                        var _selectedDayString2 = StringBuffer();
+                        print("concatenate${concatenate}");
+                        _selectedDay.forEach((item) {
+                          concatenate.write("${item.name},");
+                          _selectedDayString2.write(",${item.id}");
+
+                          print("item.name${item.name}");
+                        });
+
+                        this._selectedDayString =
+                            _selectedDayString2.toString().substring(1);
+                        print("_selectedDayString${_selectedDayString}");
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: Column(
+                      children: [
+                        FlatButton(
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .package_screen_time_choose,
+                            style: TextStyle(color: MyTheme.accent_color),
+                          ),
+                          onPressed: () {
+                            selectTime(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
-  selectTime(BuildContext context) async {
-    final TimeOfDay timeOfDay = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-      initialEntryMode: TimePickerEntryMode.dial,
-    );
-    if (timeOfDay != null && timeOfDay != selectedTime) {
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay picked_s = await showTimePicker(
+        context: context,
+        initialTime: selectedTime,
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: MyTheme.accent_color2, // <-- SEE HERE
+                onPrimary: MyTheme.accent_color, // <-- SEE HERE
+                onSurface: MyTheme.accent_color, // <-- SEE HERE
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  primary: MyTheme.accent_color2, // button text color
+                ),
+              ),
+            ),
+            child: MediaQuery(
+              data:
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+              child: child,
+            ),
+          );
+        });
+
+    if (picked_s != null && picked_s != selectedTime)
       setState(() {
-        selectedTime = timeOfDay;
+        Navigator.pop(context);
+        selectedTime = picked_s;
       });
-    }
   }
 
   AppBar buildAppBar(BuildContext context) {
