@@ -40,6 +40,7 @@ class _PackageItemsState extends State<PackageItems> {
 
   List<Day> _selectedDay = [];
   String _selectedDayString = null;
+  String _selectedDayStringName = null;
 
   @override
   void initState() {
@@ -400,7 +401,7 @@ class _PackageItemsState extends State<PackageItems> {
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text("${selectedTime}",
+                      child: Text("${_selectedDayStringName ?? ""}",
                           style: TextStyle(
                               color: MyTheme.accent_color,
                               fontSize: 14,
@@ -489,8 +490,7 @@ class _PackageItemsState extends State<PackageItems> {
                               bottomRight: const Radius.circular(0.0),
                             )),
                       child: Text(
-                        AppLocalizations.of(context)
-                            .package_screen_update_package,
+                        AppLocalizations.of(context).package_screen_time_choose,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 13,
@@ -590,7 +590,7 @@ class _PackageItemsState extends State<PackageItems> {
                         var _selectedDayString2 = StringBuffer();
                         print("concatenate${concatenate}");
                         _selectedDay.forEach((item) {
-                          concatenate.write("${item.name},");
+                          concatenate.write(",${item.name}");
                           _selectedDayString2.write(",${item.id}");
 
                           print("item.name${item.name}");
@@ -598,7 +598,11 @@ class _PackageItemsState extends State<PackageItems> {
 
                         this._selectedDayString =
                             _selectedDayString2.toString().substring(1);
-                        print("_selectedDayString${_selectedDayString}");
+                        this._selectedDayStringName =
+                            concatenate.toString().substring(1);
+
+                        print(
+                            "_selectedDayString${this._selectedDayString}${this._selectedDayStringName}");
                       },
                     ),
                   ),
