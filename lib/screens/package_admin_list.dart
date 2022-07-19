@@ -1,7 +1,6 @@
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/helpers/reg_ex_inpur_formatter.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
-import 'package:active_ecommerce_flutter/screens/package_details.dart';
 import 'package:active_ecommerce_flutter/screens/package_user_list.dart';
 import 'package:active_ecommerce_flutter/ui_elements/package_card.dart';
 import 'package:flutter/material.dart';
@@ -301,6 +300,7 @@ class _PackagesListState extends State<PackagesList> {
                     print("PackageCard${packageResponse.data[index].id}");
                     return PackageCard(
                       id: packageResponse.data[index].id,
+                      data: packageResponse.data[index],
                       image: "",
                       type: "admin",
                       name: packageResponse.data[index].name,

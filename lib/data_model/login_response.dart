@@ -17,6 +17,7 @@ class LoginResponse {
     this.token_type,
     this.expires_at,
     this.user,
+    this.user_id,
   });
 
   bool result;
@@ -25,10 +26,12 @@ class LoginResponse {
   String token_type;
   DateTime expires_at;
   User user;
+  int user_id;
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
         result: json["result"],
         message: json["message"],
+        user_id: json["user_id"] == null ? null : json["user_id"],
         access_token:
             json["access_token"] == null ? null : json["access_token"],
         token_type: json["token_type"] == null ? null : json["token_type"],
@@ -41,6 +44,7 @@ class LoginResponse {
   Map<String, dynamic> toJson() => {
         "result": result,
         "message": message,
+        "user_id": user_id,
         "access_token": access_token == null ? null : access_token,
         "token_type": token_type == null ? null : token_type,
         "expires_at": expires_at == null ? null : expires_at.toIso8601String(),

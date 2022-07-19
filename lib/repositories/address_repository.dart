@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/zones_response.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -18,8 +19,7 @@ import 'package:flutter/foundation.dart';
 
 class AddressRepository {
   Future<AddressResponse> getAddressList() async {
-    Uri url =
-        Uri.parse("${AppConfig.BASE_URL}/user/shipping/address");
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/address");
     final response = await http.get(
       url,
       headers: {
@@ -170,6 +170,14 @@ class AddressRepository {
     return myStateResponseFromJson(response.body);
   }
 
+  //  Future<ZonesResponse> getZoneList(
+  //     {country_id = 0, name = ""}) async {
+  //   Uri url = Uri.parse(
+  //       "${AppConfig.BASE_URL}/zones");
+  //   final response = await http.get(url);
+  //   return zonesResponseFromJson(response.body);
+  // }
+
   Future<CountryResponse> getCountryList({name = ""}) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/countries?name=${name}");
     final response = await http.get(url);
@@ -195,7 +203,6 @@ class AddressRepository {
           "App-Language": app_language.$
         },
         body: post_body);
-
 
     return shippingCostResponseFromJson(response.body);
   }

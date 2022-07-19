@@ -7,10 +7,8 @@ import 'package:active_ecommerce_flutter/data_model/package_delete_response.dart
 import 'package:active_ecommerce_flutter/data_model/packages_add_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
+import 'package:active_ecommerce_flutter/data_model/packages_response_subscribe.dart';
 import 'package:http/http.dart' as http;
-import 'package:active_ecommerce_flutter/data_model/wishlist_check_response.dart';
-import 'package:active_ecommerce_flutter/data_model/wishlist_delete_response.dart';
-import 'package:active_ecommerce_flutter/data_model/wishlist_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
@@ -24,7 +22,7 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
-    return packagesFromJson(response.body);
+    return packagesResponseFromJson(response.body);
   }
 
   Future<PackageDetailsResponse> getAdminPackagesDetails(int package_id) async {
@@ -49,7 +47,7 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
-    return packagesFromJson(response.body);
+    return packagesResponseFromJson(response.body);
   }
 
   Future<PackageDetailsResponse> getUserPackagesDetails(int package_id) async {
@@ -139,5 +137,24 @@ class PackagesRepository {
       },
     );
     return dailyTimeDeliveryResponseFromJson(response.body);
+  }
+
+  Future<PackagesResponseSubscribe> subscribeAdminPackages(
+      int package_id, String days, String times) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/user/subscribe-package");
+
+    //  print("post_body${post_body}");
+
+    final response = await http.post(url, headers: {
+      "Authorization": "Bearer ${access_token.$}",
+      "App-Language": app_language.$,
+      "Accept": "application/json"
+    }, body: {
+      "package_id": "${package_id}",
+      "days": "${days}",
+      "times": "${times}",
+    });
+    print("get-admin-package${response.body}");
+    return packagesResponseSubscribeFromJson(response.body);
   }
 }

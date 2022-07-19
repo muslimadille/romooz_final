@@ -14,10 +14,11 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class AuthRepository {
   Future<LoginResponse> getLoginResponse(
-      @required String email, @required String password) async {
+      @required String email, String password) async {
+    print("email${email}");
     var post_body = jsonEncode({
-      "email": "${email}",
-      "password": "$password",
+      "phone": "${email}",
+      // "password": "$password",
       "identity_matrix": AppConfig.purchase_code
     });
 
@@ -85,6 +86,8 @@ class AuthRepository {
     @required String commercial_registration_no,
     @required String tax_number,
     @required String city_id,
+    @required String commercial_registry,
+    @required String tax_number_certificate,
   ) async {
     var post_body = jsonEncode({
       "name": "$name",
@@ -96,8 +99,10 @@ class AuthRepository {
       "owner_name": "$owner_name",
       "commercial_name": "$commercial_name",
       "commercial_registration_no": "$commercial_registration_no",
+      "commercial_registry": "$commercial_registry",
+      "tax_number_certificate": "$tax_number_certificate",
       "tax_number": "$tax_number",
-      "city_id": 1
+      "city_id": city_id
     });
 
     print("response sign up${post_body}");
@@ -130,7 +135,7 @@ class AuthRepository {
     return resendCodeResponseFromJson(response.body);
   }
 
-  Future<ConfirmCodeResponse> getConfirmCodeResponse(
+  Future<LoginResponse> getConfirmCodeResponse(
       @required int user_id, @required String verification_code) async {
     var post_body = jsonEncode(
         {"user_id": "$user_id", "verification_code": "$verification_code"});
@@ -143,7 +148,7 @@ class AuthRepository {
         },
         body: post_body);
 
-    return confirmCodeResponseFromJson(response.body);
+    return loginResponseFromJson(response.body);
   }
 
   Future<PasswordForgetResponse> getPasswordForgetResponse(

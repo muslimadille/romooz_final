@@ -1,19 +1,24 @@
+import 'dart:io';
+import 'package:path/path.dart' as p;
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/data_model/city_response.dart';
 import 'package:active_ecommerce_flutter/data_model/country_response.dart';
 import 'package:active_ecommerce_flutter/data_model/state_response.dart';
+import 'package:active_ecommerce_flutter/helpers/file_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/repositories/address_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/custom/intl_phone_input.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:active_ecommerce_flutter/screens/otp.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -49,6 +54,17 @@ class _RegistrationState extends State<Registration> {
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordConfirmController = TextEditingController();
+
+  //for image uploading
+  final ImagePicker _picker = ImagePicker();
+  XFile _commercial_registry;
+
+  String commercial_registry;
+
+  XFile _tax_number_certificate;
+
+  String tax_number_certificate;
+
   //////// addresss
   ///
   ///
@@ -85,6 +101,148 @@ class _RegistrationState extends State<Registration> {
     //on Splash Screen hide statusbar
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
+  }
+
+  chooseAndUploadImageCommercialRegistry(context) async {
+    var status = await Permission.photos.request();
+
+    if (status.isDenied) {
+      // We didn't ask for permission yet.
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+                title:
+                    Text(AppLocalizations.of(context).common_photo_permission),
+                content: Text(
+                    AppLocalizations.of(context).common_app_needs_permission),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                    child: Text(AppLocalizations.of(context).common_deny),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(AppLocalizations.of(context).common_settings),
+                    onPressed: () => openAppSettings(),
+                  ),
+                ],
+              ));
+    } else if (status.isRestricted) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).common_give_photo_permission, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    } else if (status.isGranted) {
+      //file = await ImagePicker.pickImage(source: ImageSource.camera);
+      _commercial_registry =
+          await _picker.pickImage(source: ImageSource.gallery);
+
+      if (_commercial_registry == null) {
+        ToastComponent.showDialog(
+            AppLocalizations.of(context).common_no_file_chosen, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        return;
+      }
+
+      //return;
+      String base64Image =
+          FileHelper.getBase64FormateFile(_commercial_registry.path);
+      String fileName = _commercial_registry.path.split("/").last;
+
+      final extension = p.extension(_commercial_registry.path, 2);
+
+      commercial_registry = base64Image;
+
+      setState(() {});
+
+      print("base64Image fileName ${extension}");
+
+      // var profileImageUpdateResponse =
+      //     await ProfileRepository().getProfileImageUpdateResponse(
+      //   base64Image,
+      //   fileName,
+      // );
+
+      // if (profileImageUpdateResponse.result == false) {
+      //   ToastComponent.showDialog(profileImageUpdateResponse.message, context,
+      //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      //   return;
+      // } else {
+      //   ToastComponent.showDialog(profileImageUpdateResponse.message, context,
+      //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
+      //   avatar_original.$ = profileImageUpdateResponse.path;
+      //   setState(() {});
+      // }
+    }
+  }
+
+  chooseAndUploadImageTaxNumberCertificate(context) async {
+    var status = await Permission.photos.request();
+
+    if (status.isDenied) {
+      // We didn't ask for permission yet.
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+                title:
+                    Text(AppLocalizations.of(context).common_photo_permission),
+                content: Text(
+                    AppLocalizations.of(context).common_app_needs_permission),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                    child: Text(AppLocalizations.of(context).common_deny),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(AppLocalizations.of(context).common_settings),
+                    onPressed: () => openAppSettings(),
+                  ),
+                ],
+              ));
+    } else if (status.isRestricted) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).common_give_photo_permission, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    } else if (status.isGranted) {
+      //file = await ImagePicker.pickImage(source: ImageSource.camera);
+      _tax_number_certificate =
+          await _picker.pickImage(source: ImageSource.gallery);
+
+      if (_tax_number_certificate == null) {
+        ToastComponent.showDialog(
+            AppLocalizations.of(context).common_no_file_chosen, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        return;
+      }
+
+      //return;
+      String base64Image =
+          FileHelper.getBase64FormateFile(_tax_number_certificate.path);
+      String fileName = _tax_number_certificate.path.split("/").last;
+
+      final extension = p.extension(_tax_number_certificate.path, 2);
+
+      tax_number_certificate = base64Image;
+
+      setState(() {});
+
+      // var profileImageUpdateResponse =
+      //     await ProfileRepository().getProfileImageUpdateResponse(
+      //   base64Image,
+      //   fileName,
+      // );
+
+      // if (profileImageUpdateResponse.result == false) {
+      //   ToastComponent.showDialog(profileImageUpdateResponse.message, context,
+      //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      //   return;
+      // } else {
+      //   ToastComponent.showDialog(profileImageUpdateResponse.message, context,
+      //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
+      //   avatar_original.$ = profileImageUpdateResponse.path;
+      //   setState(() {});
+      // }
+    }
   }
 
   onSelectCountryDuringAdd(country) {
@@ -239,38 +397,42 @@ class _RegistrationState extends State<Registration> {
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return;
-    } else if (password == "") {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).registration_screen_password_warning,
-          context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
-      return;
-    } else if (password_confirm == "") {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context)
-              .registration_screen_password_confirm_warning,
-          context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
-      return;
-    } else if (password.length < 6) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context)
-              .registration_screen_password_length_warning,
-          context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
-      return;
-    } else if (password != password_confirm) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context)
-              .registration_screen_password_match_warning,
-          context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
-      return;
-    } else if (widget.customer_type == "wholesale" && commercial_name == null) {
+    }
+    // else if (password == "") {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context).registration_screen_password_warning,
+    //       context,
+    //       gravity: Toast.CENTER,
+    //       duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
+    // else if (password_confirm == "") {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context)
+    //           .registration_screen_password_confirm_warning,
+    //       context,
+    //       gravity: Toast.CENTER,
+    //       duration: Toast.LENGTH_LONG);
+    //   return;
+    // } else if (password.length < 6) {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context)
+    //           .registration_screen_password_length_warning,
+    //       context,
+    //       gravity: Toast.CENTER,
+    //       duration: Toast.LENGTH_LONG);
+    //   return;
+    // } else if (password != password_confirm) {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context)
+    //           .registration_screen_password_match_warning,
+    //       context,
+    //       gravity: Toast.CENTER,
+    //       duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
+
+    else if (widget.customer_type == "wholesale" && commercial_name == null) {
       ToastComponent.showDialog(widget.customer_type, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
@@ -306,7 +468,9 @@ class _RegistrationState extends State<Registration> {
         commercial_name,
         commercial_registration_no,
         tax_number,
-        _selected_city == null ? "0" : _selected_city.id.toString());
+        _selected_city == null ? "0" : _selected_city.id.toString(),
+        commercial_registry,
+        tax_number_certificate);
 
     if (signupResponse.result == false) {
       ToastComponent.showDialog(signupResponse.message, context,
@@ -395,6 +559,179 @@ class _RegistrationState extends State<Registration> {
                           ),
                         ),
 
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: Text(
+                            _register_by == "email"
+                                ? AppLocalizations.of(context)
+                                    .registration_screen_email
+                                : AppLocalizations.of(context)
+                                    .registration_screen_phone,
+                            style: TextStyle(
+                                color: MyTheme.accent_color,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        if (_register_by == "email")
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  height: 36,
+                                  child: TextField(
+                                    controller: _emailController,
+                                    autofocus: false,
+                                    decoration:
+                                        InputDecorations.buildInputDecoration_1(
+                                            hint_text: "johndoe@example.com"),
+                                  ),
+                                ),
+                                // otp_addon_installed.$
+                                //     ? GestureDetector(
+                                //         onTap: () {
+                                //           setState(() {
+                                //             _register_by = "phone";
+                                //           });
+                                //         },
+                                //         child: Text(
+                                //           AppLocalizations.of(context)
+                                //               .registration_screen_or_register_with_phone,
+                                //           style: TextStyle(
+                                //               color: MyTheme.accent_color,
+                                //               fontStyle: FontStyle.italic,
+                                //               decoration:
+                                //                   TextDecoration.underline),
+                                //         ),
+                                //       )
+                                //     : Container()
+                              ],
+                            ),
+                          )
+                        else
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  height: 36,
+                                  child: CustomInternationalPhoneNumberInput(
+                                    onInputChanged: (PhoneNumber number) {
+                                      print(number.phoneNumber);
+                                      setState(() {
+                                        _phone = number.phoneNumber;
+                                      });
+                                    },
+                                    onInputValidated: (bool value) {
+                                      print(value);
+                                    },
+                                    selectorConfig: SelectorConfig(
+                                      selectorType:
+                                          PhoneInputSelectorType.DIALOG,
+                                    ),
+                                    ignoreBlank: false,
+                                    autoValidateMode: AutovalidateMode.disabled,
+                                    selectorTextStyle:
+                                        TextStyle(color: MyTheme.font_grey),
+                                    initialValue: phoneCode,
+                                    textFieldController: _phoneNumberController,
+                                    formatInput: true,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
+                                    inputDecoration: InputDecorations
+                                        .buildInputDecoration_phone(
+                                            hint_text: "01710 333 558"),
+                                    onSaved: (PhoneNumber number) {
+                                      //print('On Saved: $number');
+                                    },
+                                  ),
+                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     setState(() {
+                                //       _register_by = "email";
+                                //     });
+                                //   },
+                                //   child: Text(
+                                //     AppLocalizations.of(context)
+                                //         .registration_screen_or_register_with_email,
+                                //     style: TextStyle(
+                                //         color: MyTheme.accent_color,
+                                //         fontStyle: FontStyle.italic,
+                                //         decoration: TextDecoration.underline),
+                                //   ),
+                                // )
+                              ],
+                            ),
+                          ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 4.0),
+                        //   child: Text(
+                        //     AppLocalizations.of(context)
+                        //         .registration_screen_password,
+                        //     style: TextStyle(
+                        //         color: MyTheme.accent_color,
+                        //         fontWeight: FontWeight.w600),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 8.0),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.end,
+                        //     children: [
+                        //       Container(
+                        //         height: 36,
+                        //         child: TextField(
+                        //           controller: _passwordController,
+                        //           autofocus: false,
+                        //           obscureText: true,
+                        //           enableSuggestions: false,
+                        //           autocorrect: false,
+                        //           decoration:
+                        //               InputDecorations.buildInputDecoration_1(
+                        //                   hint_text: "• • • • • • • •"),
+                        //         ),
+                        //       ),
+                        //       Text(
+                        //         AppLocalizations.of(context)
+                        //             .registration_screen_password_length_recommendation,
+                        //         style: TextStyle(
+                        //             color: MyTheme.textfield_grey,
+                        //             fontStyle: FontStyle.italic),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 4.0),
+                        //   child: Text(
+                        //     AppLocalizations.of(context)
+                        //         .registration_screen_retype_password,
+                        //     style: TextStyle(
+                        //         color: MyTheme.accent_color,
+                        //         fontWeight: FontWeight.w600),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 8.0),
+                        //   child: Container(
+                        //     height: 36,
+                        //     child: TextField(
+                        //       controller: _passwordConfirmController,
+                        //       autofocus: false,
+                        //       obscureText: true,
+                        //       enableSuggestions: false,
+                        //       autocorrect: false,
+                        //       decoration:
+                        //           InputDecorations.buildInputDecoration_1(
+                        //               hint_text: "• • • • • • • •"),
+                        //     ),
+                        //   ),
+                        // ),
+
                         ///// Comercial name
                         Visibility(
                           maintainSize: false,
@@ -460,12 +797,36 @@ class _RegistrationState extends State<Registration> {
                               ///// Commercial Registration No
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 4.0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .registration_commercial_registration_no,
-                                  style: TextStyle(
-                                      color: MyTheme.accent_color,
-                                      fontWeight: FontWeight.w600),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .registration_commercial_registration_no,
+                                      style: TextStyle(
+                                          color: MyTheme.accent_color,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.file_upload,
+                                          color: MyTheme.dark_grey),
+                                      onPressed: () {
+                                        chooseAndUploadImageCommercialRegistry(
+                                            context);
+                                      },
+                                    ),
+                                    _commercial_registry != null
+                                        ? Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image.file(File(
+                                                  _commercial_registry.path)),
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
                                 ),
                               ),
                               Padding(
@@ -487,12 +848,37 @@ class _RegistrationState extends State<Registration> {
                               ///// TAX Number
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 4.0),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .registration_tax_number,
-                                  style: TextStyle(
-                                      color: MyTheme.accent_color,
-                                      fontWeight: FontWeight.w600),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .registration_tax_number,
+                                      style: TextStyle(
+                                          color: MyTheme.accent_color,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.file_upload,
+                                          color: MyTheme.dark_grey),
+                                      onPressed: () {
+                                        chooseAndUploadImageTaxNumberCertificate(
+                                            context);
+                                      },
+                                    ),
+                                    _tax_number_certificate != null
+                                        ? Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image.file(File(
+                                                  _tax_number_certificate
+                                                      .path)),
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
                                 ),
                               ),
                               Padding(
@@ -873,178 +1259,6 @@ class _RegistrationState extends State<Registration> {
                           ),
                         ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            _register_by == "email"
-                                ? AppLocalizations.of(context)
-                                    .registration_screen_email
-                                : AppLocalizations.of(context)
-                                    .registration_screen_phone,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        if (_register_by == "email")
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  height: 36,
-                                  child: TextField(
-                                    controller: _emailController,
-                                    autofocus: false,
-                                    decoration:
-                                        InputDecorations.buildInputDecoration_1(
-                                            hint_text: "johndoe@example.com"),
-                                  ),
-                                ),
-                                // otp_addon_installed.$
-                                //     ? GestureDetector(
-                                //         onTap: () {
-                                //           setState(() {
-                                //             _register_by = "phone";
-                                //           });
-                                //         },
-                                //         child: Text(
-                                //           AppLocalizations.of(context)
-                                //               .registration_screen_or_register_with_phone,
-                                //           style: TextStyle(
-                                //               color: MyTheme.accent_color,
-                                //               fontStyle: FontStyle.italic,
-                                //               decoration:
-                                //                   TextDecoration.underline),
-                                //         ),
-                                //       )
-                                //     : Container()
-                              ],
-                            ),
-                          )
-                        else
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  height: 36,
-                                  child: CustomInternationalPhoneNumberInput(
-                                    onInputChanged: (PhoneNumber number) {
-                                      print(number.phoneNumber);
-                                      setState(() {
-                                        _phone = number.phoneNumber;
-                                      });
-                                    },
-                                    onInputValidated: (bool value) {
-                                      print(value);
-                                    },
-                                    selectorConfig: SelectorConfig(
-                                      selectorType:
-                                          PhoneInputSelectorType.DIALOG,
-                                    ),
-                                    ignoreBlank: false,
-                                    autoValidateMode: AutovalidateMode.disabled,
-                                    selectorTextStyle:
-                                        TextStyle(color: MyTheme.font_grey),
-                                    initialValue: phoneCode,
-                                    textFieldController: _phoneNumberController,
-                                    formatInput: true,
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            signed: true, decimal: true),
-                                    inputDecoration: InputDecorations
-                                        .buildInputDecoration_phone(
-                                            hint_text: "01710 333 558"),
-                                    onSaved: (PhoneNumber number) {
-                                      //print('On Saved: $number');
-                                    },
-                                  ),
-                                ),
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     setState(() {
-                                //       _register_by = "email";
-                                //     });
-                                //   },
-                                //   child: Text(
-                                //     AppLocalizations.of(context)
-                                //         .registration_screen_or_register_with_email,
-                                //     style: TextStyle(
-                                //         color: MyTheme.accent_color,
-                                //         fontStyle: FontStyle.italic,
-                                //         decoration: TextDecoration.underline),
-                                //   ),
-                                // )
-                              ],
-                            ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .registration_screen_password,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Container(
-                                height: 36,
-                                child: TextField(
-                                  controller: _passwordController,
-                                  autofocus: false,
-                                  obscureText: true,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  decoration:
-                                      InputDecorations.buildInputDecoration_1(
-                                          hint_text: "• • • • • • • •"),
-                                ),
-                              ),
-                              Text(
-                                AppLocalizations.of(context)
-                                    .registration_screen_password_length_recommendation,
-                                style: TextStyle(
-                                    color: MyTheme.textfield_grey,
-                                    fontStyle: FontStyle.italic),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .registration_screen_retype_password,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Container(
-                            height: 36,
-                            child: TextField(
-                              controller: _passwordConfirmController,
-                              autofocus: false,
-                              obscureText: true,
-                              enableSuggestions: false,
-                              autocorrect: false,
-                              decoration:
-                                  InputDecorations.buildInputDecoration_1(
-                                      hint_text: "• • • • • • • •"),
-                            ),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: Container(

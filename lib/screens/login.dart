@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/screens/otp.dart';
 import 'package:active_ecommerce_flutter/social_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,6 +33,7 @@ class _LoginState extends State<Login> {
   String initialCountry = 'SA';
   PhoneNumber phoneCode = PhoneNumber(isoCode: 'SA', dialCode: "+966");
   String _phone = "";
+  bool showSpinner = false;
 
   //controllers
   TextEditingController _phoneNumberController = TextEditingController();
@@ -67,12 +69,13 @@ class _LoginState extends State<Login> {
           AppLocalizations.of(context).login_screen_phone_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
-    } else if (password == "") {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).login_screen_password_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
     }
+    // else if (password == "") {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context).login_screen_password_warning, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
 
     var loginResponse = await AuthRepository()
         .getLoginResponse(_login_by == 'email' ? email : _phone, password);
@@ -82,8 +85,8 @@ class _LoginState extends State<Login> {
     } else {
       ToastComponent.showDialog(loginResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      AuthHelper().setUserData(loginResponse);
-      print("loginResponse ------ ${loginResponse.user.customer_type}");
+      // AuthHelper().setUserData(loginResponse);
+      // print("loginResponse ------ ${loginResponse}");
 
       // push notification starts
       // if (OtherConfig.USE_PUSH_NOTIFICATION) {
@@ -114,8 +117,15 @@ class _LoginState extends State<Login> {
 
       //push norification ends
 
+      // Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //   return Main();
+      // }));
+
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return Main();
+        return Otp(
+          verify_by: _login_by,
+          user_id: loginResponse.user_id,
+        );
       }));
     }
   }
@@ -395,19 +405,19 @@ class _LoginState extends State<Login> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Container(
-                                height: 36,
-                                child: TextField(
-                                  controller: _passwordController,
-                                  autofocus: false,
-                                  obscureText: true,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  decoration:
-                                      InputDecorations.buildInputDecoration_1(
-                                          hint_text: "• • • • • • • •"),
-                                ),
-                              ),
+                              // Container(
+                              //   height: 36,
+                              //   child: TextField(
+                              //     controller: _passwordController,
+                              //     autofocus: false,
+                              //     obscureText: true,
+                              //     enableSuggestions: false,
+                              //     autocorrect: false,
+                              //     decoration:
+                              //         InputDecorations.buildInputDecoration_1(
+                              //             hint_text: "• • • • • • • •"),
+                              //   ),
+                              // ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(context,

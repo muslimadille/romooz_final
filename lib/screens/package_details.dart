@@ -15,12 +15,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class PackageItems extends StatefulWidget {
-  PackageItems({Key key, this.has_bottomnav, this.packageId, this.packageType})
+  PackageItems(
+      {Key key,
+      this.has_bottomnav,
+      this.packageId,
+      this.packageType,
+      this.packageName})
       : super(key: key);
   final bool has_bottomnav;
 
   final int packageId;
   final String packageType;
+
+  final String packageName;
 
   @override
   _PackageItemsState createState() => _PackageItemsState();
@@ -246,6 +253,32 @@ class _PackageItemsState extends State<PackageItems> {
 
   onPressProceedToShipping() {
     process(mode: "proceed_to_shipping");
+  }
+
+  onPressSubscribeAdminPackages() async {
+    var replacingTime = selectedTime.replacing(
+        hour: selectedTime.hour, minute: selectedTime.minute);
+
+    String formattedTime =
+        replacingTime.hour.toString() + ":" + replacingTime.minute.toString();
+
+    print("selectedTime${formattedTime} ${widget.packageId}");
+    var subscribeProcessResponse = await PackagesRepository()
+        .subscribeAdminPackages(widget.packageId, "6,1", formattedTime);
+
+    if (subscribeProcessResponse.status != 200) {
+      ToastComponent.showDialog(subscribeProcessResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    } else {
+      ToastComponent.showDialog(subscribeProcessResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ShippingInfo();
+      })).then((value) {
+        onPopped(value);
+      });
+    }
   }
 
   process({mode}) async {
@@ -553,7 +586,7 @@ class _PackageItemsState extends State<PackageItems> {
                             fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {
-                        onPressProceedToShipping();
+                        onPressSubscribeAdminPackages();
                       },
                     ),
                   ),
@@ -649,7 +682,7 @@ class _PackageItemsState extends State<PackageItems> {
             ),
             child: MediaQuery(
               data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
               child: child,
             ),
           );
@@ -673,7 +706,7 @@ class _PackageItemsState extends State<PackageItems> {
         ),
       ),
       title: Text(
-        "${AppLocalizations.of(context).home_screen_packges_item} 1",
+        "${AppLocalizations.of(context).home_screen_packges_item} ${widget.packageName ?? ""}",
         style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
       ),
       elevation: 0.0,
@@ -787,7 +820,9 @@ class _PackageItemsState extends State<PackageItems> {
                               },
                               icon: Icon(
                                 Icons.delete_forever_outlined,
-                                color: MyTheme.medium_grey,
+                                color: widget.packageType == "admin"
+                                    ? MyTheme.white
+                                    : MyTheme.medium_grey,
                                 size: 24,
                               ),
                             ),
@@ -821,7 +856,7 @@ class _PackageItemsState extends State<PackageItems> {
                   ),
                   color: Colors.white,
                   onPressed: () {
-                    onQuantityIncrease(item_index);
+                    //onQuantityIncrease(item_index);
                   },
                 ),
               ),
