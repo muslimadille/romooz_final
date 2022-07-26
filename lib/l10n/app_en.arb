@@ -251,6 +251,7 @@
   "shipping_info_screen_address_or_pickup_choice_warning": "Choose an address or pickup point",
   "shipping_info_screen_country_warning": "Select a country",
   "shipping_info_screen_go_to_address": "To add or edit addresses, Go to address page",
+    "shipping_info_screen_go_to_address_delivey_time":"Change Delivery Date & Time",
   "shipping_info_screen_address": "Address",
   "shipping_info_screen_city": "City",
   "shipping_info_screen_enter_city": "Enter City",
@@ -499,7 +500,22 @@
   "package_screen_proceed_to_shipping": "PROCEED TO SUBSCRIBE",
   "package_screen_shopping_cart": "Package",
   "package_screen_please_log_in": "Please log in to see the package items",
-   "package_screen_time_choose":"Choose Delivery Time"
+   "package_screen_time_choose":"Choose Delivery Time",
+   "package_screen_time_day_choose":"Choose Delivery Days",
+
+   
+"address_screen_zone":"Zone",
+"address_screen_zone_warning":"Select a Zone" ,
+ "address_screen_enter_zone": "Enter Zone",
+  "address_screen_no_zone_available": "No Zones available",
+   "address_screen_loading_zones": "Loading Zones ...",
+     "registration_tax_number_image_warning": "Enter your TAX Number Image" ,
+
+         "registration_commercial_registration_no_image": "Commercial Registration No",
+    "registration_commercial_registration_no_warning_image": "Enter your Commercial Registration No"  ,
+    "shipping_info_screen_delivery_warning": "Select a Delivery Date & Time" ,
+      "shipping_info_screen_delivery_not_valid_warning": "Unavailable Delivery Date",
+       "package_screen_proceed_to_shipping_exist":"You Already SUBSCRIBED"
 
 
 }

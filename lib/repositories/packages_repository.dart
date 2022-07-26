@@ -8,6 +8,7 @@ import 'package:active_ecommerce_flutter/data_model/packages_add_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_response_subscribe.dart';
+import 'package:active_ecommerce_flutter/data_model/subscribed_package_show_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -70,6 +71,8 @@ class PackagesRepository {
     var post_body = jsonEncode({
       "name": "${name}",
       "desc": "${desc}",
+      "shipping_type": "weekly",
+      "dates": "3,1,2",
     });
     print("post_body${post_body}");
 
@@ -137,6 +140,20 @@ class PackagesRepository {
       },
     );
     return dailyTimeDeliveryResponseFromJson(response.body);
+  }
+
+  Future<SubscribedPackageShowResponse> getSubscribedPackageShowResponse(
+      int package_id) async {
+    Uri url = Uri.parse(
+        "${AppConfig.BASE_URL}/subscribed-package-show/${package_id}");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+    );
+    return subscribedPackageShowResponseFromJson(response.body);
   }
 
   Future<PackagesResponseSubscribe> subscribeAdminPackages(

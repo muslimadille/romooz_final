@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -22,6 +23,7 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   //controllers
   TextEditingController _verificationCodeController = TextEditingController();
+  bool showLoader = false;
 
   @override
   void initState() {
@@ -63,10 +65,17 @@ class _OtpState extends State<Otp> {
       return;
     }
 
+    setState(() {
+      showLoader = true;
+    });
+
     var confirmCodeResponse =
         await AuthRepository().getConfirmCodeResponse(widget.user_id, code);
 
     if (confirmCodeResponse.result == false) {
+      setState(() {
+        showLoader = false;
+      });
       ToastComponent.showDialog(confirmCodeResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
@@ -170,35 +179,48 @@ class _OtpState extends State<Otp> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 40.0),
-                          child: Container(
-                            height: 45,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: MyTheme.textfield_grey, width: 1),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(12.0))),
-                            child: FlatButton(
-                              minWidth: MediaQuery.of(context).size.width,
-                              //height: 50,
-                              color: MyTheme.accent_color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12.0))),
-                              child: Text(
-                                AppLocalizations.of(context).otp_screen_confirm,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
+                        showLoader == false
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 40.0),
+                                child: Container(
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: MyTheme.textfield_grey,
+                                          width: 1),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(12.0))),
+                                  child: FlatButton(
+                                    minWidth: MediaQuery.of(context).size.width,
+                                    //height: 50,
+                                    color: MyTheme.accent_color,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(12.0))),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .otp_screen_confirm,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    onPressed: () {
+                                      onPressConfirm();
+                                    },
+                                  ),
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: LoadingIndicator(
+                                    indicatorType: Indicator.ballPulse,
+                                    colors: [MyTheme.accent_color],
+                                  ),
+                                ),
                               ),
-                              onPressed: () {
-                                onPressConfirm();
-                              },
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),

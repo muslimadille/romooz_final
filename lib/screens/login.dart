@@ -14,6 +14,7 @@ import 'package:active_ecommerce_flutter/screens/registration.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:active_ecommerce_flutter/screens/password_forget.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
@@ -39,6 +40,8 @@ class _LoginState extends State<Login> {
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+  bool showLoader = false;
 
   @override
   void initState() {
@@ -77,9 +80,16 @@ class _LoginState extends State<Login> {
     //   return;
     // }
 
+    setState(() {
+      showLoader = true;
+    });
+
     var loginResponse = await AuthRepository()
         .getLoginResponse(_login_by == 'email' ? email : _phone, password);
     if (loginResponse.result == false) {
+      setState(() {
+        showLoader = false;
+      });
       ToastComponent.showDialog(loginResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
@@ -131,38 +141,42 @@ class _LoginState extends State<Login> {
   }
 
   onPressedFacebookLogin() async {
-    final facebookLogin = await FacebookAuth.instance
-        .login(loginBehavior: LoginBehavior.deviceAuth);
+    try {
+      final facebookLogin = await FacebookAuth.instance
+          .login(loginBehavior: LoginBehavior.deviceAuth);
 
-    if (facebookLogin.status == LoginStatus.success) {
-      // get the user data
-      // by default we get the userId, email,name and picture
-      final userData = await FacebookAuth.instance.getUserData();
-      var loginResponse = await AuthRepository().getSocialLoginResponse(
-          "facebook",
-          userData['name'].toString(),
-          userData['email'].toString(),
-          userData['id'].toString(),
-          access_token: facebookLogin.accessToken.token);
-      print("..........................${loginResponse.toString()}");
-      if (loginResponse.result == false) {
-        ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      if (facebookLogin.status == LoginStatus.success) {
+        // get the user data
+        // by default we get the userId, email,name and picture
+        final userData = await FacebookAuth.instance.getUserData();
+        var loginResponse = await AuthRepository().getSocialLoginResponse(
+            "facebook",
+            userData['name'].toString(),
+            userData['email'].toString(),
+            userData['id'].toString(),
+            access_token: facebookLogin.accessToken.token);
+        print("..........................${loginResponse.toString()}");
+        if (loginResponse.result == false) {
+          ToastComponent.showDialog(loginResponse.message, context,
+              gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        } else {
+          ToastComponent.showDialog(loginResponse.message, context,
+              gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          AuthHelper().setUserData(loginResponse);
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Main();
+          }));
+          FacebookAuth.instance.logOut();
+        }
+        // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+
       } else {
-        ToastComponent.showDialog(loginResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-        AuthHelper().setUserData(loginResponse);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Main();
-        }));
-        FacebookAuth.instance.logOut();
+        print("....Facebook auth Failed.........");
+        print(facebookLogin.status);
+        print(facebookLogin.message);
       }
-      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
-
-    } else {
-      print("....Facebook auth Failed.........");
-      print(facebookLogin.status);
-      print(facebookLogin.message);
+    } catch (e) {
+      print("eee$e");
     }
   }
 
@@ -391,82 +405,94 @@ class _LoginState extends State<Login> {
                               ],
                             ),
                           ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            AppLocalizations.of(context).login_screen_password,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              // Container(
-                              //   height: 36,
-                              //   child: TextField(
-                              //     controller: _passwordController,
-                              //     autofocus: false,
-                              //     obscureText: true,
-                              //     enableSuggestions: false,
-                              //     autocorrect: false,
-                              //     decoration:
-                              //         InputDecorations.buildInputDecoration_1(
-                              //             hint_text: "• • • • • • • •"),
-                              //   ),
-                              // ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return PasswordForget();
-                                  }));
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .login_screen_forgot_password,
-                                  style: TextStyle(
-                                      color: MyTheme.accent_color,
-                                      fontStyle: FontStyle.italic,
-                                      decoration: TextDecoration.underline),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 4.0),
+                        //   child: Text(
+                        //     AppLocalizations.of(context).login_screen_password,
+                        //     style: TextStyle(
+                        //         color: MyTheme.accent_color,
+                        //         fontWeight: FontWeight.w600),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(bottom: 8.0),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.end,
+                        //     children: [
+                        //       // Container(
+                        //       //   height: 36,
+                        //       //   child: TextField(
+                        //       //     controller: _passwordController,
+                        //       //     autofocus: false,
+                        //       //     obscureText: true,
+                        //       //     enableSuggestions: false,
+                        //       //     autocorrect: false,
+                        //       //     decoration:
+                        //       //         InputDecorations.buildInputDecoration_1(
+                        //       //             hint_text: "• • • • • • • •"),
+                        //       //   ),
+                        //       // ),
+                        //       GestureDetector(
+                        //         onTap: () {
+                        //           Navigator.push(context,
+                        //               MaterialPageRoute(builder: (context) {
+                        //             return PasswordForget();
+                        //           }));
+                        //         },
+                        //         child: Text(
+                        //           AppLocalizations.of(context)
+                        //               .login_screen_forgot_password,
+                        //           style: TextStyle(
+                        //               color: MyTheme.accent_color,
+                        //               fontStyle: FontStyle.italic,
+                        //               decoration: TextDecoration.underline),
+                        //         ),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                        showLoader == false
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 30.0),
+                                child: Container(
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: MyTheme.textfield_grey,
+                                          width: 1),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(12.0))),
+                                  child: FlatButton(
+                                    minWidth: MediaQuery.of(context).size.width,
+                                    //height: 50,
+                                    color: MyTheme.purpel,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(12.0))),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .login_screen_log_in,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    onPressed: () {
+                                      onPressedLogin();
+                                    },
+                                  ),
                                 ),
                               )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
-                          child: Container(
-                            height: 45,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: MyTheme.textfield_grey, width: 1),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(12.0))),
-                            child: FlatButton(
-                              minWidth: MediaQuery.of(context).size.width,
-                              //height: 50,
-                              color: MyTheme.purpel,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12.0))),
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .login_screen_log_in,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
+                            : Center(
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: LoadingIndicator(
+                                    indicatorType: Indicator.ballPulse,
+                                    colors: [MyTheme.accent_color],
+                                  ),
+                                ),
                               ),
-                              onPressed: () {
-                                onPressedLogin();
-                              },
-                            ),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Center(
@@ -568,7 +594,8 @@ class _LoginState extends State<Login> {
                             child: Container(
                               width: 120,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Visibility(
                                     // visible: allow_google_login.$,
@@ -585,11 +612,11 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: false,
+                                    visible: true,
                                     // visible: allow_facebook_login.$,
                                     child: InkWell(
                                       onTap: () {
-                                        // onPressedFacebookLogin();
+                                        onPressedFacebookLogin();
                                       },
                                       child: Container(
                                         width: 28,

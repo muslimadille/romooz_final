@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/screens/order_list.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -16,6 +17,7 @@ import 'package:active_ecommerce_flutter/data_model/nagad_begin_response.dart';
 import 'package:active_ecommerce_flutter/data_model/nagad_payment_process_response.dart';
 
 import 'package:active_ecommerce_flutter/data_model/sslcommerz_begin_response.dart';
+import 'package:intl/intl.dart';
 
 class PaymentRepository {
   Future<List<PaymentTypeResponse>> getPaymentResponseList(
@@ -96,11 +98,21 @@ class PaymentRepository {
   }
 
   Future<OrderCreateResponse> getOrderCreateResponseFromCod(
-      @required payment_method) async {
-    var post_body = jsonEncode(
-        {"user_id": "${user_id.$}", "payment_type": "${payment_method}"});
+      @required payment_method, @required delivery_date) async {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(delivery_date);
 
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/payments/pay/cod");
+    String formattedTime = DateFormat('HH:mm:ss').format(delivery_date);
+
+    print("formattedDate${formattedDate} ${formattedTime} ${delivery_date}");
+
+    var post_body = jsonEncode({
+      "user_id": "${user_id.$}",
+      "payment_type": "${payment_method}",
+      "required_time": "${formattedTime}",
+      "order_required_date": "${formattedDate}",
+    });
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/order/store");
 
     final response = await http.post(url,
         headers: {

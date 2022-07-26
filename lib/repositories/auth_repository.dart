@@ -102,7 +102,9 @@ class AuthRepository {
       "commercial_registry": "$commercial_registry",
       "tax_number_certificate": "$tax_number_certificate",
       "tax_number": "$tax_number",
-      "city_id": city_id
+      "city_id": city_id,
+      "long": "45.039",
+      "lat": "34.2093"
     });
 
     print("response sign up${post_body}");

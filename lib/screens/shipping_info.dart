@@ -1,10 +1,10 @@
-import 'dart:convert';
-
 import 'package:active_ecommerce_flutter/custom/scroll_to_hide_widget.dart';
+import 'package:active_ecommerce_flutter/data_model/daily_time_delivery_response.dart';
 import 'package:active_ecommerce_flutter/data_model/pickup_points_response.dart';
+import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/pickup_points_repository.dart';
 import 'package:active_ecommerce_flutter/screens/checkout.dart';
-
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -14,9 +14,85 @@ import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/data_model/city_response.dart';
 import 'package:active_ecommerce_flutter/data_model/country_response.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/screens/address.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class CustomPicker extends CommonPickerModel {
+  String digits(int value, int length) {
+    return '$value'.padLeft(length, "0");
+  }
+
+  CustomPicker({DateTime currentTime, LocaleType locale})
+      : super(locale: locale) {
+    this.currentTime = currentTime ?? DateTime.now();
+    this.setLeftIndex(this.currentTime.hour);
+    this.setMiddleIndex(this.currentTime.minute);
+    this.setRightIndex(this.currentTime.second);
+  }
+
+  @override
+  String leftStringAtIndex(int index) {
+    if (index >= 0 && index < 24) {
+      return this.digits(index, 2);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  String middleStringAtIndex(int index) {
+    if (index >= 0 && index < 60) {
+      return this.digits(index, 2);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  String rightStringAtIndex(int index) {
+    if (index >= 0 && index < 60) {
+      return this.digits(index, 2);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  String leftDivider() {
+    return "|";
+  }
+
+  @override
+  String rightDivider() {
+    return "|";
+  }
+
+  @override
+  List<int> layoutProportions() {
+    return [1, 2, 1];
+  }
+
+  @override
+  DateTime finalTime() {
+    return currentTime.isUtc
+        ? DateTime.utc(
+            currentTime.year,
+            currentTime.month,
+            currentTime.day,
+            this.currentLeftIndex(),
+            this.currentMiddleIndex(),
+            this.currentRightIndex())
+        : DateTime(
+            currentTime.year,
+            currentTime.month,
+            currentTime.day,
+            this.currentLeftIndex(),
+            this.currentMiddleIndex(),
+            this.currentRightIndex());
+  }
+}
 
 class ShippingInfo extends StatefulWidget {
   int owner_id;
@@ -47,9 +123,18 @@ class _ShippingInfoState extends State<ShippingInfo> {
   bool _isInitial = true;
   bool _shippingOptionIsAddress = true;
 
+  DateTime _shippingSelectedDate = null;
+  bool _shippingSelectedValid = false;
+
   //double variables
   double mWidth = 0;
   double mHeight = 0;
+
+  List<Day> _dayList = [];
+
+  Day _selectedDay = null;
+  String _selectedDayString = null;
+  String _selectedDayStringName = null;
 
   @override
   void initState() {
@@ -67,12 +152,29 @@ class _ShippingInfoState extends State<ShippingInfo> {
     }
   }
 
+  getTimeDateDelivery() async {
+    var timeResponseData =
+        await PackagesRepository().getDailyTimeDeliveryResponse();
+    var timeResponseDataList = timeResponseData.days;
+
+    print("timeResponseDataList${timeResponseDataList}");
+    // if (cartResponseData != null) {
+    //   _shopList = cartResponseList;
+    // }
+    if (timeResponseDataList != null && timeResponseDataList.length > 0) {
+      _dayList = timeResponseDataList;
+    }
+
+    // getSetCartTotal();
+    setState(() {});
+  }
+
   fetchAll() {
     if (is_logged_in.$ == true) {
-
       fetchShippingAddressList();
+      getTimeDateDelivery();
 
-      if(pick_up_status.$){
+      if (pick_up_status.$) {
         fetchPickupPoints();
       }
       //fetchPickupPoints();
@@ -102,28 +204,25 @@ class _ShippingInfoState extends State<ShippingInfo> {
     var pickupPointsResponse =
         await PickupPointRepository().getPickupPointListResponse();
     _pickupList.addAll(pickupPointsResponse.data);
-    if(!_shippingOptionIsAddress) {
+    if (!_shippingOptionIsAddress) {
       _seleted_shipping_pickup_point = _pickupList.first.id;
     }
     getSetShippingCost();
-
   }
 
   getSetShippingCost() async {
     var shippingCostResponse;
     if (_shippingOptionIsAddress) {
-      shippingCostResponse = await AddressRepository()
-          .getShippingCostResponse(user_id: user_id.$,address_id: _seleted_shipping_address);
-
-    }else{
-      shippingCostResponse = await AddressRepository()
-          .getShippingCostResponse(user_id: user_id.$,
-          pick_up_id: _seleted_shipping_pickup_point,shipping_type: "pickup_point");
-
+      shippingCostResponse = await AddressRepository().getShippingCostResponse(
+          user_id: user_id.$, address_id: _seleted_shipping_address);
+    } else {
+      shippingCostResponse = await AddressRepository().getShippingCostResponse(
+          user_id: user_id.$,
+          pick_up_id: _seleted_shipping_pickup_point,
+          shipping_type: "pickup_point");
     }
 
-
-    if ( shippingCostResponse.result == true) {
+    if (shippingCostResponse.result == true) {
       _shipping_cost_string = shippingCostResponse.value_string;
       setState(() {});
     }
@@ -137,9 +236,9 @@ class _ShippingInfoState extends State<ShippingInfo> {
     _shipping_cost_string = ". . .";
     _shipping_cost_string = ". . .";
     _isInitial = true;
-    _shippingOptionIsAddress=true;
-    _seleted_shipping_pickup_point=0;
-    _seleted_shipping_address=0;
+    _shippingOptionIsAddress = true;
+    _seleted_shipping_pickup_point = 0;
+    _seleted_shipping_address = 0;
   }
 
   Future<void> _onRefresh() async {
@@ -169,26 +268,28 @@ class _ShippingInfoState extends State<ShippingInfo> {
     if (option) {
       _seleted_shipping_pickup_point = 0;
 
-      _shippingAddressList.length>0?_seleted_shipping_address = _shippingAddressList.first.id:_seleted_shipping_address=0;
+      _shippingAddressList.length > 0
+          ? _seleted_shipping_address = _shippingAddressList.first.id
+          : _seleted_shipping_address = 0;
     } else {
       _seleted_shipping_address = 0;
-      _pickupList.length>0?_seleted_shipping_pickup_point= _pickupList.first.id:_seleted_shipping_pickup_point=0;
+      _pickupList.length > 0
+          ? _seleted_shipping_pickup_point = _pickupList.first.id
+          : _seleted_shipping_pickup_point = 0;
     }
     _shippingOptionIsAddress = option;
     getSetShippingCost();
-    setState(() {
-    });
+    setState(() {});
   }
 
   onPressProceed(context) async {
-   // detectShippingOption();
+    // detectShippingOption();
 
     //pickup point is not enable so address must be added
-    if(!pick_up_status.$) {
+    if (!pick_up_status.$) {
       if (_seleted_shipping_address == 0) {
         ToastComponent.showDialog(
-            AppLocalizations
-                .of(context)
+            AppLocalizations.of(context)
                 .shipping_info_screen_address_choice_warning,
             context,
             gravity: Toast.CENTER,
@@ -210,25 +311,39 @@ class _ShippingInfoState extends State<ShippingInfo> {
 
     var addressUpdateInCartResponse;
 
-     if (_seleted_shipping_address != 0) {
-       addressUpdateInCartResponse = await AddressRepository()
-           .getAddressUpdateInCartResponse(address_id: _seleted_shipping_address);
-    }else{
-       addressUpdateInCartResponse = await AddressRepository()
-           .getAddressUpdateInCartResponse(pickup_point_id: _seleted_shipping_pickup_point);
-     }
+    if (_seleted_shipping_address != 0) {
+      addressUpdateInCartResponse = await AddressRepository()
+          .getAddressUpdateInCartResponse(
+              address_id: _seleted_shipping_address);
+    } else {
+      addressUpdateInCartResponse = await AddressRepository()
+          .getAddressUpdateInCartResponse(
+              pickup_point_id: _seleted_shipping_pickup_point);
+    }
 
-      if (addressUpdateInCartResponse.result == false) {
-        ToastComponent.showDialog(addressUpdateInCartResponse.message, context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-        return;
-      }
-
+    if (addressUpdateInCartResponse.result == false) {
       ToastComponent.showDialog(addressUpdateInCartResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    } else if (_shippingSelectedDate == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).shipping_info_screen_delivery_warning,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    }
+    print("_shippingSelectedDate${_shippingSelectedDate}");
+
+    ToastComponent.showDialog(addressUpdateInCartResponse.message, context,
+        gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return Checkout(title: AppLocalizations.of(context).checkout_screen_checkout,isWalletRecharge: false);
+      return Checkout(
+        title: AppLocalizations.of(context).checkout_screen_checkout,
+        isWalletRecharge: false,
+        shippingSelectedDate: _shippingSelectedDate,
+      );
     })).then((value) {
       onPopped(value);
     });
@@ -281,31 +396,163 @@ class _ShippingInfoState extends State<ShippingInfo> {
                               ? Container(
                                   height: 40,
                                   child: Center(
-                                      child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return Address(
-                                          from_shipping_info: true,
-                                        );
-                                      })).then((value) {
-                                        onPopped(value);
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        AppLocalizations.of(context)
-                                            .shipping_info_screen_go_to_address,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: MyTheme.accent_color),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return Address(
+                                            from_shipping_info: true,
+                                          );
+                                        })).then((value) {
+                                          onPopped(value);
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .shipping_info_screen_go_to_address,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: MyTheme.accent_color),
+                                        ),
                                       ),
                                     ),
-                                  )))
+                                  ),
+                                )
                               : Container(),
+                          _shippingOptionIsAddress
+                              ? Container(
+                                  height: 40,
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        print(
+                                            "DateTime.now()${DateTime.now().year} ${app_language.$}");
+                                        DatePicker.showDateTimePicker(context,
+                                            showTitleActions: true,
+                                            theme: DatePickerTheme(
+                                                backgroundColor: MyTheme.white),
+                                            minTime: DateTime(
+                                                DateTime.now().year,
+                                                DateTime.now().month,
+                                                DateTime.now().day,
+                                                08,
+                                                00),
+                                            maxTime: DateTime(
+                                                DateTime.now().year,
+                                                (DateTime.now().month + 1) >= 12
+                                                    ? 12
+                                                    : (DateTime.now().month +
+                                                        1),
+                                                DateTime.now().day,
+                                                23,
+                                                59), onChanged: (date) {
+                                          print(
+                                              'onChanged ${_shippingSelectedDate}');
+                                          var day_name = intl.DateFormat('EEEE')
+                                              .format(date)
+                                              .toString()
+                                              .toUpperCase()
+                                              .substring(0, 2);
+
+                                          final index = _dayList.indexWhere(
+                                              (element) =>
+                                                  element.code == day_name);
+                                          if (index >= 0) {
+                                            print(
+                                                'Using indexWhere: ${_dayList[index]}');
+                                            setState(() {
+                                              _shippingSelectedDate = date;
+                                              _shippingSelectedValid = true;
+                                            });
+                                          } else {
+                                            ToastComponent.showDialog(
+                                                AppLocalizations.of(context)
+                                                    .shipping_info_screen_delivery_not_valid_warning,
+                                                context,
+                                                gravity: Toast.CENTER,
+                                                duration: Toast.LENGTH_LONG);
+
+                                            setState(() {
+                                              _shippingSelectedDate = null;
+                                              _shippingSelectedValid = false;
+                                            });
+                                          }
+                                        }, onConfirm: (date) {
+                                          print(
+                                              'confirm ${_shippingSelectedDate}');
+                                          var day_name = intl.DateFormat('EEEE')
+                                              .format(date)
+                                              .toString()
+                                              .toUpperCase()
+                                              .substring(0, 2);
+
+                                          final index = _dayList.indexWhere(
+                                              (element) =>
+                                                  element.code == day_name);
+                                          if (index >= 0) {
+                                            print(
+                                                'Using indexWhere: ${_dayList[index]}');
+                                            setState(() {
+                                              _shippingSelectedDate = date;
+                                              _shippingSelectedValid = true;
+                                            });
+                                          } else {
+                                            ToastComponent.showDialog(
+                                                AppLocalizations.of(context)
+                                                    .shipping_info_screen_delivery_not_valid_warning,
+                                                context,
+                                                gravity: Toast.CENTER,
+                                                duration: Toast.LENGTH_LONG);
+
+                                            setState(() {
+                                              _shippingSelectedDate = null;
+                                              _shippingSelectedValid = false;
+                                            });
+                                          }
+                                        },
+                                            locale: app_language.$ == 'ar'
+                                                ? LocaleType.ar
+                                                : LocaleType.en);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .shipping_info_screen_go_to_address_delivey_time,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: MyTheme.accent_color),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                _shippingSelectedDate == null
+                                    ? AppLocalizations.of(context)
+                                        .shipping_info_screen_delivery_warning
+                                    : "${_shippingSelectedDate}",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    decoration: TextDecoration.none,
+                                    color: MyTheme.dark_grey),
+                                textDirection: app_language_rtl.$
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             height: 100,
                           )
@@ -585,9 +832,9 @@ class _ShippingInfoState extends State<ShippingInfo> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).common_login_warning,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).common_login_warning,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     } else if (_isInitial && _pickupList.length == 0) {
       return SingleChildScrollView(
           child: ShimmerHelper()
@@ -612,12 +859,10 @@ class _ShippingInfoState extends State<ShippingInfo> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).no_pickup_point,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).no_pickup_point,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     }
-
-
   }
 
   GestureDetector buildPickupInfoItemCard(index) {
@@ -794,60 +1039,72 @@ class _ShippingInfoState extends State<ShippingInfo> {
               color: MyTheme.light_grey,
               height: 1,
             ),
-            pick_up_status.$?ScrollToHideWidget(
-              child: Container(
-                  color: MyTheme.white,
-                  //MyTheme.light_grey,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      FlatButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          setState(() {
-                            changeShippingOption(true);
-                          });
-                        },
-                        child: Container(
-                            color: MyTheme.white,
-                            height: 50,
-                            width: (mWidth / 2) - 1,
-                            alignment: Alignment.center,
-                            child: Text(
-                              AppLocalizations.of(context).address_screen_address,
-                              style: TextStyle(
-                                  color: _shippingOptionIsAddress
-                                      ? MyTheme.dark_grey
-                                      : MyTheme.medium_grey_50,fontWeight:_shippingOptionIsAddress? FontWeight.w700:FontWeight.normal),
-                            )),
-                      ),
-                      Container(width: 0.5,height: 30,color: MyTheme.grey_153,),
-
-                      FlatButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          setState(() {
-                            changeShippingOption(false);
-                          });
-                        },
-                        child: Container(
-                            color: MyTheme.white,
-                            alignment: Alignment.center,
-                            height: 50,
-                            width: (mWidth / 2) - 1,
-                            child: Text(
-                              AppLocalizations.of(context).pickup_point,
-                              style: TextStyle(
-                                  color: _shippingOptionIsAddress
-                                      ? MyTheme.medium_grey_50
-                                      : MyTheme.dark_grey, fontWeight: !_shippingOptionIsAddress ? FontWeight.w700:FontWeight.normal),
-                            )),
-                      ),
-                    ],
-                  )),
-              scrollController: _mainScrollController,
-              childHeight: 40,
-            ):Container(),
+            pick_up_status.$
+                ? ScrollToHideWidget(
+                    child: Container(
+                        color: MyTheme.white,
+                        //MyTheme.light_grey,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            FlatButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                setState(() {
+                                  changeShippingOption(true);
+                                });
+                              },
+                              child: Container(
+                                  color: MyTheme.white,
+                                  height: 50,
+                                  width: (mWidth / 2) - 1,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .address_screen_address,
+                                    style: TextStyle(
+                                        color: _shippingOptionIsAddress
+                                            ? MyTheme.dark_grey
+                                            : MyTheme.medium_grey_50,
+                                        fontWeight: _shippingOptionIsAddress
+                                            ? FontWeight.w700
+                                            : FontWeight.normal),
+                                  )),
+                            ),
+                            Container(
+                              width: 0.5,
+                              height: 30,
+                              color: MyTheme.grey_153,
+                            ),
+                            FlatButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                setState(() {
+                                  changeShippingOption(false);
+                                });
+                              },
+                              child: Container(
+                                  color: MyTheme.white,
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                  width: (mWidth / 2) - 1,
+                                  child: Text(
+                                    AppLocalizations.of(context).pickup_point,
+                                    style: TextStyle(
+                                        color: _shippingOptionIsAddress
+                                            ? MyTheme.medium_grey_50
+                                            : MyTheme.dark_grey,
+                                        fontWeight: !_shippingOptionIsAddress
+                                            ? FontWeight.w700
+                                            : FontWeight.normal),
+                                  )),
+                            ),
+                          ],
+                        )),
+                    scrollController: _mainScrollController,
+                    childHeight: 40,
+                  )
+                : Container(),
             //:Container()
           ],
         ),

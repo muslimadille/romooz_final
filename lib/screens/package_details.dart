@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/data_model/daily_time_delivery_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
+import 'package:active_ecommerce_flutter/data_model/subscribed_package_show_response.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/screens/shipping_info.dart';
 import 'package:flutter/material.dart';
@@ -49,11 +50,15 @@ class _PackageItemsState extends State<PackageItems> {
   String _selectedDayString = null;
   String _selectedDayStringName = null;
 
+  SubscribedPackageShowResponse subscribed_package_show_response =
+      SubscribedPackageShowResponse();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getTimeDateDelivery();
+    getSubscribedPackageShow();
 
     /*print("user data");
     print(is_logged_in.$);
@@ -127,6 +132,21 @@ class _PackageItemsState extends State<PackageItems> {
 
     // getSetCartTotal();
     setState(() {});
+  }
+
+  getSubscribedPackageShow() async {
+    var packgeResponseData = await PackagesRepository()
+        .getSubscribedPackageShowResponse(widget.packageId);
+
+    print("packgeResponseData${packgeResponseData.id} ${widget.packageId}");
+
+    // getSetCartTotal();
+    setState(() {
+      subscribed_package_show_response = packgeResponseData;
+    });
+
+    print(
+        "packgeResponseData${packgeResponseData.id} ${widget.packageId} ${subscribed_package_show_response.id}");
   }
 
   getSetCartTotal() {
@@ -262,9 +282,12 @@ class _PackageItemsState extends State<PackageItems> {
     String formattedTime =
         replacingTime.hour.toString() + ":" + replacingTime.minute.toString();
 
+    print("_selectedDay${_selectedDay} ${formattedTime}");
+
     print("selectedTime${formattedTime} ${widget.packageId}");
     var subscribeProcessResponse = await PackagesRepository()
-        .subscribeAdminPackages(widget.packageId, "6,1", formattedTime);
+        .subscribeAdminPackages(
+            widget.packageId, _selectedDayString, formattedTime);
 
     if (subscribeProcessResponse.status != 200) {
       ToastComponent.showDialog(subscribeProcessResponse.message, context,
@@ -561,7 +584,9 @@ class _PackageItemsState extends State<PackageItems> {
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
-                      color: MyTheme.accent_color,
+                      color: subscribed_package_show_response.id != null
+                          ? MyTheme.accent_color
+                          : MyTheme.accent_color2,
                       shape: app_language_rtl.$
                           ? RoundedRectangleBorder(
                               borderRadius: const BorderRadius.only(
@@ -578,16 +603,27 @@ class _PackageItemsState extends State<PackageItems> {
                               bottomRight: const Radius.circular(8.0),
                             )),
                       child: Text(
-                        AppLocalizations.of(context)
-                            .package_screen_proceed_to_shipping,
+                        subscribed_package_show_response.id != null
+                            ? AppLocalizations.of(context)
+                                .package_screen_proceed_to_shipping_exist
+                            : AppLocalizations.of(context)
+                                .package_screen_proceed_to_shipping,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () {
-                        onPressSubscribeAdminPackages();
-                      },
+                      onPressed: subscribed_package_show_response.id != null
+                          ? () {
+                              onPressSubscribeAdminPackages();
+                              print(
+                                  "subscribed_package_show_response${subscribed_package_show_response}");
+                            }
+                          : () {
+                              onPressSubscribeAdminPackages();
+                              print(
+                                  "subscribed_package_show_response${subscribed_package_show_response.id}");
+                            },
                     ),
                   ),
                 ),
@@ -611,10 +647,16 @@ class _PackageItemsState extends State<PackageItems> {
                 children: [
                   Container(
                     child: MultiSelectDialogField<Day>(
+                      buttonText: Text(
+                        AppLocalizations.of(context)
+                            .package_screen_time_day_choose,
+                        style: TextStyle(color: MyTheme.accent_color),
+                      ),
+                      separateSelectedItems: true,
                       items: _dayList
                           .map((e) => MultiSelectItem(e, e.name))
                           .toList(),
-                      listType: MultiSelectListType.LIST,
+                      listType: MultiSelectListType.CHIP,
                       selectedColor: MyTheme.accent_color,
                       onConfirm: (values) {
                         _selectedDay = values;
@@ -640,19 +682,14 @@ class _PackageItemsState extends State<PackageItems> {
                     ),
                   ),
                   Container(
-                    child: Column(
-                      children: [
-                        FlatButton(
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .package_screen_time_choose,
-                            style: TextStyle(color: MyTheme.accent_color),
-                          ),
-                          onPressed: () {
-                            selectTime(context);
-                          },
-                        ),
-                      ],
+                    child: FlatButton(
+                      child: Text(
+                        AppLocalizations.of(context).package_screen_time_choose,
+                        style: TextStyle(color: MyTheme.accent_color),
+                      ),
+                      onPressed: () {
+                        selectTime(context);
+                      },
                     ),
                   ),
                 ],
@@ -844,7 +881,7 @@ class _PackageItemsState extends State<PackageItems> {
               SizedBox(
                 width: 28,
                 height: 28,
-                child: FlatButton(
+                child: RaisedButton(
                   padding: EdgeInsets.all(0),
                   child: Icon(
                     Icons.add,
@@ -855,9 +892,11 @@ class _PackageItemsState extends State<PackageItems> {
                     side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
                   ),
                   color: Colors.white,
-                  onPressed: () {
-                    //onQuantityIncrease(item_index);
-                  },
+                  onPressed: widget.packageType == 'user'
+                      ? () {
+                          //onQuantityDecrease(seller_index, item_index);
+                        }
+                      : null,
                 ),
               ),
               Padding(
@@ -870,21 +909,22 @@ class _PackageItemsState extends State<PackageItems> {
               SizedBox(
                 width: 28,
                 height: 28,
-                child: FlatButton(
+                child: RaisedButton(
                   padding: EdgeInsets.all(0),
                   child: Icon(
                     Icons.remove,
                     color: MyTheme.accent_color,
                     size: 18,
                   ),
-                  height: 30,
                   shape: CircleBorder(
                     side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
                   ),
                   color: Colors.white,
-                  onPressed: () {
-                    //onQuantityDecrease(seller_index, item_index);
-                  },
+                  onPressed: widget.packageType == 'user'
+                      ? () {
+                          //onQuantityDecrease(seller_index, item_index);
+                        }
+                      : null,
                 ),
               )
             ],

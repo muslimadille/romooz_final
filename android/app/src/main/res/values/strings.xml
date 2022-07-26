@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ActiveEcomma</string>
+    <string name="app_name">Romooz</string>
 
     <!-- Replace "000000000000" with your Facebook App ID here. -->
-    <string name="facebook_app_id">000000000000</string>
-
+   <string name="facebook_app_id">990731958289281</string>
+    <string name="facebook_client_token">3c4d3521285c97c6a8801b483775d11b</string>
     <!--
       Replace "000000000000" with your Facebook App ID here.
       **NOTE**: The scheme needs to start with `fb` and then your ID.
     -->
-    <string name="fb_login_protocol_scheme">fb000000000000</string>
+    <string name="fb_login_protocol_scheme">fb990731958289281</string>
 </resources>

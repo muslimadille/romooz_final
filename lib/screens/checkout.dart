@@ -26,6 +26,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Checkout extends StatefulWidget {
   int order_id; // only need when making manual payment from order details
+  DateTime shippingSelectedDate;
   bool
       manual_payment_from_order_details; // only need when making manual payment from order details
   String list;
@@ -40,6 +41,7 @@ class Checkout extends StatefulWidget {
       this.list = "both",
       this.isWalletRecharge = false,
       this.rechargeAmount = 0.0,
+      this.shippingSelectedDate = null,
       this.title})
       : super(key: key);
 
@@ -77,6 +79,7 @@ class _CheckoutState extends State<Checkout> {
     print(access_token.value);
     print(user_id.$);
     print(user_name.$);*/
+    print("_shippingSelectedDate${widget.shippingSelectedDate}");
 
     fetchAll();
   }
@@ -422,7 +425,8 @@ class _CheckoutState extends State<Checkout> {
   pay_by_cod() async {
     loading();
     var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponseFromCod(_selected_payment_method_key);
+        .getOrderCreateResponseFromCod(
+            _selected_payment_method_key, widget.shippingSelectedDate);
     Navigator.of(loadingcontext).pop();
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
@@ -440,7 +444,11 @@ class _CheckoutState extends State<Checkout> {
     loading();
 
     var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponseFromCod(_selected_payment_method_key);
+        .getOrderCreateResponseFromCod(
+            _selected_payment_method_key, widget.shippingSelectedDate);
+
+    print("orderCreateResponse =====${orderCreateResponse}");
+
     Navigator.of(loadingcontext).pop();
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
@@ -448,7 +456,6 @@ class _CheckoutState extends State<Checkout> {
       Navigator.of(context).pop();
       return;
     }
-    print("orderCreateResponse${orderCreateResponse.orders_id}");
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CheckoutView(order_id: orderCreateResponse.orders_id);

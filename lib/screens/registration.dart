@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:active_ecommerce_flutter/data_model/zones_response.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path/path.dart' as p;
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/data_model/city_response.dart';
@@ -55,6 +57,8 @@ class _RegistrationState extends State<Registration> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordConfirmController = TextEditingController();
 
+  bool showLoader = false;
+
   //for image uploading
   final ImagePicker _picker = ImagePicker();
   XFile _commercial_registry;
@@ -71,6 +75,8 @@ class _RegistrationState extends State<Registration> {
   ///int _default_shipping_address = 0;
   City _selected_city = null;
   Country _selected_country;
+  Zone _selected_zone;
+
   MyState _selected_state;
 
   bool _isInitial = true;
@@ -85,6 +91,8 @@ class _RegistrationState extends State<Registration> {
   TextEditingController _stateController = TextEditingController();
   TextEditingController _countryController = TextEditingController();
 
+  TextEditingController _zoneController = TextEditingController();
+
   //for update purpose
   List<TextEditingController> _addressControllerListForUpdate = [];
   List<TextEditingController> _postalCodeControllerListForUpdate = [];
@@ -92,6 +100,9 @@ class _RegistrationState extends State<Registration> {
   List<TextEditingController> _cityControllerListForUpdate = [];
   List<TextEditingController> _stateControllerListForUpdate = [];
   List<TextEditingController> _countryControllerListForUpdate = [];
+
+  List<TextEditingController> _zoneControllerListForUpdate = [];
+
   List<City> _selected_city_list_for_update = [];
   List<MyState> _selected_state_list_for_update = [];
   List<Country> _selected_country_list_for_update = [];
@@ -99,6 +110,7 @@ class _RegistrationState extends State<Registration> {
   @override
   void initState() {
     //on Splash Screen hide statusbar
+    print("customer_type${widget.customer_type}");
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
   }
@@ -149,11 +161,12 @@ class _RegistrationState extends State<Registration> {
 
       final extension = p.extension(_commercial_registry.path, 2);
 
-      commercial_registry = base64Image;
+      commercial_registry =
+          "data:image/${extension.substring(1)};base64,${base64Image}";
 
       setState(() {});
 
-      print("base64Image fileName ${extension}");
+      print("base64Image fileName ${commercial_registry}");
 
       // var profileImageUpdateResponse =
       //     await ProfileRepository().getProfileImageUpdateResponse(
@@ -223,6 +236,9 @@ class _RegistrationState extends State<Registration> {
 
       tax_number_certificate = base64Image;
 
+      tax_number_certificate =
+          "data:image/${extension.substring(1)};base64,${base64Image}";
+
       setState(() {});
 
       // var profileImageUpdateResponse =
@@ -260,6 +276,20 @@ class _RegistrationState extends State<Registration> {
       _countryController.text = country.name;
       _stateController.text = "";
       _cityController.text = "";
+    });
+  }
+
+  onSelectZoneDuringAdd(zone) {
+    if (_selected_zone != null && zone.id == _selected_zone.id) {
+      //setModalState(() {
+      _countryController.text = zone.name;
+      //});
+      return;
+    }
+    _selected_zone = zone;
+
+    setState(() {
+      _zoneController.text = zone.name;
     });
   }
 
@@ -432,13 +462,30 @@ class _RegistrationState extends State<Registration> {
     //   return;
     // }
 
-    else if (widget.customer_type == "wholesale" && commercial_name == null) {
-      ToastComponent.showDialog(widget.customer_type, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
-    } else if (widget.customer_type == "wholesale" && owner_name == null) {
+    else if (widget.customer_type == "wholesale" && owner_name == "") {
       ToastComponent.showDialog(
           AppLocalizations.of(context).registration_Owner_name_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" && commercial_name == "") {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).registration_commercial_name_warning,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" &&
+        commercial_registration_no == "") {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context)
+              .registration_commercial_registration_no_warning,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" && tax_number == "") {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).registration_tax_number_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     } else if (widget.customer_type == "wholesale" &&
@@ -455,7 +502,30 @@ class _RegistrationState extends State<Registration> {
           AppLocalizations.of(context).registration_tax_number_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
+    } else if (widget.customer_type == "wholesale" &&
+        commercial_registry == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context)
+              .registration_commercial_registration_no_warning_image,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    } else if (widget.customer_type == "wholesale" &&
+        tax_number_certificate == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).registration_tax_number_image_warning,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
     }
+
+    setState(() {
+      showLoader = true;
+    });
+    /////
+    ///
 
     var signupResponse = await AuthRepository().getSignupResponse(
         name,
@@ -468,11 +538,14 @@ class _RegistrationState extends State<Registration> {
         commercial_name,
         commercial_registration_no,
         tax_number,
-        _selected_city == null ? "0" : _selected_city.id.toString(),
+        _selected_zone == null ? "0" : _selected_zone.id.toString(),
         commercial_registry,
         tax_number_certificate);
 
     if (signupResponse.result == false) {
+      setState(() {
+        showLoader = false;
+      });
       ToastComponent.showDialog(signupResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
@@ -734,15 +807,11 @@ class _RegistrationState extends State<Registration> {
 
                         ///// Comercial name
                         Visibility(
-                          maintainSize: false,
-                          maintainAnimation: false,
-                          maintainState: false,
                           visible: widget.customer_type == "wholesale"
                               ? true
                               : false,
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 4.0),
@@ -1213,6 +1282,105 @@ class _RegistrationState extends State<Registration> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Text(
+                                  "${AppLocalizations.of(context).address_screen_zone} *",
+                                  style: TextStyle(
+                                      color: MyTheme.accent_color,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: Container(
+                                  height: 40,
+                                  child: TypeAheadField(
+                                    suggestionsCallback: (name) async {
+                                      var countryResponse =
+                                          await AddressRepository()
+                                              .getZoneList();
+                                      return countryResponse.data;
+                                    },
+                                    loadingBuilder: (context) {
+                                      return Container(
+                                        height: 50,
+                                        child: Center(
+                                            child: Text(
+                                          AppLocalizations.of(context)
+                                              .address_screen_loading_zones,
+                                          style: TextStyle(
+                                              color: MyTheme.accent_color,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                      );
+                                    },
+                                    itemBuilder: (context, country) {
+                                      print(country.toString());
+                                      return ListTile(
+                                        dense: true,
+                                        title: Text(
+                                          country.name,
+                                          style: TextStyle(
+                                              color: MyTheme.font_grey),
+                                        ),
+                                      );
+                                    },
+                                    noItemsFoundBuilder: (context) {
+                                      return Container(
+                                        height: 50,
+                                        child: Center(
+                                            child: Text(
+                                                AppLocalizations.of(context)
+                                                    .address_screen_no_zone_available,
+                                                style: TextStyle(
+                                                    color:
+                                                        MyTheme.medium_grey))),
+                                      );
+                                    },
+                                    onSuggestionSelected: (zone) {
+                                      onSelectZoneDuringAdd(zone);
+                                    },
+                                    textFieldConfiguration:
+                                        TextFieldConfiguration(
+                                      onTap: () {},
+                                      //autofocus: true,
+                                      controller: _zoneController,
+                                      onSubmitted: (txt) {
+                                        // keep this blank
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: AppLocalizations.of(context)
+                                              .address_screen_enter_zone,
+                                          hintStyle: TextStyle(
+                                              fontSize: 12.0,
+                                              color: MyTheme.textfield_grey),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: MyTheme.textfield_grey,
+                                                width: 0.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              const Radius.circular(8.0),
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: MyTheme.textfield_grey,
+                                                width: 1.0),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              const Radius.circular(8.0),
+                                            ),
+                                          ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 8.0)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Text(
                                   AppLocalizations.of(context)
                                       .address_screen_postal_code,
                                   style: TextStyle(
@@ -1222,7 +1390,7 @@ class _RegistrationState extends State<Registration> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
+                                padding: const EdgeInsets.only(bottom: 0.0),
                                 child: Container(
                                   height: 40,
                                   child: TextField(
@@ -1259,36 +1427,49 @@ class _RegistrationState extends State<Registration> {
                           ),
                         ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
-                          child: Container(
-                            height: 45,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: MyTheme.textfield_grey, width: 1),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(12.0))),
-                            child: FlatButton(
-                              minWidth: MediaQuery.of(context).size.width,
-                              //height: 50,
-                              color: MyTheme.accent_color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12.0))),
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .registration_screen_register_sign_up,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
+                        showLoader == false
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 30.0),
+                                child: Container(
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: MyTheme.textfield_grey,
+                                          width: 1),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(12.0))),
+                                  child: FlatButton(
+                                    minWidth: MediaQuery.of(context).size.width,
+                                    //height: 50,
+                                    color: MyTheme.accent_color,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(12.0))),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .registration_screen_register_sign_up,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    onPressed: () {
+                                      onPressSignUp();
+                                    },
+                                  ),
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: LoadingIndicator(
+                                    indicatorType: Indicator.ballPulse,
+                                    colors: [MyTheme.accent_color],
+                                  ),
+                                ),
                               ),
-                              onPressed: () {
-                                onPressSignUp();
-                              },
-                            ),
-                          ),
-                        ),
+
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Center(

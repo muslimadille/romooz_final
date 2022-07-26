@@ -4,15 +4,41 @@
 
 import 'dart:convert';
 
-List<ZonesResponse> zonesResponseFromJson(String str) =>
-    List<ZonesResponse>.from(
-        json.decode(str).map((x) => ZonesResponse.fromJson(x)));
+ZonesResponse zonesResponseFromJson(String str) =>
+    ZonesResponse.fromJson(json.decode(str));
 
-String zonesResponseToJson(List<ZonesResponse> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String zonesResponseToJson(ZonesResponse data) => json.encode(data.toJson());
 
 class ZonesResponse {
   ZonesResponse({
+    this.data,
+    this.success,
+    this.status,
+  });
+
+  List<Zone> data;
+  bool success;
+  int status;
+
+  factory ZonesResponse.fromJson(Map<String, dynamic> json) => ZonesResponse(
+        data: json["data"] == null
+            ? null
+            : List<Zone>.from(json["data"].map((x) => Zone.fromJson(x))),
+        success: json["success"] == null ? null : json["success"],
+        status: json["status"] == null ? null : json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data.map((x) => x.toJson())),
+        "success": success == null ? null : success,
+        "status": status == null ? null : status,
+      };
+}
+
+class Zone {
+  Zone({
     this.id,
     this.cityId,
     this.name,
@@ -20,9 +46,6 @@ class ZonesResponse {
     this.cost,
     this.customerCost,
     this.sellerCost,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
   });
 
   int id;
@@ -32,11 +55,8 @@ class ZonesResponse {
   int cost;
   int customerCost;
   int sellerCost;
-  dynamic deletedAt;
-  DateTime createdAt;
-  DateTime updatedAt;
 
-  factory ZonesResponse.fromJson(Map<String, dynamic> json) => ZonesResponse(
+  factory Zone.fromJson(Map<String, dynamic> json) => Zone(
         id: json["id"] == null ? null : json["id"],
         cityId: json["city_id"] == null ? null : json["city_id"],
         name: json["name"] == null ? null : json["name"],
@@ -45,13 +65,6 @@ class ZonesResponse {
         customerCost:
             json["customer_cost"] == null ? null : json["customer_cost"],
         sellerCost: json["seller_cost"] == null ? null : json["seller_cost"],
-        deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -62,8 +75,5 @@ class ZonesResponse {
         "cost": cost == null ? null : cost,
         "customer_cost": customerCost == null ? null : customerCost,
         "seller_cost": sellerCost == null ? null : sellerCost,
-        "deleted_at": deletedAt,
-        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
-        "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
       };
 }

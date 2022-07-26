@@ -170,13 +170,11 @@ class AddressRepository {
     return myStateResponseFromJson(response.body);
   }
 
-  //  Future<ZonesResponse> getZoneList(
-  //     {country_id = 0, name = ""}) async {
-  //   Uri url = Uri.parse(
-  //       "${AppConfig.BASE_URL}/zones");
-  //   final response = await http.get(url);
-  //   return zonesResponseFromJson(response.body);
-  // }
+  Future<ZonesResponse> getZoneList() async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/zones");
+    final response = await http.get(url);
+    return zonesResponseFromJson(response.body);
+  }
 
   Future<CountryResponse> getCountryList({name = ""}) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/countries?name=${name}");

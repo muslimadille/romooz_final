@@ -250,6 +250,7 @@
    "shipping_info_screen_address_or_pickup_choice_warning":"قم باختيار عنوان أو نقطة التقاط",
    "shipping_info_screen_country_warning":"قم بتحديد بلد",
    "shipping_info_screen_go_to_address":"لاضافة أو تحرير عناوين ، اذهب الى صفحة العنوان",
+     "shipping_info_screen_go_to_address_delivey_time":"اختر وقت و تاريخ التوصيل",
    "shipping_info_screen_address":"العنوان",
    "shipping_info_screen_city":"المدينة",
    "shipping_info_screen_enter_city":"أدخل المدينة",
@@ -498,12 +499,26 @@
    "package_screen_cart_empty":"الباقة فارغة",
    "package_screen_total_amount":"اجمالي" ,
    "package_screen_proceed_to_shipping":"اشترك فى الباقة",
+
+    "package_screen_proceed_to_shipping_exist":"انت الان مشترك فى الباقة",
+
    "package_screen_shopping_cart":"الباقة",
    "package_screen_please_log_in":"برجاء تسجيل الدخول لمشاهدة الباقة",
-      "package_screen_time_choose":"اختر وقت التسليم"
+      "package_screen_time_choose":"اختر موعد وايام التوصيل",
+
+      "package_screen_time_day_choose":"اختر ايام التوصيل",
 
 
+"address_screen_zone":"المنطقة",
+"address_screen_zone_warning":"تحديد المنطقة",
+  "address_screen_enter_zone":"قم بادخال المنطقة",
+  "address_screen_no_zone_available":"لا يوجد منطقة متاح",
+     "address_screen_loading_zones":"تحميل المناطق ...",
+      "registration_tax_number_image_warning": "ادخل صورة الرقم الضريبي" ,
 
-
+           "registration_commercial_registration_no_image": "صورة السجل التجاري",
+    "registration_commercial_registration_no_warning_image": "ادخل صورة السجل الضريبى" ,
+    "shipping_info_screen_delivery_warning": "اختر تاريخ ووقت التوصيل",
+     "shipping_info_screen_delivery_not_valid_warning": "تاريخ غير متاح"
 
 }

@@ -20,17 +20,25 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
+	<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+<!-- Google Sign-in Section -->
+
+
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+       <key>CFBundleTypeRole</key>
+       <string>Editor</string>
+        <key>CFBundleURLName</key>
+       <string>com.googleusercontent.apps.310543301172-f8io81ucdc0smdfcmd2abm23k94mc04h</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.310543301172-f8io81ucdc0smdfcmd2abm23k94mc04h</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.310543301172-f8io81ucdc0smdfcmd2abm23k94mc04h</string>
-				<string>fb990731958289281</string>
 			</array>
 		</dict>
 		<dict>
@@ -38,23 +46,39 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.romooz.app.shoppingapp.payments</string>
+				<string>com.romooz.app.customer.payments</string>
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>FacebookAppID</key>
-	<string>990731958289281</string>
-	<key>FacebookDisplayName</key>
-	<string>3c4d3521285c97c6a8801b483775d11b</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
+    </dict>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+			<string>fb990731958289281</string>
+			</array>
+		</dict>
+		</array>
+		<key>FacebookAppID</key>
+		<string>990731958289281</string>
+		<key>FacebookClientToken</key>
+		<string>3c4d3521285c97c6a8801b483775d11b</string>
+		<key>FacebookDisplayName</key>
+		<string>Romooz</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
-	</array>
+		</array>
+    </dict>
+</array>
+
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
