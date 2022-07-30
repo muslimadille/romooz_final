@@ -1,6 +1,7 @@
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
+import 'package:active_ecommerce_flutter/style_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
@@ -119,8 +120,7 @@ class _OtpState extends State<Otp> {
                     child: Container(
                       width: 75,
                       height: 75,
-                      child: Image.asset(
-                          'assets/login_registration_form_logo.png'),
+                      child: Image.asset('assets/black-logo.png'),
                     ),
                   ),
                   Padding(
@@ -179,53 +179,35 @@ class _OtpState extends State<Otp> {
                             ],
                           ),
                         ),
-                        showLoader == false
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 40.0),
-                                child: Container(
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: MyTheme.textfield_grey,
-                                          width: 1),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(12.0))),
-                                  child: FlatButton(
-                                    minWidth: MediaQuery.of(context).size.width,
-                                    //height: 50,
-                                    color: MyTheme.accent_color,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .otp_screen_confirm,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    onPressed: () {
-                                      onPressConfirm();
-                                    },
-                                  ),
-                                ),
-                              )
-                            : Center(
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: LoadingIndicator(
-                                    indicatorType: Indicator.ballPulse,
-                                    colors: [MyTheme.accent_color],
-                                  ),
-                                ),
-                              ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                          visible: !showLoader,
+                          child: Container(
+                            height: 45,
+                            child: PrimaryButton(
+                              color: MyTheme.accent_color,
+                              reduis: 0.4,
+                              title: AppLocalizations.of(context)
+                                  .otp_screen_confirm,
+                              onTap: () {
+                                onPressConfirm();
+                              },
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: showLoader,
+                          child: LoaderButton(
+                            color: MyTheme.accent_color,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 100),
+                    padding: const EdgeInsets.only(top: 50),
                     child: InkWell(
                       onTap: () {
                         onTapResend();

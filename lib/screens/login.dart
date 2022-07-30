@@ -2,6 +2,7 @@ import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/otp.dart';
 import 'package:active_ecommerce_flutter/social_config.dart';
+import 'package:active_ecommerce_flutter/style_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
@@ -451,48 +452,54 @@ class _LoginState extends State<Login> {
                         //     ],
                         //   ),
                         // ),
-                        showLoader == false
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 30.0),
-                                child: Container(
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: MyTheme.textfield_grey,
-                                          width: 1),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(12.0))),
-                                  child: FlatButton(
-                                    minWidth: MediaQuery.of(context).size.width,
-                                    //height: 50,
-                                    color: MyTheme.purpel,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .login_screen_log_in,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    onPressed: () {
-                                      onPressedLogin();
-                                    },
-                                  ),
-                                ),
-                              )
-                            : Center(
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: LoadingIndicator(
-                                    indicatorType: Indicator.ballPulse,
-                                    colors: [MyTheme.accent_color],
-                                  ),
-                                ),
-                              ),
+                        // showLoader == false
+                        //     ? Padding(
+                        //         padding: const EdgeInsets.only(top: 30.0),
+                        //         child: Container(
+                        //           height: 45,
+                        //           child: PrimaryButton(
+                        //             color: MyTheme.purpel,
+                        //             onTap: () {
+                        //               onPressedLogin();
+                        //             },
+                        //             reduis: 0.0,
+                        //             title: AppLocalizations.of(context)
+                        //                 .login_screen_log_in,
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : Center(
+                        //         child: Container(
+                        //           height: 50,
+                        //           width: 50,
+                        //           child: LoadingIndicator(
+                        //             indicatorType: Indicator.ballPulse,
+                        //             colors: [MyTheme.accent_color],
+                        //           ),
+                        //         ),
+                        //       ),
+
+                        Visibility(
+                          visible: !showLoader,
+                          child: Container(
+                            height: 45,
+                            child: PrimaryButton(
+                              color: MyTheme.purpel,
+                              reduis: 0.4,
+                              title: AppLocalizations.of(context)
+                                  .login_screen_log_in,
+                              onTap: () {
+                                onPressedLogin();
+                              },
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: showLoader,
+                          child: LoaderButton(
+                            color: MyTheme.purpel,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Center(

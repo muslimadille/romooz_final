@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:active_ecommerce_flutter/data_model/zones_response.dart';
+import 'package:active_ecommerce_flutter/style_classes.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path/path.dart' as p;
 import 'package:active_ecommerce_flutter/app_config.dart';
@@ -1426,49 +1427,30 @@ class _RegistrationState extends State<Registration> {
                             ],
                           ),
                         ),
-
-                        showLoader == false
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 30.0),
-                                child: Container(
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: MyTheme.textfield_grey,
-                                          width: 1),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(12.0))),
-                                  child: FlatButton(
-                                    minWidth: MediaQuery.of(context).size.width,
-                                    //height: 50,
-                                    color: MyTheme.accent_color,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .registration_screen_register_sign_up,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    onPressed: () {
-                                      onPressSignUp();
-                                    },
-                                  ),
-                                ),
-                              )
-                            : Center(
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: LoadingIndicator(
-                                    indicatorType: Indicator.ballPulse,
-                                    colors: [MyTheme.accent_color],
-                                  ),
-                                ),
-                              ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                          visible: !showLoader,
+                          child: Container(
+                            height: 45,
+                            child: PrimaryButton(
+                              color: MyTheme.accent_color,
+                              reduis: 0.4,
+                              title: AppLocalizations.of(context)
+                                  .login_screen_sign_up,
+                              onTap: () {
+                                onPressSignUp();
+                              },
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: showLoader,
+                          child: LoaderButton(
+                            color: MyTheme.accent_color,
+                          ),
+                        ),
 
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),

@@ -26,6 +26,14 @@ class MyTheme {
   static Color shimmer_highlighted = Colors.grey.shade200;
   static Color wholesale_color = Color(0xFFcb6a35);
 
+  static double mainMajorTextSize = 30.0;
+  static double majorTextSize = 25.0;
+  static double largeTextSize = 20.0;
+  static double mediumTextSize = 16.0;
+  static double smallTextSize = 14.0;
+  static double xSmallTextSize = 12.0;
+  static double tinySmallTextSize = 10.0;
+
   //testing shimmer
   /*static Color shimmer_base = Colors.redAccent;
   static Color shimmer_highlighted = Colors.yellow;*/

@@ -1306,35 +1306,35 @@ class _ProductDetailsState extends State<ProductDetails> {
                     )
                   ]),
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        16.0,
-                        16.0,
-                        16.0,
-                        0.0,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .top_selling_products_screen_top_selling_products,
-                        style: TextStyle(
-                            color: MyTheme.font_grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        16.0,
-                        16.0,
-                        16.0,
-                        0.0,
-                      ),
-                      child: buildTopSellingProductList(),
-                    )
-                  ]),
-                )
+                // SliverList(
+                //   delegate: SliverChildListDelegate([
+                //     Padding(
+                //       padding: const EdgeInsets.fromLTRB(
+                //         16.0,
+                //         16.0,
+                //         16.0,
+                //         0.0,
+                //       ),
+                //       child: Text(
+                //         AppLocalizations.of(context)
+                //             .top_selling_products_screen_top_selling_products,
+                //         style: TextStyle(
+                //             color: MyTheme.font_grey,
+                //             fontSize: 16,
+                //             fontWeight: FontWeight.w600),
+                //       ),
+                //     ),
+                //     Padding(
+                //       padding: const EdgeInsets.fromLTRB(
+                //         16.0,
+                //         16.0,
+                //         16.0,
+                //         0.0,
+                //       ),
+                //       child: buildTopSellingProductList(),
+                //     )
+                //   ]),
+                // )
               ],
             ),
           )),
@@ -1367,55 +1367,55 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ),
               ),
-        Container(
-          width: MediaQuery.of(context).size.width * (.5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(AppLocalizations.of(context).product_details_screen_seller,
-                  style: TextStyle(
-                    color: Color.fromRGBO(153, 153, 153, 1),
-                  )),
-              Text(
-                _productDetails.shop_name,
-                style: TextStyle(
-                    color: MyTheme.font_grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
-              )
-            ],
-          ),
-        ),
-        Spacer(),
-        Container(
-            child: Row(
-          children: [
-            InkWell(
-              onTap: () {
-                if (is_logged_in == false) {
-                  ToastComponent.showDialog("You need to log in", context,
-                      gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-                  return;
-                }
+        // Container(
+        //   width: MediaQuery.of(context).size.width * (.5),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Text(AppLocalizations.of(context).product_details_screen_seller,
+        //           style: TextStyle(
+        //             color: Color.fromRGBO(153, 153, 153, 1),
+        //           )),
+        //       Text(
+        //         _productDetails.shop_name,
+        //         style: TextStyle(
+        //             color: MyTheme.font_grey,
+        //             fontSize: 14,
+        //             fontWeight: FontWeight.w600),
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // Spacer(),
+        // Container(
+        //     child: Row(
+        //   children: [
+        //     InkWell(
+        //       onTap: () {
+        //         if (is_logged_in == false) {
+        //           ToastComponent.showDialog("You need to log in", context,
+        //               gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        //           return;
+        //         }
 
-                onTapSellerChat();
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Text(
-                  AppLocalizations.of(context)
-                      .product_details_screen_chat_with_seller,
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Color.fromRGBO(7, 101, 136, 1),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-            Icon(Icons.message, size: 16, color: Color.fromRGBO(7, 101, 136, 1))
-          ],
-        ))
+        //         onTapSellerChat();
+        //       },
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        //         child: Text(
+        //           AppLocalizations.of(context)
+        //               .product_details_screen_chat_with_seller,
+        //           style: TextStyle(
+        //               decoration: TextDecoration.underline,
+        //               color: Color.fromRGBO(7, 101, 136, 1),
+        //               fontSize: 12,
+        //               fontWeight: FontWeight.w600),
+        //         ),
+        //       ),
+        //     ),
+        //     Icon(Icons.message, size: 16, color: Color.fromRGBO(7, 101, 136, 1))
+        //   ],
+        // ))
       ],
     );
   }

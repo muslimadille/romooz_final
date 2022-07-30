@@ -62,23 +62,23 @@ class _SplashState extends State<Splash> {
       navigateAfterSeconds: Main(),
 
       //navigateAfterFuture: loadFromFuture(), //uncomment this
-      title: Text(
-        "V " + _packageInfo.version,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14.0,
-          color: MyTheme.dark_grey,
-        ),
-      ),
+      // title: Text(
+      //   "V " + _packageInfo.version,
+      //   style: TextStyle(
+      //     fontWeight: FontWeight.bold,
+      //     fontSize: 14.0,
+      //     color: MyTheme.dark_grey,
+      //   ),
+      // ),
       useLoader: false,
-      loadingText: Text(
-        AppConfig.copyright_text,
-        style: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 13.0,
-          color: MyTheme.dark_grey,
-        ),
-      ),
+      // loadingText: Text(
+      //   AppConfig.copyright_text,
+      //   style: TextStyle(
+      //     fontWeight: FontWeight.w400,
+      //     fontSize: 13.0,
+      //     color: MyTheme.dark_grey,
+      //   ),
+      // ),
       image: Image.asset(
         "assets/black-logo.png",
       ),

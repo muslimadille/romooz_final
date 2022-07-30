@@ -103,77 +103,21 @@ class _MainState extends State<Main> {
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.transparent,
-            clipBehavior: Clip.antiAlias,
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                onTap: onTapped,
-                currentIndex: _currentIndex,
-                backgroundColor: Colors.white.withOpacity(0.8),
-                fixedColor: Theme.of(context).accentColor,
-                unselectedItemColor: Color.fromRGBO(153, 153, 153, 1),
-                items: [
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        "assets/home.png",
-                        color: _currentIndex == 0
-                            ? Theme.of(context).accentColor
-                            : Color.fromRGBO(153, 153, 153, 1),
-                        height: 20,
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_home,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        "assets/categories.png",
-                        color: _currentIndex == 1
-                            ? Theme.of(context).accentColor
-                            : Color.fromRGBO(153, 153, 153, 1),
-                        height: 20,
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_categories,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.circle,
-                      color: Colors.transparent,
-                    ),
-                    title: Text(""),
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        "assets/cart.png",
-                        color: _currentIndex == 3
-                            ? Theme.of(context).accentColor
-                            : Color.fromRGBO(153, 153, 153, 1),
-                        height: 20,
-                      ),
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          AppLocalizations.of(context)
-                              .main_screen_bottom_navigation_cart,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
-                  BottomNavigationBarItem(
+            color: MyTheme.white,
+            clipBehavior: Clip.hardEdge,
+            shape: CircularNotchedRectangle(),
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              onTap: onTapped,
+              currentIndex: _currentIndex,
+              backgroundColor: Colors.white.withOpacity(0.8),
+              fixedColor: MyTheme.accent_color,
+              unselectedItemColor: Color.fromRGBO(153, 153, 153, 1),
+              items: [
+                BottomNavigationBarItem(
                     icon: Image.asset(
-                      "assets/profile.png",
-                      color: _currentIndex == 4
+                      "assets/home.png",
+                      color: _currentIndex == 0
                           ? Theme.of(context).accentColor
                           : Color.fromRGBO(153, 153, 153, 1),
                       height: 20,
@@ -182,13 +126,67 @@ class _MainState extends State<Main> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         AppLocalizations.of(context)
-                            .main_screen_bottom_navigation_profile,
+                            .main_screen_bottom_navigation_home,
                         style: TextStyle(fontSize: 12),
                       ),
+                    )),
+                BottomNavigationBarItem(
+                    icon: Image.asset(
+                      "assets/categories.png",
+                      color: _currentIndex == 1
+                          ? Theme.of(context).accentColor
+                          : Color.fromRGBO(153, 153, 153, 1),
+                      height: 20,
+                    ),
+                    title: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .main_screen_bottom_navigation_categories,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    )),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.circle,
+                    color: Colors.transparent,
+                  ),
+                  title: Text(""),
+                ),
+                BottomNavigationBarItem(
+                    icon: Image.asset(
+                      "assets/cart.png",
+                      color: _currentIndex == 3
+                          ? Theme.of(context).accentColor
+                          : Color.fromRGBO(153, 153, 153, 1),
+                      height: 20,
+                    ),
+                    title: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .main_screen_bottom_navigation_cart,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    )),
+                BottomNavigationBarItem(
+                  icon: Image.asset(
+                    "assets/profile.png",
+                    color: _currentIndex == 4
+                        ? Theme.of(context).accentColor
+                        : Color.fromRGBO(153, 153, 153, 1),
+                    height: 20,
+                  ),
+                  title: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .main_screen_bottom_navigation_profile,
+                      style: TextStyle(fontSize: 12),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

@@ -18,7 +18,6 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/repositories/address_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class MapLocation extends StatefulWidget {
   MapLocation({Key key, this.address}) : super(key: key);
   var address;
@@ -50,7 +49,7 @@ class MapLocationState extends State<MapLocation>
 
     if (widget.address.location_available) {
       setInitialLocation();
-    }else{
+    } else {
       setDummyInitialLocation();
     }
   }
@@ -67,12 +66,11 @@ class MapLocationState extends State<MapLocation>
   }
 
   onTapPickHere(selectedPlace) async {
-
-    var addressUpdateLocationResponse = await AddressRepository().getAddressUpdateLocationResponse(
-        widget.address.id,
-        selectedPlace.geometry.location.lat,
-        selectedPlace.geometry.location.lng
-        );
+    var addressUpdateLocationResponse = await AddressRepository()
+        .getAddressUpdateLocationResponse(
+            widget.address.id,
+            selectedPlace.geometry.location.lat,
+            selectedPlace.geometry.location.lng);
 
     if (addressUpdateLocationResponse.result == false) {
       ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
@@ -83,12 +81,14 @@ class MapLocationState extends State<MapLocation>
     ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
         gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return PlacePicker(
-      hintText:  AppLocalizations.of(context).map_location_screen_your_delivery_location,
+      hintText: AppLocalizations.of(context)
+          .map_location_screen_your_delivery_location,
       apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
       initialPosition: kInitialPosition,
       useCurrentLocation: false,
@@ -135,7 +135,8 @@ class MapLocationState extends State<MapLocation>
                 child: state == SearchingState.Searching
                     ? Center(
                         child: Text(
-                          AppLocalizations.of(context).map_location_screen_calculating,
+                        AppLocalizations.of(context)
+                            .map_location_screen_calculating,
                         style: TextStyle(color: MyTheme.font_grey),
                       ))
                     : Padding(
@@ -171,7 +172,8 @@ class MapLocationState extends State<MapLocation>
                                   bottomRight: const Radius.circular(4.0),
                                 )),
                                 child: Text(
-                                  AppLocalizations.of(context).map_location_screen_pick_here,
+                                  AppLocalizations.of(context)
+                                      .map_location_screen_pick_here,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {

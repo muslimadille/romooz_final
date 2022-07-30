@@ -1806,32 +1806,64 @@ class _AddressState extends State<Address> {
                           size: 16,
                         ),
                       ),
-                    )),
+                    ),
+                  ),
             OtherConfig.USE_GOOGLE_MAP
-                ? Positioned(
-                    right: 0,
-                    top: 80.0,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return MapLocation(
-                              address: _shippingAddressList[index]);
-                        })).then((value) {
-                          onPopped(value);
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
-                        child: Icon(
-                          Icons.location_on,
-                          color: MyTheme.dark_grey,
-                          size: 16,
+                ? app_language_rtl.$
+                    ? Positioned(
+                        left: 0,
+                        top: 80.0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MapLocation(
+                                  address: _shippingAddressList[index]);
+                            })).then((value) {
+                              onPopped(value);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 12.0,
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: 16.0),
+                            child: Icon(
+                              Icons.location_on,
+                              color: MyTheme.dark_grey,
+                              size: 16,
+                            ),
+                          ),
+                        ))
+                    : Positioned(
+                        right: 0,
+                        top: 80.0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MapLocation(
+                                  address: _shippingAddressList[index]);
+                            })).then((value) {
+                              onPopped(value);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 12.0,
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: 16.0),
+                            child: Icon(
+                              Icons.location_on,
+                              color: MyTheme.dark_grey,
+                              size: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                    ))
-                : Container()
+                      )
+                : Container(),
           ],
         ),
       ),
