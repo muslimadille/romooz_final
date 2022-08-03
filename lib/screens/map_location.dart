@@ -29,8 +29,8 @@ class MapLocation extends StatefulWidget {
 class MapLocationState extends State<MapLocation>
     with SingleTickerProviderStateMixin {
   PickResult selectedPlace;
-  static LatLng kInitialPosition = LatLng(
-      51.52034098371205, -0.12637399200000668); // London , arbitary value
+  static LatLng kInitialPosition =
+      LatLng(24.8132637, 46.331984); // London , arbitary value
 
   GoogleMapController _controller;
 

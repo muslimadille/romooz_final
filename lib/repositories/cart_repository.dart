@@ -64,7 +64,7 @@ class CartRepository {
       @required int id,
       @required String variant,
       @required int user_id,
-      @required int quantity) async {
+      @required String quantity) async {
     var post_body = jsonEncode({
       "id": "${id}",
       "variant": "$variant",

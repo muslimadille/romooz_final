@@ -525,7 +525,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   buildHomeMenuRow(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
@@ -669,50 +669,50 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            if (customer_type.$ == 'retail' || customer_type.$ == "null") {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return PackagesList();
-              }));
-            } else {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return PackagesList();
-              }));
-            }
-          },
-          child: Container(
-            height: 100,
-            width: MediaQuery.of(context).size.width / 5 - 4,
-            child: Column(
-              children: [
-                Container(
-                    height: 57,
-                    width: 57,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border:
-                            Border.all(color: MyTheme.light_grey, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Image.asset("assets/flash_deal.png"),
-                    )),
-                Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                        (customer_type.$ == 'retail' ||
-                                customer_type.$ == "null")
-                            ? AppLocalizations.of(context)
-                                .home_screen_flash_deal
-                            : AppLocalizations.of(context).home_screen_packges,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
-              ],
-            ),
-          ),
-        )
+        // GestureDetector(
+        //   onTap: () {
+        //     if (customer_type.$ == 'retail' || customer_type.$ == "null") {
+        //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //         return PackagesList();
+        //       }));
+        //     } else {
+        //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //         return PackagesList();
+        //       }));
+        //     }
+        //   },
+        //   child: Container(
+        //     height: 100,
+        //     width: MediaQuery.of(context).size.width / 5 - 4,
+        //     child: Column(
+        //       children: [
+        //         Container(
+        //             height: 57,
+        //             width: 57,
+        //             decoration: BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 border:
+        //                     Border.all(color: MyTheme.light_grey, width: 1)),
+        //             child: Padding(
+        //               padding: const EdgeInsets.all(16.0),
+        //               child: Image.asset("assets/flash_deal.png"),
+        //             )),
+        //         Padding(
+        //             padding: const EdgeInsets.only(top: 8),
+        //             child: Text(
+        //                 (customer_type.$ == 'retail' ||
+        //                         customer_type.$ == "null")
+        //                     ? AppLocalizations.of(context)
+        //                         .home_screen_flash_deal
+        //                     : AppLocalizations.of(context).home_screen_packges,
+        //                 textAlign: TextAlign.center,
+        //                 style: TextStyle(
+        //                     color: Color.fromRGBO(132, 132, 132, 1),
+        //                     fontWeight: FontWeight.w300))),
+        //       ],
+        //     ),
+        //   ),
+        // )
       ],
     );
   }

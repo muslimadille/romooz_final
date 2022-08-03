@@ -1,3 +1,7 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:active_ecommerce_flutter/data_model/zones_response.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -8,11 +12,14 @@ import 'package:active_ecommerce_flutter/data_model/city_response.dart';
 import 'package:active_ecommerce_flutter/data_model/state_response.dart';
 import 'package:active_ecommerce_flutter/data_model/country_response.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/other_config.dart';
 import 'package:active_ecommerce_flutter/screens/map_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Address extends StatefulWidget {
   Address({Key key, this.from_shipping_info = false}) : super(key: key);
@@ -21,14 +28,79 @@ class Address extends StatefulWidget {
   _AddressState createState() => _AddressState();
 }
 
-class _AddressState extends State<Address> {
-  ScrollController _mainScrollController = ScrollController();
+class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
+  /////////////map ////
 
+  dynamic addresses_created = null;
+
+  Future<Position> position;
+  double latitude = 0.0;
+  double longitude = 0.0;
+
+  PickResult selectedPlace;
+  PickResult selectedPlace_update;
+  LatLng kInitialPosition =
+      LatLng(24.8132637, 46.331984); // London , arbitary value
+
+  GoogleMapController _controller;
+
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    _controller = controller;
+    String value = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_style.json');
+    _controller.setMapStyle(value);
+    setState(() {});
+  }
+
+  setInitialLocation() {
+    kInitialPosition = LatLng(addresses_created.lat, addresses_created.lang);
+    setState(() {});
+  }
+
+  Future<Position> getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.medium);
+
+    return position;
+  }
+
+  setDummyInitialLocation() {
+    position = getLocation();
+    position.then((value) => {
+          kInitialPosition = LatLng(value.latitude, value.longitude) //
+        });
+
+    print("position===${position}");
+    setState(() {});
+  }
+
+  onTapPickHere(selectedPlace) async {
+    // var addressUpdateLocationResponse = await AddressRepository()
+    //     .getAddressUpdateLocationResponse(
+    //         addresses_created.id,
+    //         selectedPlace.geometry.location.lat,
+    //         selectedPlace.geometry.location.lng);
+
+    // if (addressUpdateLocationResponse.result == false) {
+    //   ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
+
+    // ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
+    //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
+    // Navigator.pop(context);
+  }
+
+  /////////////////////// map
+
+  ScrollController _mainScrollController = ScrollController();
   int _default_shipping_address = 0;
   City _selected_city;
   Country _selected_country;
   MyState _selected_state;
-
+  Zone _selected_zone;
   bool _isInitial = true;
   List<dynamic> _shippingAddressList = [];
 
@@ -39,7 +111,7 @@ class _AddressState extends State<Address> {
   TextEditingController _cityController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
   TextEditingController _countryController = TextEditingController();
-
+  TextEditingController _zoneController = TextEditingController();
   //for update purpose
   List<TextEditingController> _addressControllerListForUpdate = [];
   List<TextEditingController> _postalCodeControllerListForUpdate = [];
@@ -47,9 +119,14 @@ class _AddressState extends State<Address> {
   List<TextEditingController> _cityControllerListForUpdate = [];
   List<TextEditingController> _stateControllerListForUpdate = [];
   List<TextEditingController> _countryControllerListForUpdate = [];
+
+  List<TextEditingController> _zoneControllerListForUpdate = [];
+
   List<City> _selected_city_list_for_update = [];
   List<MyState> _selected_state_list_for_update = [];
   List<Country> _selected_country_list_for_update = [];
+
+  List<LatLng> _locationControllerListForUpdate = [];
 
   @override
   void initState() {
@@ -59,6 +136,8 @@ class _AddressState extends State<Address> {
     if (is_logged_in.$ == true) {
       fetchAll();
     }
+
+    setDummyInitialLocation();
   }
 
   fetchAll() {
@@ -75,6 +154,8 @@ class _AddressState extends State<Address> {
       _isInitial = false;
     });
     if (_shippingAddressList.length > 0) {
+      addresses_created = _shippingAddressList[0];
+      print("addresses_created${addresses_created}");
       //_default_shipping_address = _shippingAddressList[0].id;
 
       var count = 0;
@@ -102,9 +183,11 @@ class _AddressState extends State<Address> {
             .add(MyState(id: address.state_id, name: address.state_name));
         _selected_city_list_for_update
             .add(City(id: address.city_id, name: address.city_name));
+
+        _locationControllerListForUpdate.add(LatLng(address.lat, address.lang));
       });
 
-      print("fetchShippingAddressList");
+      print("fetchShippingAddressList${_locationControllerListForUpdate}");
     }
 
     setState(() {});
@@ -151,6 +234,31 @@ class _AddressState extends State<Address> {
   afterAddingAnAddress() {
     reset();
     fetchAll();
+  }
+
+  afterAddingAnAddressUpdateLocation(address_id) async {
+    print(selectedPlace_update);
+    print(
+        "afterAddingAnAddressUpdateLocation${selectedPlace_update.geometry.location.lat} _default_shipping_address ${_shippingAddressList[0].id}");
+    var addressUpdateLocationResponse = await AddressRepository()
+        .getAddressUpdateLocationResponse(
+            address_id,
+            selectedPlace_update.geometry.location.lat,
+            selectedPlace_update.geometry.location.lng);
+
+    if (addressUpdateLocationResponse.result == false) {
+      ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
+    ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
+        gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
+    Navigator.of(context, rootNavigator: true).pop();
+    afterAddingAnAddress();
+
+    // Navigator.pop(context);
   }
 
   afterDeletingAnAddress() {
@@ -239,6 +347,8 @@ class _AddressState extends State<Address> {
   }
 
   onAddressAdd(context) async {
+    print("onAddressAdd${selectedPlace_update}");
+
     var address = _addressController.text.toString();
     var postal_code = _postalCodeController.text.toString();
     var phone = _phoneController.text.toString();
@@ -288,8 +398,7 @@ class _AddressState extends State<Address> {
     ToastComponent.showDialog(addressAddResponse.message, context,
         gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
-    Navigator.of(context, rootNavigator: true).pop();
-    afterAddingAnAddress();
+    afterAddingAnAddressUpdateLocation(24);
   }
 
   onAddressUpdate(context, index, id) async {
@@ -344,8 +453,21 @@ class _AddressState extends State<Address> {
     ToastComponent.showDialog(addressUpdateResponse.message, context,
         gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
-    Navigator.of(context, rootNavigator: true).pop();
-    afterUpdatingAnAddress();
+    afterAddingAnAddressUpdateLocation(id);
+  }
+
+  onSelectZoneDuringAdd(zone) {
+    if (_selected_zone != null && zone.id == _selected_zone.id) {
+      //setModalState(() {
+      _countryController.text = zone.name;
+      //});
+      return;
+    }
+    _selected_zone = zone;
+
+    setState(() {
+      _zoneController.text = zone.name;
+    });
   }
 
   onSelectCountryDuringAdd(country, setModalState) {
@@ -812,9 +934,105 @@ class _AddressState extends State<Address> {
                               onSubmitted: (txt) {
                                 // keep blank
                               },
+                              // onSuggestionSelected: (zone) {
+                              //         onSelectZoneDuringAdd(zone);
+                              //       },
                               decoration: InputDecoration(
                                   hintText: AppLocalizations.of(context)
                                       .address_screen_enter_city,
+                                  hintStyle: TextStyle(
+                                      fontSize: 12.0,
+                                      color: MyTheme.textfield_grey),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 0.5),
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 1.0),
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 8.0)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "${AppLocalizations.of(context).address_screen_zone} *",
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Container(
+                          height: 40,
+                          child: TypeAheadField(
+                            suggestionsCallback: (name) async {
+                              var countryResponse =
+                                  await AddressRepository().getZoneList();
+                              return countryResponse.data;
+                            },
+                            loadingBuilder: (context) {
+                              return Container(
+                                height: 50,
+                                child: Center(
+                                    child: Text(
+                                  AppLocalizations.of(context)
+                                      .address_screen_loading_zones,
+                                  style: TextStyle(
+                                      color: MyTheme.font_grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                )),
+                              );
+                            },
+                            itemBuilder: (context, country) {
+                              print(country.toString());
+                              return ListTile(
+                                dense: true,
+                                title: Text(
+                                  country.name,
+                                  style: TextStyle(color: MyTheme.font_grey),
+                                ),
+                              );
+                            },
+                            noItemsFoundBuilder: (context) {
+                              return Container(
+                                height: 50,
+                                child: Center(
+                                    child: Text(
+                                        AppLocalizations.of(context)
+                                            .address_screen_no_zone_available,
+                                        style: TextStyle(
+                                            color: MyTheme.medium_grey))),
+                              );
+                            },
+                            onSuggestionSelected: (zone) {
+                              onSelectZoneDuringAdd(zone);
+                            },
+                            textFieldConfiguration: TextFieldConfiguration(
+                              onTap: () {},
+                              //autofocus: true,
+                              controller: _zoneController,
+                              onSubmitted: (txt) {
+                                // keep this blank
+                              },
+                              decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(context)
+                                      .address_screen_enter_zone,
                                   hintStyle: TextStyle(
                                       fontSize: 12.0,
                                       color: MyTheme.textfield_grey),
@@ -922,7 +1140,11 @@ class _AddressState extends State<Address> {
                                     EdgeInsets.symmetric(horizontal: 8.0)),
                           ),
                         ),
-                      )
+                      ),
+                      Container(
+                        height: 250,
+                        child: placePickerMethod(context),
+                      ),
                     ],
                   ),
                 ),
@@ -942,7 +1164,7 @@ class _AddressState extends State<Address> {
                             side: BorderSide(
                                 color: MyTheme.light_grey, width: 1.0)),
                         child: Text(
-                          "CLOSE",
+                          AppLocalizations.of(context).common_close_ucfirst,
                           style: TextStyle(
                             color: MyTheme.font_grey,
                           ),
@@ -966,7 +1188,7 @@ class _AddressState extends State<Address> {
                             side: BorderSide(
                                 color: MyTheme.light_grey, width: 1.0)),
                         child: Text(
-                          "ADD",
+                          AppLocalizations.of(context).common_add_ucfirst,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -983,6 +1205,272 @@ class _AddressState extends State<Address> {
             );
           });
         });
+  }
+
+  PlacePicker placePickerMethodUpdate(BuildContext context, int index) {
+    return PlacePicker(
+      hintText: AppLocalizations.of(context)
+          .map_location_screen_your_delivery_location,
+      apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
+      initialPosition: _locationControllerListForUpdate[index],
+      useCurrentLocation: false,
+      //selectInitialPosition: true,
+      onMapCreated: _onMapCreated,
+      //initialMapType: MapType.terrain,
+
+      //usePlaceDetailSearch: true,
+      onPlacePicked: (result) {
+        selectedPlace = result;
+        print("onTapPickHere ---${selectedPlace}");
+        Navigator.of(context).pop();
+        setState(() {});
+      },
+      //forceSearchOnZoomChanged: true,
+      //automaticallyImplyAppBarLeading: false,
+      //autocompleteLanguage: "ko",
+      //region: 'au',
+      //selectInitialPosition: true,
+      selectedPlaceWidgetBuilder:
+          (_, selectedPlace, state, isSearchBarFocused) {
+        print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+        selectedPlace_update = selectedPlace;
+
+        print("-------------");
+        // onTapPickHere(selectedPlace);
+        /*
+      if(!isSearchBarFocused && state != SearchingState.Searching){
+        ToastComponent.showDialog("Hello", context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      }*/
+        return isSearchBarFocused
+            ? Container()
+            : Visibility(
+                visible: false,
+                child: FloatingCard(
+                  height: 50,
+                  bottomPosition: 120.0,
+                  // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                  leftPosition: 0.0,
+                  rightPosition: 0.0,
+                  width: 500,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: const Radius.circular(8.0),
+                    bottomLeft: const Radius.circular(8.0),
+                    topRight: const Radius.circular(8.0),
+                    bottomRight: const Radius.circular(8.0),
+                  ),
+                  child: state == SearchingState.Searching
+                      ? Center(
+                          child: Text(
+                          AppLocalizations.of(context)
+                              .map_location_screen_calculating,
+                          style: TextStyle(color: MyTheme.font_grey),
+                        ))
+                      : Visibility(
+                          visible: false,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 2.0, right: 2.0),
+                                        child: Text(
+                                          selectedPlace.formattedAddress,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: MyTheme.medium_grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: FlatButton(
+                                    color: MyTheme.accent_color,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.only(
+                                      topLeft: const Radius.circular(4.0),
+                                      bottomLeft: const Radius.circular(4.0),
+                                      topRight: const Radius.circular(4.0),
+                                      bottomRight: const Radius.circular(4.0),
+                                    )),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .map_location_screen_pick_here,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+                                      //            this will override default 'Select here' Button.
+                                      /*print("do something with [selectedPlace] data");
+                                    print(selectedPlace.formattedAddress);
+                                    print(selectedPlace.geometry.location.lat);
+                                    print(selectedPlace.geometry.location.lng);*/
+
+                                      onTapPickHere(selectedPlace);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ),
+              );
+      },
+      pinBuilder: (context, state) {
+        if (state == PinState.Idle) {
+          return Image.asset(
+            'assets/delivery_map_icon.png',
+            height: 60,
+          );
+        } else {
+          return Image.asset(
+            'assets/delivery_map_icon.png',
+            height: 80,
+          );
+        }
+      },
+    );
+  }
+
+  PlacePicker placePickerMethod(BuildContext context) {
+    return PlacePicker(
+      hintText: AppLocalizations.of(context)
+          .map_location_screen_your_delivery_location,
+      apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
+      initialPosition: kInitialPosition,
+      useCurrentLocation: false,
+      //selectInitialPosition: true,
+      onMapCreated: _onMapCreated,
+      //initialMapType: MapType.terrain,
+
+      //usePlaceDetailSearch: true,
+      onPlacePicked: (result) {
+        selectedPlace = result;
+        print("onTapPickHere ---${selectedPlace}");
+        Navigator.of(context).pop();
+        setState(() {});
+      },
+      //forceSearchOnZoomChanged: true,
+      //automaticallyImplyAppBarLeading: false,
+      //autocompleteLanguage: "ko",
+      //region: 'au',
+      //selectInitialPosition: true,
+      selectedPlaceWidgetBuilder:
+          (_, selectedPlace, state, isSearchBarFocused) {
+        print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+        selectedPlace_update = selectedPlace;
+
+        print("-------------");
+        // onTapPickHere(selectedPlace);
+        /*
+      if(!isSearchBarFocused && state != SearchingState.Searching){
+        ToastComponent.showDialog("Hello", context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      }*/
+        return isSearchBarFocused
+            ? Container()
+            : Visibility(
+                visible: false,
+                child: FloatingCard(
+                  height: 50,
+                  bottomPosition: 120.0,
+                  // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                  leftPosition: 0.0,
+                  rightPosition: 0.0,
+                  width: 500,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: const Radius.circular(8.0),
+                    bottomLeft: const Radius.circular(8.0),
+                    topRight: const Radius.circular(8.0),
+                    bottomRight: const Radius.circular(8.0),
+                  ),
+                  child: state == SearchingState.Searching
+                      ? Center(
+                          child: Text(
+                          AppLocalizations.of(context)
+                              .map_location_screen_calculating,
+                          style: TextStyle(color: MyTheme.font_grey),
+                        ))
+                      : Visibility(
+                          visible: false,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 2.0, right: 2.0),
+                                        child: Text(
+                                          selectedPlace.formattedAddress,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: MyTheme.medium_grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: FlatButton(
+                                    color: MyTheme.accent_color,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.only(
+                                      topLeft: const Radius.circular(4.0),
+                                      bottomLeft: const Radius.circular(4.0),
+                                      topRight: const Radius.circular(4.0),
+                                      bottomRight: const Radius.circular(4.0),
+                                    )),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .map_location_screen_pick_here,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+                                      //            this will override default 'Select here' Button.
+                                      /*print("do something with [selectedPlace] data");
+                                    print(selectedPlace.formattedAddress);
+                                    print(selectedPlace.geometry.location.lat);
+                                    print(selectedPlace.geometry.location.lng);*/
+
+                                      onTapPickHere(selectedPlace);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ),
+              );
+      },
+      pinBuilder: (context, state) {
+        if (state == PinState.Idle) {
+          return Image.asset(
+            'assets/delivery_map_icon.png',
+            height: 60,
+          );
+        } else {
+          return Image.asset(
+            'assets/delivery_map_icon.png',
+            height: 80,
+          );
+        }
+      },
+    );
   }
 
   Future buildShowUpdateFormDialog(BuildContext context, index) {
@@ -1336,6 +1824,99 @@ class _AddressState extends State<Address> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
+                          "${AppLocalizations.of(context).address_screen_zone} *",
+                          style: TextStyle(
+                              color: MyTheme.font_grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Container(
+                          height: 40,
+                          child: TypeAheadField(
+                            suggestionsCallback: (name) async {
+                              var countryResponse =
+                                  await AddressRepository().getZoneList();
+                              return countryResponse.data;
+                            },
+                            loadingBuilder: (context) {
+                              return Container(
+                                height: 50,
+                                child: Center(
+                                    child: Text(
+                                  AppLocalizations.of(context)
+                                      .address_screen_loading_zones,
+                                  style: TextStyle(
+                                      color: MyTheme.font_grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal),
+                                )),
+                              );
+                            },
+                            itemBuilder: (context, country) {
+                              print(country.toString());
+                              return ListTile(
+                                dense: true,
+                                title: Text(
+                                  country.name,
+                                  style: TextStyle(color: MyTheme.font_grey),
+                                ),
+                              );
+                            },
+                            noItemsFoundBuilder: (context) {
+                              return Container(
+                                height: 50,
+                                child: Center(
+                                    child: Text(
+                                        AppLocalizations.of(context)
+                                            .address_screen_no_zone_available,
+                                        style: TextStyle(
+                                            color: MyTheme.medium_grey))),
+                              );
+                            },
+                            onSuggestionSelected: (zone) {
+                              onSelectZoneDuringAdd(zone);
+                            },
+                            textFieldConfiguration: TextFieldConfiguration(
+                              onTap: () {},
+                              //autofocus: true,
+                              controller: _zoneController,
+                              onSubmitted: (txt) {
+                                // keep this blank
+                              },
+                              decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(context)
+                                      .address_screen_enter_zone,
+                                  hintStyle: TextStyle(
+                                      fontSize: 12.0,
+                                      color: MyTheme.textfield_grey),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 0.5),
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MyTheme.textfield_grey,
+                                        width: 1.0),
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(8.0),
+                                    ),
+                                  ),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 8.0)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
                             AppLocalizations.of(context)
                                 .address_screen_postal_code,
                             style: TextStyle(
@@ -1416,7 +1997,11 @@ class _AddressState extends State<Address> {
                                     EdgeInsets.symmetric(horizontal: 8.0)),
                           ),
                         ),
-                      )
+                      ),
+                      Container(
+                        height: 250,
+                        child: placePickerMethodUpdate(context, index),
+                      ),
                     ],
                   ),
                 ),

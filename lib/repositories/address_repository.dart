@@ -104,6 +104,7 @@ class AddressRepository {
       "latitude": "$latitude",
       "longitude": "$longitude"
     });
+    print("Location update${post_body}");
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/update-location");
     final response = await http.post(url,

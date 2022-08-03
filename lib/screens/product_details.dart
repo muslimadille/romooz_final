@@ -1,10 +1,9 @@
 import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
 import 'package:active_ecommerce_flutter/data_model/state_response.dart';
+import 'package:active_ecommerce_flutter/helpers/reg_ex_inpur_formatter.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
-import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
-import 'package:active_ecommerce_flutter/screens/product_reviews.dart';
 import 'package:active_ecommerce_flutter/ui_elements/list_product_card.dart';
 import 'package:active_ecommerce_flutter/ui_elements/mini_product_card.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/wishlist_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/cart_repository.dart';
-import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/color_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -80,6 +78,10 @@ class _ProductDetailsState extends State<ProductDetails> {
   List<dynamic> _packageItems = [];
 
   TextEditingController _packageController = TextEditingController();
+  TextEditingController _qtyController = TextEditingController();
+
+  final _qtyValidator = RegExInputFormatter.withRegex(
+      '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$');
 
   Package _selected_package;
 
@@ -87,6 +89,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   void initState() {
+    _qtyController.text = "1";
     fetchAll();
     super.initState();
   }
@@ -401,8 +404,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     // print(user_id.$);
     // print(_quantity);
 
-    var cartAddResponse = await CartRepository()
-        .getCartAddResponse(widget.id, _variant, user_id.$, _quantity);
+    var cartAddResponse = await CartRepository().getCartAddResponse(
+        widget.id, _variant, user_id.$, _qtyController.text.toString());
 
     if (cartAddResponse.result == false) {
       ToastComponent.showDialog(cartAddResponse.message, context,
@@ -1095,186 +1098,186 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
+                    // Divider(
+                    //   height: 1,
+                    // ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.push(context,
+                    //         MaterialPageRoute(builder: (context) {
+                    //       return ProductReviews(id: widget.id);
+                    //     })).then((value) {
+                    //       onPopped(value);
+                    //     });
+                    //   },
+                    //   child: Container(
+                    //     height: 40,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.fromLTRB(
+                    //         16.0,
+                    //         0.0,
+                    //         8.0,
+                    //         0.0,
+                    //       ),
+                    //       child: Row(
+                    //         children: [
+                    //           Text(
+                    //             AppLocalizations.of(context)
+                    //                 .product_details_screen_reviews,
+                    //             style: TextStyle(
+                    //                 color: MyTheme.font_grey,
+                    //                 fontSize: 14,
+                    //                 fontWeight: FontWeight.w600),
+                    //           ),
+                    //           Spacer(),
+                    //           Icon(
+                    //             Ionicons.ios_add,
+                    //             color: MyTheme.font_grey,
+                    //             size: 24,
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     Divider(
                       height: 1,
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ProductReviews(id: widget.id);
-                        })).then((value) {
-                          onPopped(value);
-                        });
-                      },
-                      child: Container(
-                        height: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            16.0,
-                            0.0,
-                            8.0,
-                            0.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)
-                                    .product_details_screen_reviews,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Spacer(),
-                              Icon(
-                                Ionicons.ios_add,
-                                color: MyTheme.font_grey,
-                                size: 24,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return CommonWebviewScreen(
-                            url:
-                                "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
-                            page_name: AppLocalizations.of(context)
-                                .product_details_screen_seller_policy,
-                          );
-                        }));
-                      },
-                      child: Container(
-                        height: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            16.0,
-                            0.0,
-                            8.0,
-                            0.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)
-                                    .product_details_screen_seller_policy,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Spacer(),
-                              Icon(
-                                Ionicons.ios_add,
-                                color: MyTheme.font_grey,
-                                size: 24,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return CommonWebviewScreen(
-                            url:
-                                "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
-                            page_name: AppLocalizations.of(context)
-                                .product_details_screen_return_policy,
-                          );
-                        }));
-                      },
-                      child: Container(
-                        height: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            16.0,
-                            0.0,
-                            8.0,
-                            0.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)
-                                    .product_details_screen_return_policy,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Spacer(),
-                              Icon(
-                                Ionicons.ios_add,
-                                color: MyTheme.font_grey,
-                                size: 24,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return CommonWebviewScreen(
-                            url:
-                                "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
-                            page_name: AppLocalizations.of(context)
-                                .product_details_screen_support_policy,
-                          );
-                        }));
-                      },
-                      child: Container(
-                        height: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            16.0,
-                            0.0,
-                            8.0,
-                            0.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)
-                                    .product_details_screen_support_policy,
-                                style: TextStyle(
-                                    color: MyTheme.font_grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Spacer(),
-                              Icon(
-                                Ionicons.ios_add,
-                                color: MyTheme.font_grey,
-                                size: 24,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.push(context,
+                    //         MaterialPageRoute(builder: (context) {
+                    //       return CommonWebviewScreen(
+                    //         url:
+                    //             "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
+                    //         page_name: AppLocalizations.of(context)
+                    //             .product_details_screen_seller_policy,
+                    //       );
+                    //     }));
+                    //   },
+                    //   child: Container(
+                    //     height: 40,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.fromLTRB(
+                    //         16.0,
+                    //         0.0,
+                    //         8.0,
+                    //         0.0,
+                    //       ),
+                    //       child: Row(
+                    //         children: [
+                    //           Text(
+                    //             AppLocalizations.of(context)
+                    //                 .product_details_screen_seller_policy,
+                    //             style: TextStyle(
+                    //                 color: MyTheme.font_grey,
+                    //                 fontSize: 14,
+                    //                 fontWeight: FontWeight.w600),
+                    //           ),
+                    //           Spacer(),
+                    //           Icon(
+                    //             Ionicons.ios_add,
+                    //             color: MyTheme.font_grey,
+                    //             size: 24,
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Divider(
+                    //   height: 1,
+                    // ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.push(context,
+                    //         MaterialPageRoute(builder: (context) {
+                    //       return CommonWebviewScreen(
+                    //         url:
+                    //             "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
+                    //         page_name: AppLocalizations.of(context)
+                    //             .product_details_screen_return_policy,
+                    //       );
+                    //     }));
+                    //   },
+                    //   child: Container(
+                    //     height: 40,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.fromLTRB(
+                    //         16.0,
+                    //         0.0,
+                    //         8.0,
+                    //         0.0,
+                    //       ),
+                    //       child: Row(
+                    //         children: [
+                    //           Text(
+                    //             AppLocalizations.of(context)
+                    //                 .product_details_screen_return_policy,
+                    //             style: TextStyle(
+                    //                 color: MyTheme.font_grey,
+                    //                 fontSize: 14,
+                    //                 fontWeight: FontWeight.w600),
+                    //           ),
+                    //           Spacer(),
+                    //           Icon(
+                    //             Ionicons.ios_add,
+                    //             color: MyTheme.font_grey,
+                    //             size: 24,
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Divider(
+                    //   height: 1,
+                    // ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.push(context,
+                    //         MaterialPageRoute(builder: (context) {
+                    //       return CommonWebviewScreen(
+                    //         url:
+                    //             "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
+                    //         page_name: AppLocalizations.of(context)
+                    //             .product_details_screen_support_policy,
+                    //       );
+                    //     }));
+                    //   },
+                    //   child: Container(
+                    //     height: 40,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.fromLTRB(
+                    //         16.0,
+                    //         0.0,
+                    //         8.0,
+                    //         0.0,
+                    //       ),
+                    //       child: Row(
+                    //         children: [
+                    //           Text(
+                    //             AppLocalizations.of(context)
+                    //                 .product_details_screen_support_policy,
+                    //             style: TextStyle(
+                    //                 color: MyTheme.font_grey,
+                    //                 fontSize: 14,
+                    //                 fontWeight: FontWeight.w600),
+                    //           ),
+                    //           Spacer(),
+                    //           Icon(
+                    //             Ionicons.ios_add,
+                    //             color: MyTheme.font_grey,
+                    //             size: 24,
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Divider(
+                    //   height: 1,
+                    // ),
                   ]),
                 ),
                 SliverList(
@@ -1475,12 +1478,46 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: [
               buildQuantityDownButton(),
               Container(
-                  width: 36,
-                  child: Center(
-                      child: Text(
-                    _quantity.toString(),
-                    style: TextStyle(fontSize: 18, color: MyTheme.dark_grey),
-                  ))),
+                width: 36,
+                child: Center(
+                  child: TextField(
+                    controller: _qtyController,
+                    textAlign: TextAlign.center,
+                    autofocus: false,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [_qtyValidator],
+                    decoration: InputDecoration(
+                        hintText: "1",
+                        hintStyle: TextStyle(
+                            fontSize: 12.0, color: MyTheme.textfield_grey),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: MyTheme.textfield_grey, width: 0.5),
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(8.0),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: MyTheme.textfield_grey, width: 1.0),
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(8.0),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0)),
+                  ),
+                ),
+              ),
+              // Container(
+              //   width: 36,
+              //   child: Center(
+              //     child: Text(
+              //       _quantity.toString(),
+              //       style: TextStyle(fontSize: 18, color: MyTheme.dark_grey),
+              //     ),
+              //   ),
+              // ),
               buildQuantityUpButton()
             ],
           ),
@@ -1890,30 +1927,10 @@ class _ProductDetailsState extends State<ProductDetails> {
           color: Colors.transparent,
           height: 50,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FlatButton(
-                height: 50,
-                color: MyTheme.splash_screen_color,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)
-                      .product_details_screen_button_add_to_package,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-                onPressed: () {
-                  showMyPackages();
-                },
-              ),
-              // SizedBox(
-              //   width: 1,
-              // ),
-              FlatButton(
+                minWidth: MediaQuery.of(context).size.width / 2 - .5,
                 height: 50,
                 color: MyTheme.golden,
                 shape: RoundedRectangleBorder(
@@ -1931,10 +1948,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   onPressAddToCart(context, _addedToCartSnackbar);
                 },
               ),
-              // SizedBox(
-              //   width: 1,
-              // ),
+              SizedBox(
+                width: 1,
+              ),
               FlatButton(
+                minWidth: MediaQuery.of(context).size.width / 2 - .5,
                 height: 50,
                 color: MyTheme.accent_color,
                 shape: RoundedRectangleBorder(
@@ -2391,6 +2409,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             onPressed: () {
               if (_quantity < _stock) {
                 _quantity++;
+                _qtyController.text = _quantity.toString();
                 setState(() {});
                 calculateTotalPrice();
               }
@@ -2404,6 +2423,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           onPressed: () {
             if (_quantity > 1) {
               _quantity--;
+              _qtyController.text = _quantity.toString();
               setState(() {});
               calculateTotalPrice();
             }
