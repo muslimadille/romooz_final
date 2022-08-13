@@ -122,7 +122,8 @@ class CustomInternationalPhoneNumberInput extends StatefulWidget {
       this.focusNode,
       this.cursorColor,
       this.autofillHints,
-      this.countries})
+      this.countries,
+      List<TextInputFormatter> inputFormatters})
       : super(key: key);
 
   @override
@@ -504,10 +505,7 @@ class CustomSelectorButton extends StatelessWidget {
             height: 36,
             decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(
-                    color: MyTheme.textfield_grey,
-                    width: .5
-                ),
+                border: Border.all(color: MyTheme.textfield_grey, width: .5),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5.0),
                     bottomLeft: Radius.circular(5.0))),

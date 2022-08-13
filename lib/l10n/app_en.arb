@@ -70,6 +70,8 @@
   "main_drawer_not_logged_in": "Not Logged In",
   "main_drawer_change_language": "Change Language",
   "main_drawer_home": "Home",
+   "go_to_home": "Go To Home",
+
   "main_drawer_profile": "Profile",
   "main_drawer_orders": "Orders",
   "main_drawer_my_wishlist": "My Wishlist",

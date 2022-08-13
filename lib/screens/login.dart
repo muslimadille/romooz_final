@@ -535,12 +535,16 @@ class _LoginState extends State<Login> {
                                     fontWeight: FontWeight.w600),
                               ),
                               onPressed: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return Registration(
-                                    customer_type: "retail",
-                                  );
-                                }));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return Registration(
+                                        customer_type: "retail",
+                                      );
+                                    },
+                                  ),
+                                );
                               },
                             ),
                           ),

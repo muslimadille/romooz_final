@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:active_ecommerce_flutter/data_model/zones_response.dart';
+import 'package:active_ecommerce_flutter/screens/main.dart';
+import 'package:active_ecommerce_flutter/style_classes.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
@@ -22,8 +24,13 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Address extends StatefulWidget {
-  Address({Key key, this.from_shipping_info = false}) : super(key: key);
+  Address(
+      {Key key,
+      this.from_shipping_info = false,
+      this.from_registeration = false})
+      : super(key: key);
   bool from_shipping_info;
+  bool from_registeration;
   @override
   _AddressState createState() => _AddressState();
 }
@@ -43,7 +50,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       LatLng(24.8132637, 46.331984); // London , arbitary value
 
   GoogleMapController _controller;
-
+  bool showLoader = false;
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _controller = controller;
     String value = await DefaultAssetBundle.of(context)
@@ -126,6 +133,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   List<MyState> _selected_state_list_for_update = [];
   List<Country> _selected_country_list_for_update = [];
 
+  List<Zone> _selected_zone_list_for_update = [];
+
   List<LatLng> _locationControllerListForUpdate = [];
 
   @override
@@ -177,6 +186,10 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
             .add(TextEditingController(text: address.state_name));
         _cityControllerListForUpdate
             .add(TextEditingController(text: address.city_name));
+
+        _zoneControllerListForUpdate
+            .add(TextEditingController(text: address.zone_name));
+
         _selected_country_list_for_update
             .add(Country(id: address.country_id, name: address.country_name));
         _selected_state_list_for_update
@@ -184,10 +197,13 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         _selected_city_list_for_update
             .add(City(id: address.city_id, name: address.city_name));
 
+        _selected_zone_list_for_update
+            .add(Zone(id: address.zone_id, name: address.zone_name));
+
         _locationControllerListForUpdate.add(LatLng(address.lat, address.lang));
       });
 
-      print("fetchShippingAddressList${_locationControllerListForUpdate}");
+      //print("fetchShippingAddressList${_locationControllerListForUpdate}");
     }
 
     setState(() {});
@@ -216,6 +232,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     _selected_city_list_for_update.clear();
     _selected_state_list_for_update.clear();
     _selected_country_list_for_update.clear();
+    _selected_zone_list_for_update.clear();
     setState(() {});
   }
 
@@ -238,13 +255,17 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   afterAddingAnAddressUpdateLocation(address_id) async {
     print(selectedPlace_update);
-    print(
-        "afterAddingAnAddressUpdateLocation${selectedPlace_update.geometry.location.lat} _default_shipping_address ${_shippingAddressList[0].id}");
-    var addressUpdateLocationResponse = await AddressRepository()
-        .getAddressUpdateLocationResponse(
-            address_id,
-            selectedPlace_update.geometry.location.lat,
-            selectedPlace_update.geometry.location.lng);
+    var addressUpdateLocationResponse;
+    if (selectedPlace_update == null) {
+      addressUpdateLocationResponse = await AddressRepository()
+          .getAddressUpdateLocationResponse(address_id, 24.8132637, 46.331984);
+    } else {
+      addressUpdateLocationResponse = await AddressRepository()
+          .getAddressUpdateLocationResponse(
+              address_id,
+              selectedPlace_update.geometry.location.lat,
+              selectedPlace_update.geometry.location.lng);
+    }
 
     if (addressUpdateLocationResponse.result == false) {
       ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
@@ -257,6 +278,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
     Navigator.of(context, rootNavigator: true).pop();
     afterAddingAnAddress();
+    setState(() {
+      showLoader = false;
+    });
 
     // Navigator.pop(context);
   }
@@ -348,6 +372,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   onAddressAdd(context) async {
     print("onAddressAdd${selectedPlace_update}");
+    setState(() {
+      showLoader = true;
+    });
 
     var address = _addressController.text.toString();
     var postal_code = _postalCodeController.text.toString();
@@ -381,11 +408,19 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       return;
     }
 
+    if (_selected_zone == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).address_screen_zone_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
     var addressAddResponse = await AddressRepository().getAddressAddResponse(
         address: address,
         country_id: _selected_country.id,
         state_id: _selected_state.id,
         city_id: _selected_city.id,
+        zone_id: _selected_zone.id,
         postal_code: postal_code,
         phone: phone);
 
@@ -398,7 +433,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     ToastComponent.showDialog(addressAddResponse.message, context,
         gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
-    afterAddingAnAddressUpdateLocation(24);
+    afterAddingAnAddressUpdateLocation(addressAddResponse.data.id);
   }
 
   onAddressUpdate(context, index, id) async {
@@ -434,12 +469,20 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       return;
     }
 
+    if (_selected_zone_list_for_update[index] == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).address_screen_zone_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
     var addressUpdateResponse = await AddressRepository()
         .getAddressUpdateResponse(
             id: id,
             address: address,
             country_id: _selected_country_list_for_update[index].id,
             state_id: _selected_state_list_for_update[index].id,
+            zone_id: _selected_zone_list_for_update[index].id,
             city_id: _selected_city_list_for_update[index].id,
             postal_code: postal_code,
             phone: phone);
@@ -459,7 +502,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   onSelectZoneDuringAdd(zone) {
     if (_selected_zone != null && zone.id == _selected_zone.id) {
       //setModalState(() {
-      _countryController.text = zone.name;
+      _zoneController.text = zone.name;
       //});
       return;
     }
@@ -468,6 +511,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     setState(() {
       _zoneController.text = zone.name;
     });
+    print("_selected_zone ${_selected_zone}");
   }
 
   onSelectCountryDuringAdd(country, setModalState) {
@@ -569,6 +613,20 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     });
   }
 
+  onSelectZoneDuringUpdate(index, zone, setModalState) {
+    if (_selected_zone_list_for_update[index] != null &&
+        zone.id == _selected_zone_list_for_update[index].id) {
+      setModalState(() {
+        _zoneControllerListForUpdate[index].text = zone.name;
+      });
+      return;
+    }
+    _selected_zone_list_for_update[index] = zone;
+    setModalState(() {
+      _zoneControllerListForUpdate[index].text = zone.name;
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -579,7 +637,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: buildAppBar(context),
+        appBar: widget.from_registeration
+            ? buildAppBarRegister(context)
+            : buildAppBar(context),
         bottomNavigationBar: buildBottomAppBar(context),
         body: RefreshIndicator(
           color: MyTheme.accent_color,
@@ -934,9 +994,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               onSubmitted: (txt) {
                                 // keep blank
                               },
-                              // onSuggestionSelected: (zone) {
-                              //         onSelectZoneDuringAdd(zone);
-                              //       },
+
                               decoration: InputDecoration(
                                   hintText: AppLocalizations.of(context)
                                       .address_screen_enter_city,
@@ -981,8 +1039,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           height: 40,
                           child: TypeAheadField(
                             suggestionsCallback: (name) async {
-                              var countryResponse =
-                                  await AddressRepository().getZoneList();
+                              var countryResponse = await AddressRepository()
+                                  .getZoneList(city_id: _selected_city.id);
                               return countryResponse.data;
                             },
                             loadingBuilder: (context) {
@@ -1177,28 +1235,39 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                     SizedBox(
                       width: 1,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 28.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 30,
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                                color: MyTheme.light_grey, width: 1.0)),
-                        child: Text(
-                          AppLocalizations.of(context).common_add_ucfirst,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                    Visibility(
+                      visible: !showLoader,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 28.0),
+                        child: FlatButton(
+                          minWidth: 75,
+                          height: 30,
+                          color: MyTheme.accent_color,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              side: BorderSide(
+                                  color: MyTheme.light_grey, width: 1.0)),
+                          child: Text(
+                            AppLocalizations.of(context).common_add_ucfirst,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              onAddressAdd(context);
+                            });
+                          },
                         ),
-                        onPressed: () {
-                          onAddressAdd(context);
-                        },
                       ),
-                    )
+                    ),
+                    Visibility(
+                      visible: showLoader,
+                      child: LoaderButton(
+                        color: MyTheme.accent_color,
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -1837,8 +1906,11 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           height: 40,
                           child: TypeAheadField(
                             suggestionsCallback: (name) async {
-                              var countryResponse =
-                                  await AddressRepository().getZoneList();
+                              var countryResponse = await AddressRepository()
+                                  .getZoneList(
+                                      city_id:
+                                          _selected_city_list_for_update[index]
+                                              .id);
                               return countryResponse.data;
                             },
                             loadingBuilder: (context) {
@@ -1877,12 +1949,13 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               );
                             },
                             onSuggestionSelected: (zone) {
-                              onSelectZoneDuringAdd(zone);
+                              onSelectZoneDuringUpdate(
+                                  index, zone, setModalState);
                             },
                             textFieldConfiguration: TextFieldConfiguration(
                               onTap: () {},
                               //autofocus: true,
-                              controller: _zoneController,
+                              controller: _zoneControllerListForUpdate[index],
                               onSubmitted: (txt) {
                                 // keep this blank
                               },
@@ -2000,7 +2073,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       ),
                       Container(
                         height: 250,
-                        child: placePickerMethodUpdate(context, index),
+                        child: placePickerMethod(context),
                       ),
                     ],
                   ),
@@ -2077,6 +2150,27 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
+      title: Column(
+        children: [
+          Text(
+            AppLocalizations.of(context).address_screen_addresses_of_user,
+            style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+          ),
+          Text(
+            "* ${AppLocalizations.of(context).address_screen_addresses_to_make_default}",
+            style: TextStyle(fontSize: 10, color: MyTheme.medium_grey),
+          ),
+        ],
+      ),
+      elevation: 0.0,
+      titleSpacing: 0,
+    );
+  }
+
+  AppBar buildAppBarRegister(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      centerTitle: true,
       title: Column(
         children: [
           Text(
@@ -2457,7 +2551,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   buildBottomAppBar(BuildContext context) {
     return Visibility(
-      visible: widget.from_shipping_info,
+      visible: widget.from_shipping_info || widget.from_registeration,
       child: BottomAppBar(
         child: Container(
           color: Colors.transparent,
@@ -2473,15 +2567,19 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(0.0),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)
-                      .address_screen_back_to_shipping_info,
+                  widget.from_shipping_info
+                      ? AppLocalizations.of(context)
+                          .address_screen_back_to_shipping_info
+                      : AppLocalizations.of(context).go_to_home,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),
                 onPressed: () {
-                  return Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return Main();
+                  }));
                 },
               )
             ],

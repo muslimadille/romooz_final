@@ -236,16 +236,19 @@ class _CategoryListState extends State<CategoryList> {
       elevation: 0.0,
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
-            width: 80,
-            height: 80,
-            child: ClipRRect(
-                borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(16), right: Radius.zero),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/placeholder.png',
-                  image: categoryResponse.categories[index].banner,
-                  fit: BoxFit.cover,
-                ))),
+          width: 80,
+          height: 80,
+          child: ClipRRect(
+            borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(16), right: Radius.zero),
+            child: FadeInImage.assetNetwork(
+              placeholder: 'assets/placeholder.png',
+              image: categoryResponse.categories[index].banner ??
+                  "https://picsum.photos/300/300",
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
         Container(
           height: 80,
           child: Column(

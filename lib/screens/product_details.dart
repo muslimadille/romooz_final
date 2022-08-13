@@ -8,6 +8,7 @@ import 'package:active_ecommerce_flutter/ui_elements/list_product_card.dart';
 import 'package:active_ecommerce_flutter/ui_elements/mini_product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:expandable/expandable.dart';
@@ -68,7 +69,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   var _singlePriceString;
   int _quantity = 1;
   int _stock = 0;
-
+  FocusNode _nodeText1 = FocusNode();
   List<dynamic> _relatedProducts = [];
   bool _relatedProductInit = false;
   List<dynamic> _topProducts = [];
@@ -114,18 +115,28 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   fetchProductDetails() async {
-    var productDetailsResponse =
-        await ProductRepository().getProductDetails(id: widget.id);
+    try {
+      var productDetailsResponse =
+          await ProductRepository().getProductDetails(id: widget.id);
 
-    if (productDetailsResponse.detailed_products.length > 0) {
-      _productDetails = productDetailsResponse.detailed_products[0];
-      sellerChatTitleController.text =
-          productDetailsResponse.detailed_products[0].name;
+      if (productDetailsResponse.result == false) {
+        ToastComponent.showDialog(productDetailsResponse.message, context,
+            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        Navigator.of(context).pop();
+      } else {
+        if (productDetailsResponse.detailed_products.length > 0) {
+          _productDetails = productDetailsResponse.detailed_products[0];
+          sellerChatTitleController.text =
+              productDetailsResponse.detailed_products[0].name;
+        }
+
+        setProductDetailValues();
+
+        setState(() {});
+      }
+    } on Exception catch (_) {
+      print('never reached');
     }
-
-    setProductDetailValues();
-
-    setState(() {});
   }
 
   fetchRelatedProducts() async {
@@ -1478,15 +1489,16 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: [
               buildQuantityDownButton(),
               Container(
-                width: 36,
+                width: 45,
                 child: Center(
                   child: TextField(
                     controller: _qtyController,
                     textAlign: TextAlign.center,
                     autofocus: false,
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [_qtyValidator],
+                    focusNode: _nodeText1,
+                    keyboardType: const TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                         hintText: "1",
                         hintStyle: TextStyle(

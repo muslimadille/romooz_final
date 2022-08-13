@@ -38,6 +38,7 @@ class ShopRepository {
       url,
       headers: {
         "App-Language": app_language.$,
+        "Authorization": "Bearer ${access_token.$}",
       },
     );
     return productMiniResponseFromJson(response.body);
@@ -50,6 +51,7 @@ class ShopRepository {
       url,
       headers: {
         "App-Language": app_language.$,
+        "Authorization": "Bearer ${access_token.$}",
       },
     );
     return productMiniResponseFromJson(response.body);
@@ -63,6 +65,7 @@ class ShopRepository {
       url,
       headers: {
         "App-Language": app_language.$,
+        "Authorization": "Bearer ${access_token.$}",
       },
     );
     return productMiniResponseFromJson(response.body);

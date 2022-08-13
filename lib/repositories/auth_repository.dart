@@ -18,7 +18,7 @@ class AuthRepository {
     print("email${email}");
     var post_body = jsonEncode({
       "phone": "${email}",
-      // "password": "$password",
+      "user_type": "customer",
       "identity_matrix": AppConfig.purchase_code
     });
 
@@ -104,7 +104,8 @@ class AuthRepository {
       "tax_number": "$tax_number",
       "city_id": city_id,
       "long": "45.039",
-      "lat": "34.2093"
+      "lat": "34.2093",
+      "user_type": "customer",
     });
 
     print("response sign up${post_body}");

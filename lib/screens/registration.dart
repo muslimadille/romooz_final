@@ -1297,8 +1297,8 @@ class _RegistrationState extends State<Registration> {
                                   child: TypeAheadField(
                                     suggestionsCallback: (name) async {
                                       var countryResponse =
-                                          await AddressRepository()
-                                              .getZoneList();
+                                          await AddressRepository().getZoneList(
+                                              city_id: _selected_city.id);
                                       return countryResponse.data;
                                     },
                                     loadingBuilder: (context) {
@@ -1438,7 +1438,7 @@ class _RegistrationState extends State<Registration> {
                               color: MyTheme.accent_color,
                               reduis: 0.4,
                               title: AppLocalizations.of(context)
-                                  .login_screen_sign_up,
+                                  .registration_screen_register_sign_up,
                               onTap: () {
                                 onPressSignUp();
                               },

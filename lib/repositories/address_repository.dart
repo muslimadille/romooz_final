@@ -38,6 +38,7 @@ class AddressRepository {
       @required int country_id,
       @required int state_id,
       @required int city_id,
+      @required int zone_id,
       @required String postal_code,
       @required String phone}) async {
     var post_body = jsonEncode({
@@ -46,6 +47,7 @@ class AddressRepository {
       "country_id": "$country_id",
       "state_id": "$state_id",
       "city_id": "$city_id",
+      "zone_id": "$zone_id",
       "postal_code": "$postal_code",
       "phone": "$phone"
     });
@@ -68,6 +70,7 @@ class AddressRepository {
       @required int country_id,
       @required int state_id,
       @required int city_id,
+      @required int zone_id,
       @required String postal_code,
       @required String phone}) async {
     var post_body = jsonEncode({
@@ -76,11 +79,13 @@ class AddressRepository {
       "address": "$address",
       "country_id": "$country_id",
       "state_id": "$state_id",
+      "zone_id": "$zone_id",
       "city_id": "$city_id",
       "postal_code": "$postal_code",
       "phone": "$phone"
     });
 
+    print("post_body${post_body}");
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/update");
     final response = await http.post(url,
         headers: {
@@ -89,6 +94,7 @@ class AddressRepository {
           "App-Language": app_language.$
         },
         body: post_body);
+    print("response${response}");
 
     return addressUpdateResponseFromJson(response.body);
   }
@@ -171,8 +177,9 @@ class AddressRepository {
     return myStateResponseFromJson(response.body);
   }
 
-  Future<ZonesResponse> getZoneList() async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/zones");
+  Future<ZonesResponse> getZoneList({city_id = 0}) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/zones?city_id=${city_id}");
+    print("city_id${city_id}");
     final response = await http.get(url);
     return zonesResponseFromJson(response.body);
   }
@@ -194,8 +201,8 @@ class AddressRepository {
       "shipping_type": "$shipping_type"
     });
 
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/shipping_cost");
-    final response = await http.post(url,
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/shipping_cost/${address_id}");
+    final response = await http.get(url,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}",

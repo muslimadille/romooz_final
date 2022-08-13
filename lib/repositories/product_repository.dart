@@ -20,6 +20,7 @@ class ProductRepository {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/products/best-seller");
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -28,6 +29,7 @@ class ProductRepository {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/products/todays-deal");
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -38,6 +40,7 @@ class ProductRepository {
         Uri.parse("${AppConfig.BASE_URL}/flash-deal-products/" + id.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -51,6 +54,7 @@ class ProductRepository {
         "?page=${page}&name=${name}");
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -63,6 +67,7 @@ class ProductRepository {
 
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -74,6 +79,7 @@ class ProductRepository {
         "?page=${page}&name=${name}");
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -91,18 +97,27 @@ class ProductRepository {
 
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
 
   Future<ProductDetailsResponse> getProductDetails(
       {@required int id = 0}) async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/products/" + id.toString());
+    Uri url;
+    if (access_token.$ == "") {
+      url = Uri.parse("${AppConfig.BASE_URL}/products/get/" + id.toString());
+    } else {
+      url = Uri.parse("${AppConfig.BASE_URL}/products/" + id.toString());
+    }
+
     print(url.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     print(response.body.toString());
+    print("Bearer ${access_token.$}");
     return productDetailsResponseFromJson(response.body);
   }
 
@@ -111,6 +126,7 @@ class ProductRepository {
         Uri.parse("${AppConfig.BASE_URL}/products/related/" + id.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -121,6 +137,7 @@ class ProductRepository {
         "${AppConfig.BASE_URL}/products/top-from-seller/" + id.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     return productMiniResponseFromJson(response.body);
   }
@@ -131,6 +148,7 @@ class ProductRepository {
         "${AppConfig.BASE_URL}/products/variant/price?id=${id.toString()}&color=${color}&variants=${variants}");
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
 
     return variantResponseFromJson(response.body);

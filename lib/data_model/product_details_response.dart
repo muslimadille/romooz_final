@@ -19,6 +19,8 @@ class ProductDetailsResponse {
     this.detailed_products,
     this.success,
     this.status,
+    this.result,
+    this.message,
   });
 
   List<DetailedProduct> detailed_products;
@@ -27,18 +29,29 @@ class ProductDetailsResponse {
 
   int status;
 
+  bool result;
+  String message;
+
   factory ProductDetailsResponse.fromJson(Map<String, dynamic> json) =>
       ProductDetailsResponse(
-        detailed_products: List<DetailedProduct>.from(
-            json["data"].map((x) => DetailedProduct.fromJson(x))),
+        detailed_products: json["data"] == null
+            ? null
+            : List<DetailedProduct>.from(
+                json["data"].map((x) => DetailedProduct.fromJson(x))),
         success: json["success"],
         status: json["status"],
+        result: json["result"],
+        message: json["message"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(detailed_products.map((x) => x.toJson())),
+        "data": detailed_products == null
+            ? null
+            : List<dynamic>.from(detailed_products.map((x) => x.toJson())),
         "success": success,
         "status": status,
+        "result": result,
+        "message": message,
       };
 }
 

@@ -476,17 +476,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                          //width: 100,
-                          height: 100,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(16),
-                                  bottom: Radius.zero),
-                              child: FadeInImage.assetNetwork(
-                                placeholder: 'assets/placeholder.png',
-                                image: _featuredCategoryList[index].banner,
-                                fit: BoxFit.cover,
-                              ))),
+                        //width: 100,
+                        height: 100,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16), bottom: Radius.zero),
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/placeholder.png',
+                            image: _featuredCategoryList[index].banner ??
+                                "https://picsum.photos/100/500",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(8, 8, 8, 4),
                         child: Container(
@@ -756,15 +758,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               return Stack(
                 children: <Widget>[
                   Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          child: FadeInImage.assetNetwork(
-                            placeholder: 'assets/placeholder.png',
-                            image: i,
-                            fit: BoxFit.fill,
-                          ))),
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/placeholder.png',
+                        image: i ?? "https://picsum.photos/100/500",
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Row(
