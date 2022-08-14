@@ -48,26 +48,26 @@ class _CheckoutViewState extends State<CheckoutView> {
     BrandType brandType,
     double amount,
   ) async {
-    CheckoutSettings _checkoutSettings = CheckoutSettings(
-      brand: brandType,
-      amount: amount,
-      orderId: widget.order_id ?? "0",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": "Bearer ${access_token.$}"
-      },
-      additionalParams: {
-        'merchantTransactionId': '#123456',
-      },
-    );
-    print("initPaymentSession ---$brandType --- ${_checkoutSettings.orderId}");
+    // CheckoutSettings _checkoutSettings = CheckoutSettings(
+    //   brand: brandType,
+    //   amount: amount,
+    //   orderId: widget.order_id ?? "0",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //     "Authorization": "Bearer ${access_token.$}"
+    //   },
+    //   additionalParams: {
+    //     'merchantTransactionId': '#123456',
+    //   },
+    // );
+    // print("initPaymentSession ---$brandType --- ${_checkoutSettings.orderId}");
 
-    hyperpay.initSession(checkoutSetting: _checkoutSettings);
-    print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
+    // hyperpay.initSession(checkoutSetting: _checkoutSettings);
+    // print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
 
-    sessionCheckoutID = await hyperpay.getCheckoutID;
-    print("sessionCheckoutID ---$sessionCheckoutID ");
+    // sessionCheckoutID = await hyperpay.getCheckoutID;
+    // print("sessionCheckoutID ---$sessionCheckoutID ");
   }
 
   Future<void> onPay(context) async {

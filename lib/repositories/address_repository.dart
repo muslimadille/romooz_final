@@ -202,13 +202,15 @@ class AddressRepository {
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/shipping_cost/${address_id}");
-    final response = await http.get(url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${access_token.$}",
-          "App-Language": app_language.$
-        },
-        body: post_body);
+    final response = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$
+      },
+      // body: post_body
+    );
 
     return shippingCostResponseFromJson(response.body);
   }
