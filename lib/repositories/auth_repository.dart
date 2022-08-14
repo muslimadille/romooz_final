@@ -13,11 +13,11 @@ import 'dart:convert';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class AuthRepository {
-  Future<LoginResponse> getLoginResponse(
-      @required String email, String password) async {
+  Future<LoginResponse> getLoginResponse(@required String email, String password) async {
     print("email${email}");
     var post_body = jsonEncode({
       "phone": "${email}",
+      // "password": "$password",
       "user_type": "customer",
       "identity_matrix": AppConfig.purchase_code
     });
@@ -30,7 +30,8 @@ class AuthRepository {
           "App-Language": app_language.$,
         },
         body: post_body);
-
+    print('ppppppppppppppppppppppppppppppppppppp');
+    print(response.body);
     return loginResponseFromJson(response.body);
   }
 
@@ -75,38 +76,71 @@ class AuthRepository {
   }
 
   Future<SignupResponse> getSignupResponse(
-    @required String name,
-    @required String email_or_phone,
-    @required String password,
-    @required String passowrd_confirmation,
-    @required String register_by,
-    @required String customer_type,
-    @required String owner_name,
-    @required String commercial_name,
-    @required String commercial_registration_no,
-    @required String tax_number,
-    @required String city_id,
-    @required String commercial_registry,
-    @required String tax_number_certificate,
-  ) async {
-    var post_body = jsonEncode({
-      "name": "$name",
-      "email_or_phone": "${email_or_phone}",
-      "password": "$password",
-      "password_confirmation": "${passowrd_confirmation}",
-      "register_by": "$register_by",
-      "customer_type": "$customer_type",
-      "owner_name": "$owner_name",
-      "commercial_name": "$commercial_name",
-      "commercial_registration_no": "$commercial_registration_no",
-      "commercial_registry": "$commercial_registry",
-      "tax_number_certificate": "$tax_number_certificate",
-      "tax_number": "$tax_number",
-      "city_id": city_id,
-      "long": "45.039",
-      "lat": "34.2093",
-      "user_type": "customer",
-    });
+      Map<String,dynamic> data,
+      // @required String name,
+      // @required String email_or_phone,
+      // @required String customer_type,
+      // // @required String password,
+      // // @required String passowrd_confirmation,
+      // // @required String register_by,
+      // @required String owner_name,
+      // @required String commercial_name,
+      // @required String commercial_registration_no,
+      // @required String commercial_registry,
+      // @required String tax_number,
+      // @required String tax_number_certificate,
+      // @required String state_id,
+      ) async {
+
+
+
+
+
+    // var data = {
+    //   "name": "$name",
+    //   "email_or_phone": "${email_or_phone}",
+    //   "user_type": "customer",
+    //   "customer_type": "$customer_type",
+    // };
+    //
+    // if(customer_type== "wholesale"){
+    //   data.addAll({
+    //     // "password": "$password",
+    //     // "password_confirmation": "${passowrd_confirmation}",
+    //     // "register_by": "$register_by",
+    //     "owner_name": "$owner_name",
+    //     "commercial_name": "$commercial_name",
+    //     "commercial_registration_no": "$commercial_registration_no",
+    //     "commercial_registry": "$commercial_registry",
+    //     "tax_number": "$tax_number",
+    //     "tax_number_certificate": "$tax_number_certificate",
+    //     "state_id": state_id,
+    //     // "long": "45.039",
+    //     // "lat": "34.2093",
+    //   });
+    // }
+
+    var post_body = jsonEncode(data);
+
+
+    //var  post_body = jsonEncode({
+    //   "name": "$name",
+    //   "email_or_phone": "${email_or_phone}",
+    //   "user_type": "customer",
+    //   "password": "$password",
+    //   "password_confirmation": "${passowrd_confirmation}",
+    //   "register_by": "$register_by",
+    //   "customer_type": "$customer_type",
+    //   "owner_name": "$owner_name",
+    //   "commercial_name": "$commercial_name",
+    //   "commercial_registration_no": "$commercial_registration_no",
+    //   "commercial_registry": "$commercial_registry",
+    //   "tax_number_certificate": "$tax_number_certificate",
+    //   "tax_number": "$tax_number",
+    //   "city_id": city_id,
+    //   "long": "45.039",
+    //   "lat": "34.2093",
+    // });
 
     print("response sign up${post_body}");
 
@@ -117,6 +151,7 @@ class AuthRepository {
           "App-Language": app_language.$,
         },
         body: post_body);
+    print('00000000000000000000000000000000000000000000000000000000');
     print("response sign up${response.body} ${post_body}");
 
     return signupResponseFromJson(response.body);
@@ -125,7 +160,7 @@ class AuthRepository {
   Future<ResendCodeResponse> getResendCodeResponse(
       @required int user_id, @required String verify_by) async {
     var post_body =
-        jsonEncode({"user_id": "$user_id", "register_by": "$verify_by"});
+    jsonEncode({"user_id": "$user_id", "register_by": "$verify_by"});
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/resend_code");
     final response = await http.post(url,
@@ -138,11 +173,9 @@ class AuthRepository {
     return resendCodeResponseFromJson(response.body);
   }
 
-  Future<LoginResponse> getConfirmCodeResponse(
-      @required int user_id, @required String verification_code) async {
+  Future<LoginResponse> getConfirmCodeResponse(@required int user_id, @required String verification_code) async {
     var post_body = jsonEncode(
         {"user_id": "$user_id", "verification_code": "$verification_code"});
-
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/confirm_code");
     final response = await http.post(url,
         headers: {
@@ -150,7 +183,8 @@ class AuthRepository {
           "App-Language": app_language.$,
         },
         body: post_body);
-
+    print('111111111111111111111111111');
+    print(response.body);
     return loginResponseFromJson(response.body);
   }
 
