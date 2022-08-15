@@ -4,6 +4,7 @@ import 'package:active_ecommerce_flutter/ui_elements/product_card.dart';
 import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class CategoryProducts extends StatefulWidget {
   CategoryProducts({Key key, this.category_name, this.category_id})
@@ -16,6 +17,8 @@ class CategoryProducts extends StatefulWidget {
 }
 
 class _CategoryProductsState extends State<CategoryProducts> {
+
+
   ScrollController _scrollController = ScrollController();
   ScrollController _xcrollController = ScrollController();
   TextEditingController _searchController = TextEditingController();
@@ -38,13 +41,20 @@ class _CategoryProductsState extends State<CategoryProducts> {
       //print("position: " + _xcrollController.position.pixels.toString());
       //print("max: " + _xcrollController.position.maxScrollExtent.toString());
 
-      if (_xcrollController.position.pixels ==
+      if (_xcrollController.position.pixels >=
           _xcrollController.position.maxScrollExtent) {
-        setState(() {
-          _page++;
-        });
-        _showLoadingContainer = true;
+        // setState(() async{
+        //   _page++;
+        // });
+        // fetchData();
+
+        _page++;
         fetchData();
+        setState((){
+
+        });
+
+        _showLoadingContainer = true;
       }
     });
   }
@@ -60,6 +70,19 @@ class _CategoryProductsState extends State<CategoryProducts> {
   fetchData() async {
     var productResponse = await ProductRepository().getCategoryProducts(
         id: widget.category_id, page: _page, name: _searchKey);
+    print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+    if (is_logged_in.$ == true){
+      print('0000000000000000000000000000000000000');
+      // get price based on city
+      productResponse.products.forEach((element) async{
+        var variantResponse = await ProductRepository().getVariantWiseInfo(id: element.id);
+        print('111111111111111111111111111');
+        print(variantResponse.price_string);
+        print(variantResponse.variant);
+        element.main_price = variantResponse.price.toString();
+      });
+    }
+
     _productList.addAll(productResponse.products);
     _isInitial = false;
     _totalData = productResponse.meta.total;

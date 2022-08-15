@@ -121,6 +121,7 @@ class ProductRepository {
     return productDetailsResponseFromJson(response.body);
   }
 
+
   Future<ProductMiniResponse> getRelatedProducts({@required int id = 0}) async {
     Uri url =
         Uri.parse("${AppConfig.BASE_URL}/products/related/" + id.toString());

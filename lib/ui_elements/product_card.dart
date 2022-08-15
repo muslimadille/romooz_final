@@ -63,7 +63,7 @@ class _ProductCardState extends State<ProductCard> {
                         fit: BoxFit.cover,
                       ))),
               Container(
-                height: 90,
+                // height: 90,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

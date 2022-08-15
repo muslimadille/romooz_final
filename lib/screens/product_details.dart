@@ -113,7 +113,14 @@ class _ProductDetailsState extends State<ProductDetails> {
     fetchRelatedProducts();
     fetchTopProducts();
   }
-
+  // getCityPrice() async{
+  //   var color_string = _colorList.length > 0
+  //       ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
+  //       : "";
+  //   var variantResponse = await ProductRepository().getVariantWiseInfo(
+  //       id: widget.id, color: color_string, variants: _choiceString);
+  //   _singlePrice = variantResponse.price;
+  // }
   fetchProductDetails() async {
     try {
       var productDetailsResponse =
@@ -907,6 +914,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                     height: 24.0,
                   ),
                 ])),
+
+
+
+                // Main Price Row
                 SliverList(
                     delegate: SliverChildListDelegate([
                   Padding(
@@ -923,6 +934,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                   ),
                 ])),
+
+
+
+
+
                 SliverList(
                     delegate: SliverChildListDelegate([
                   club_point_addon_installed.$
@@ -944,6 +960,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                     height: 24.0,
                   ),
                 ])),
+
+
+
                 SliverList(
                     delegate: SliverChildListDelegate([
                   _productDetails != null
@@ -967,6 +986,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                   ),
                 ),
+
+
+                //quantity Row
                 SliverList(
                     delegate: SliverChildListDelegate([
                   Padding(
