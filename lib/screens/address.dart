@@ -98,7 +98,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   ScrollController _mainScrollController = ScrollController();
   int _default_shipping_address = 0;
   // City _selected_city;
-  Country _selected_country;
+  // Country _selected_country;
   MyState _selected_state;
   Zone _selected_zone;
   bool _isInitial = true;
@@ -110,7 +110,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   TextEditingController _phoneController = TextEditingController();
   // TextEditingController _cityController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
-  TextEditingController _countryController = TextEditingController();
+  // TextEditingController _countryController = TextEditingController();
   TextEditingController _zoneController = TextEditingController();
   //for update purpose
   List<TextEditingController> _addressControllerListForUpdate = [];
@@ -118,13 +118,13 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   List<TextEditingController> _phoneControllerListForUpdate = [];
   // List<TextEditingController> _cityControllerListForUpdate = [];
   List<TextEditingController> _stateControllerListForUpdate = [];
-  List<TextEditingController> _countryControllerListForUpdate = [];
+  // List<TextEditingController> _countryControllerListForUpdate = [];
 
   List<TextEditingController> _zoneControllerListForUpdate = [];
 
   // List<City> _selected_city_list_for_update = [];
   List<MyState> _selected_state_list_for_update = [];
-  List<Country> _selected_country_list_for_update = [];
+  // List<Country> _selected_country_list_for_update = [];
 
   List<LatLng> _locationControllerListForUpdate = [];
 
@@ -171,14 +171,14 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
             .add(TextEditingController(text: address.postal_code));
         _phoneControllerListForUpdate
             .add(TextEditingController(text: address.phone));
-        _countryControllerListForUpdate
-            .add(TextEditingController(text: address.country_name));
+        // _countryControllerListForUpdate
+        //     .add(TextEditingController(text: address.country_name));
         _stateControllerListForUpdate
             .add(TextEditingController(text: address.state_name));
         // _cityControllerListForUpdate
         //     .add(TextEditingController(text: address.city_name));
-        _selected_country_list_for_update
-            .add(Country(id: address.country_id, name: address.country_name));
+        // _selected_country_list_for_update
+        //     .add(Country(id: address.country_id, name: address.country_name));
         _selected_state_list_for_update
             .add(MyState(id: address.state_id, name: address.state_name));
         // _selected_city_list_for_update
@@ -202,7 +202,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     _postalCodeController.clear();
     _phoneController.clear();
 
-    _countryController.clear();
+    // _countryController.clear();
     _stateController.clear();
     // _cityController.clear();
 
@@ -210,12 +210,12 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     _addressControllerListForUpdate.clear();
     _postalCodeControllerListForUpdate.clear();
     _phoneControllerListForUpdate.clear();
-    _countryControllerListForUpdate.clear();
+    // _countryControllerListForUpdate.clear();
     _stateControllerListForUpdate.clear();
     // _cityControllerListForUpdate.clear();
     // _selected_city_list_for_update.clear();
     _selected_state_list_for_update.clear();
-    _selected_country_list_for_update.clear();
+    // _selected_country_list_for_update.clear();
     setState(() {});
   }
 
@@ -360,12 +360,12 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       return;
     }
 
-    if (_selected_country == null) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).address_screen_country_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
-    }
+    // if (_selected_country == null) {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context).address_screen_country_warning, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
 
     if (_selected_state == null) {
       ToastComponent.showDialog(
@@ -383,7 +383,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
     var addressAddResponse = await AddressRepository().getAddressAddResponse(
         address: address,
-        country_id: _selected_country.id,
+        // country_id: _selected_country.id,
         state_id: _selected_state.id,
         // city_id: _selected_city.id,
         postal_code: postal_code,
@@ -413,12 +413,12 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       return;
     }
 
-    if (_selected_country_list_for_update[index] == null) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).address_screen_country_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
-    }
+    // if (_selected_country_list_for_update[index] == null) {
+    //   ToastComponent.showDialog(
+    //       AppLocalizations.of(context).address_screen_country_warning, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //   return;
+    // }
 
     if (_selected_state_list_for_update[index] == null) {
       ToastComponent.showDialog(
@@ -438,7 +438,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         .getAddressUpdateResponse(
         id: id,
         address: address,
-        country_id: _selected_country_list_for_update[index].id,
+        // country_id: _selected_country_list_for_update[index].id,
         state_id: _selected_state_list_for_update[index].id,
         // city_id: _selected_city_list_for_update[index].id,
         postal_code: postal_code,
@@ -456,38 +456,38 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     afterAddingAnAddressUpdateLocation(id);
   }
 
-  onSelectZoneDuringAdd(zone) {
-    if (_selected_zone != null && zone.id == _selected_zone.id) {
-      //setModalState(() {
-      _countryController.text = zone.name;
-      //});
-      return;
-    }
-    _selected_zone = zone;
+  // onSelectZoneDuringAdd(zone) {
+  //   if (_selected_zone != null && zone.id == _selected_zone.id) {
+  //     //setModalState(() {
+  //     _countryController.text = zone.name;
+  //     //});
+  //     return;
+  //   }
+  //   _selected_zone = zone;
+  //
+  //   setState(() {
+  //     _zoneController.text = zone.name;
+  //   });
+  // }
 
-    setState(() {
-      _zoneController.text = zone.name;
-    });
-  }
-
-  onSelectCountryDuringAdd(country, setModalState) {
-    if (_selected_country != null && country.id == _selected_country.id) {
-      setModalState(() {
-        _countryController.text = country.name;
-      });
-      return;
-    }
-    _selected_country = country;
-    _selected_state = null;
-    // _selected_city = null;
-    setState(() {});
-
-    setModalState(() {
-      _countryController.text = country.name;
-      _stateController.text = "";
-      // _cityController.text = "";
-    });
-  }
+  // onSelectCountryDuringAdd(country, setModalState) {
+  //   if (_selected_country != null && country.id == _selected_country.id) {
+  //     setModalState(() {
+  //       _countryController.text = country.name;
+  //     });
+  //     return;
+  //   }
+  //   _selected_country = country;
+  //   _selected_state = null;
+  //   // _selected_city = null;
+  //   setState(() {});
+  //
+  //   setModalState(() {
+  //     _countryController.text = country.name;
+  //     _stateController.text = "";
+  //     // _cityController.text = "";
+  //   });
+  // }
 
   onSelectStateDuringAdd(state, setModalState) {
     if (_selected_state != null && state.id == _selected_state.id) {
@@ -518,25 +518,25 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   //   });
   // }
 
-  onSelectCountryDuringUpdate(index, country, setModalState) {
-    if (_selected_country_list_for_update[index] != null &&
-        country.id == _selected_country_list_for_update[index].id) {
-      setModalState(() {
-        _countryControllerListForUpdate[index].text = country.name;
-      });
-      return;
-    }
-    _selected_country_list_for_update[index] = country;
-    _selected_state_list_for_update[index] = null;
-    // _selected_city_list_for_update[index] = null;
-    setState(() {});
-
-    setModalState(() {
-      _countryControllerListForUpdate[index].text = country.name;
-      _stateControllerListForUpdate[index].text = "";
-      // _cityControllerListForUpdate[index].text = "";
-    });
-  }
+  // onSelectCountryDuringUpdate(index, country, setModalState) {
+  //   if (_selected_country_list_for_update[index] != null &&
+  //       country.id == _selected_country_list_for_update[index].id) {
+  //     setModalState(() {
+  //       _countryControllerListForUpdate[index].text = country.name;
+  //     });
+  //     return;
+  //   }
+  //   _selected_country_list_for_update[index] = country;
+  //   _selected_state_list_for_update[index] = null;
+  //   // _selected_city_list_for_update[index] = null;
+  //   setState(() {});
+  //
+  //   setModalState(() {
+  //     _countryControllerListForUpdate[index].text = country.name;
+  //     _stateControllerListForUpdate[index].text = "";
+  //     // _cityControllerListForUpdate[index].text = "";
+  //   });
+  // }
 
   onSelectStateDuringUpdate(index, state, setModalState) {
     if (_selected_state_list_for_update[index] != null &&
@@ -612,8 +612,11 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           color: MyTheme.dark_grey,
                           size: 16,
                         ),
-                        onPressed: () {
-                          buildShowAddFormDialog(context);
+                        onPressed: () async{
+                             await buildShowAddFormDialog(context);
+                          setState(() {
+
+                          });
                         },
                       ),
                     ),
@@ -687,93 +690,93 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         ),
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                            "${AppLocalizations.of(context).address_screen_country} *",
-                            style: TextStyle(
-                                color: MyTheme.font_grey, fontSize: 12)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          height: 40,
-                          child: TypeAheadField(
-                            suggestionsCallback: (name) async {
-                              var countryResponse = await AddressRepository()
-                                  .getCountryList(name: name);
-                              return countryResponse.countries;
-                            },
-                            loadingBuilder: (context) {
-                              return Container(
-                                height: 50,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context)
-                                            .address_screen_loading_countries,
-                                        style: TextStyle(
-                                            color: MyTheme.medium_grey))),
-                              );
-                            },
-                            itemBuilder: (context, country) {
-                              //print(suggestion.toString());
-                              return ListTile(
-                                dense: true,
-                                title: Text(
-                                  country.name,
-                                  style: TextStyle(color: MyTheme.font_grey),
-                                ),
-                              );
-                            },
-                            noItemsFoundBuilder: (context) {
-                              return Container(
-                                height: 50,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context)
-                                            .address_screen_no_country_available,
-                                        style: TextStyle(
-                                            color: MyTheme.medium_grey))),
-                              );
-                            },
-                            onSuggestionSelected: (country) {
-                              onSelectCountryDuringAdd(country, setModalState);
-                            },
-                            textFieldConfiguration: TextFieldConfiguration(
-                              onTap: () {},
-                              //autofocus: true,
-                              controller: _countryController,
-                              onSubmitted: (txt) {
-                                // keep this blank
-                              },
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations.of(context)
-                                      .address_screen_enter_country,
-                                  hintStyle: TextStyle(
-                                      fontSize: 12.0,
-                                      color: MyTheme.textfield_grey),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyTheme.textfield_grey,
-                                        width: 0.5),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyTheme.textfield_grey,
-                                        width: 1.0),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 8.0)),
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 8.0),
+                      //   child: Text(
+                      //       "${AppLocalizations.of(context).address_screen_country} *",
+                      //       style: TextStyle(
+                      //           color: MyTheme.font_grey, fontSize: 12)),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 16.0),
+                      //   child: Container(
+                      //     height: 40,
+                      //     child: TypeAheadField(
+                      //       suggestionsCallback: (name) async {
+                      //         var countryResponse = await AddressRepository()
+                      //             .getCountryList(name: name);
+                      //         return countryResponse.countries;
+                      //       },
+                      //       loadingBuilder: (context) {
+                      //         return Container(
+                      //           height: 50,
+                      //           child: Center(
+                      //               child: Text(
+                      //                   AppLocalizations.of(context)
+                      //                       .address_screen_loading_countries,
+                      //                   style: TextStyle(
+                      //                       color: MyTheme.medium_grey))),
+                      //         );
+                      //       },
+                      //       itemBuilder: (context, country) {
+                      //         //print(suggestion.toString());
+                      //         return ListTile(
+                      //           dense: true,
+                      //           title: Text(
+                      //             country.name,
+                      //             style: TextStyle(color: MyTheme.font_grey),
+                      //           ),
+                      //         );
+                      //       },
+                      //       noItemsFoundBuilder: (context) {
+                      //         return Container(
+                      //           height: 50,
+                      //           child: Center(
+                      //               child: Text(
+                      //                   AppLocalizations.of(context)
+                      //                       .address_screen_no_country_available,
+                      //                   style: TextStyle(
+                      //                       color: MyTheme.medium_grey))),
+                      //         );
+                      //       },
+                      //       onSuggestionSelected: (country) {
+                      //         onSelectCountryDuringAdd(country, setModalState);
+                      //       },
+                      //       textFieldConfiguration: TextFieldConfiguration(
+                      //         onTap: () {},
+                      //         //autofocus: true,
+                      //         controller: _countryController,
+                      //         onSubmitted: (txt) {
+                      //           // keep this blank
+                      //         },
+                      //         decoration: InputDecoration(
+                      //             hintText: AppLocalizations.of(context)
+                      //                 .address_screen_enter_country,
+                      //             hintStyle: TextStyle(
+                      //                 fontSize: 12.0,
+                      //                 color: MyTheme.textfield_grey),
+                      //             enabledBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   color: MyTheme.textfield_grey,
+                      //                   width: 0.5),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 const Radius.circular(8.0),
+                      //               ),
+                      //             ),
+                      //             focusedBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   color: MyTheme.textfield_grey,
+                      //                   width: 1.0),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 const Radius.circular(8.0),
+                      //               ),
+                      //             ),
+                      //             contentPadding:
+                      //             EdgeInsets.symmetric(horizontal: 8.0)),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
 
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
@@ -789,16 +792,19 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           height: 40,
                           child: TypeAheadField(
                             suggestionsCallback: (name) async {
-                              if (_selected_country == null) {
-                                var stateResponse = await AddressRepository()
-                                    .getStateListByCountry(); // blank response
-                                return stateResponse.states;
-                              }
                               var stateResponse = await AddressRepository()
-                                  .getStateListByCountry(
-                                  country_id: _selected_country.id,
-                                  name: name);
+                                  .getStateListByCountry(); // blank response
                               return stateResponse.states;
+                              // if (_selected_country == null) {
+                              //   var stateResponse = await AddressRepository()
+                              //       .getStateListByCountry(); // blank response
+                              //   return stateResponse.states;
+                              // }
+                              // var stateResponse = await AddressRepository()
+                              //     .getStateListByCountry(
+                              //     country_id: _selected_country.id,
+                              //     name: name);
+                              // return stateResponse.states;
                             },
                             loadingBuilder: (context) {
                               return Container(
@@ -1149,6 +1155,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           ),
                         ),
                       ),
+
                       Container(
                         height: 250,
                         child: placePickerMethod(context),
@@ -1202,8 +1209,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () {
-                          onAddressAdd(context);
+                        onPressed: () async{
+                          await onAddressAdd(context);
+                          Navigator.of(context, rootNavigator: true).pop();
                         },
                       ),
                     )
@@ -1541,95 +1549,101 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                            "${AppLocalizations.of(context).address_screen_country} *",
-                            style: TextStyle(
-                                color: MyTheme.font_grey, fontSize: 12)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          height: 40,
-                          child: TypeAheadField(
-                            suggestionsCallback: (name) async {
-                              var countryResponse = await AddressRepository()
-                                  .getCountryList(name: name);
-                              return countryResponse.countries;
-                            },
-                            loadingBuilder: (context) {
-                              return Container(
-                                height: 50,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context)
-                                            .address_screen_loading_countries,
-                                        style: TextStyle(
-                                            color: MyTheme.medium_grey))),
-                              );
-                            },
-                            itemBuilder: (context, country) {
-                              //print(suggestion.toString());
-                              return ListTile(
-                                dense: true,
-                                title: Text(
-                                  country.name,
-                                  style: TextStyle(color: MyTheme.font_grey),
-                                ),
-                              );
-                            },
-                            noItemsFoundBuilder: (context) {
-                              return Container(
-                                height: 50,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context)
-                                            .address_screen_no_country_available,
-                                        style: TextStyle(
-                                            color: MyTheme.medium_grey))),
-                              );
-                            },
-                            onSuggestionSelected: (country) {
-                              onSelectCountryDuringUpdate(
-                                  index, country, setModalState);
-                            },
-                            textFieldConfiguration: TextFieldConfiguration(
-                              onTap: () {},
-                              //autofocus: true,
-                              controller:
-                              _countryControllerListForUpdate[index],
-                              onSubmitted: (txt) {
-                                // keep this blank
-                              },
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations.of(context)
-                                      .address_screen_enter_country,
-                                  hintStyle: TextStyle(
-                                      fontSize: 12.0,
-                                      color: MyTheme.textfield_grey),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyTheme.textfield_grey,
-                                        width: 0.5),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyTheme.textfield_grey,
-                                        width: 1.0),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 8.0)),
-                            ),
-                          ),
-                        ),
-                      ),
+
+
+                      //
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 8.0),
+                      //   child: Text(
+                      //       "${AppLocalizations.of(context).address_screen_country} *",
+                      //       style: TextStyle(
+                      //           color: MyTheme.font_grey, fontSize: 12)),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 16.0),
+                      //   child: Container(
+                      //     height: 40,
+                      //     child: TypeAheadField(
+                      //       suggestionsCallback: (name) async {
+                      //         var countryResponse = await AddressRepository()
+                      //             .getCountryList(name: name);
+                      //         return countryResponse.countries;
+                      //       },
+                      //       loadingBuilder: (context) {
+                      //         return Container(
+                      //           height: 50,
+                      //           child: Center(
+                      //               child: Text(
+                      //                   AppLocalizations.of(context)
+                      //                       .address_screen_loading_countries,
+                      //                   style: TextStyle(
+                      //                       color: MyTheme.medium_grey))),
+                      //         );
+                      //       },
+                      //       itemBuilder: (context, country) {
+                      //         //print(suggestion.toString());
+                      //         return ListTile(
+                      //           dense: true,
+                      //           title: Text(
+                      //             country.name,
+                      //             style: TextStyle(color: MyTheme.font_grey),
+                      //           ),
+                      //         );
+                      //       },
+                      //       noItemsFoundBuilder: (context) {
+                      //         return Container(
+                      //           height: 50,
+                      //           child: Center(
+                      //               child: Text(
+                      //                   AppLocalizations.of(context)
+                      //                       .address_screen_no_country_available,
+                      //                   style: TextStyle(
+                      //                       color: MyTheme.medium_grey))),
+                      //         );
+                      //       },
+                      //       onSuggestionSelected: (country) {
+                      //         onSelectCountryDuringUpdate(
+                      //             index, country, setModalState);
+                      //       },
+                      //       textFieldConfiguration: TextFieldConfiguration(
+                      //         onTap: () {},
+                      //         //autofocus: true,
+                      //         controller:
+                      //         _countryControllerListForUpdate[index],
+                      //         onSubmitted: (txt) {
+                      //           // keep this blank
+                      //         },
+                      //         decoration: InputDecoration(
+                      //             hintText: AppLocalizations.of(context)
+                      //                 .address_screen_enter_country,
+                      //             hintStyle: TextStyle(
+                      //                 fontSize: 12.0,
+                      //                 color: MyTheme.textfield_grey),
+                      //             enabledBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   color: MyTheme.textfield_grey,
+                      //                   width: 0.5),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 const Radius.circular(8.0),
+                      //               ),
+                      //             ),
+                      //             focusedBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   color: MyTheme.textfield_grey,
+                      //                   width: 1.0),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 const Radius.circular(8.0),
+                      //               ),
+                      //             ),
+                      //             contentPadding:
+                      //             EdgeInsets.symmetric(horizontal: 8.0)),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+
+
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
@@ -1643,20 +1657,23 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           height: 40,
                           child: TypeAheadField(
                             suggestionsCallback: (name) async {
-                              if (_selected_country_list_for_update[index] ==
-                                  null) {
-                                var stateResponse = await AddressRepository()
+                              var stateResponse = await AddressRepository()
                                     .getStateListByCountry(); // blank response
                                 return stateResponse.states;
-                              }
-                              var stateResponse = await AddressRepository()
-                                  .getStateListByCountry(
-                                  country_id:
-                                  _selected_country_list_for_update[
-                                  index]
-                                      .id,
-                                  name: name);
-                              return stateResponse.states;
+                              // if (_selected_country_list_for_update[index] ==
+                              //     null) {
+                              //   var stateResponse = await AddressRepository()
+                              //       .getStateListByCountry(); // blank response
+                              //   return stateResponse.states;
+                              // }
+                              // var stateResponse = await AddressRepository()
+                              //     .getStateListByCountry(
+                              //     country_id:
+                              //     _selected_country_list_for_update[
+                              //     index]
+                              //         .id,
+                              //     name: name);
+                              // return stateResponse.states;
                             },
                             loadingBuilder: (context) {
                               return Container(
@@ -1731,6 +1748,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           ),
                         ),
                       ),
+
                       // Padding(
                       //   padding: const EdgeInsets.only(bottom: 8.0),
                       //   child: Text(
@@ -1829,99 +1847,101 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       //     ),
                       //   ),
                       // ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "${AppLocalizations.of(context).address_screen_zone} *",
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          height: 40,
-                          child: TypeAheadField(
-                            suggestionsCallback: (name) async {
-                              var countryResponse =
-                              await AddressRepository().getZoneList();
-                              return countryResponse.data;
-                            },
-                            loadingBuilder: (context) {
-                              return Container(
-                                height: 50,
-                                child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .address_screen_loading_zones,
-                                      style: TextStyle(
-                                          color: MyTheme.font_grey,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal),
-                                    )),
-                              );
-                            },
-                            itemBuilder: (context, country) {
-                              print(country.toString());
-                              return ListTile(
-                                dense: true,
-                                title: Text(
-                                  country.name,
-                                  style: TextStyle(color: MyTheme.font_grey),
-                                ),
-                              );
-                            },
-                            noItemsFoundBuilder: (context) {
-                              return Container(
-                                height: 50,
-                                child: Center(
-                                    child: Text(
-                                        AppLocalizations.of(context)
-                                            .address_screen_no_zone_available,
-                                        style: TextStyle(
-                                            color: MyTheme.medium_grey))),
-                              );
-                            },
-                            onSuggestionSelected: (zone) {
-                              onSelectZoneDuringAdd(zone);
-                            },
-                            textFieldConfiguration: TextFieldConfiguration(
-                              onTap: () {},
-                              //autofocus: true,
-                              controller: _zoneController,
-                              onSubmitted: (txt) {
-                                // keep this blank
-                              },
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations.of(context)
-                                      .address_screen_enter_zone,
-                                  hintStyle: TextStyle(
-                                      fontSize: 12.0,
-                                      color: MyTheme.textfield_grey),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyTheme.textfield_grey,
-                                        width: 0.5),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyTheme.textfield_grey,
-                                        width: 1.0),
-                                    borderRadius: const BorderRadius.all(
-                                      const Radius.circular(8.0),
-                                    ),
-                                  ),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 8.0)),
-                            ),
-                          ),
-                        ),
-                      ),
+
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 8.0),
+                      //   child: Text(
+                      //     "${AppLocalizations.of(context).address_screen_zone} *",
+                      //     style: TextStyle(
+                      //         color: MyTheme.font_grey,
+                      //         fontSize: 12,
+                      //         fontWeight: FontWeight.normal),
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 16.0),
+                      //   child: Container(
+                      //     height: 40,
+                      //     child: TypeAheadField(
+                      //       suggestionsCallback: (name) async {
+                      //         var countryResponse =
+                      //         await AddressRepository().getZoneList();
+                      //         return countryResponse.data;
+                      //       },
+                      //       loadingBuilder: (context) {
+                      //         return Container(
+                      //           height: 50,
+                      //           child: Center(
+                      //               child: Text(
+                      //                 AppLocalizations.of(context)
+                      //                     .address_screen_loading_zones,
+                      //                 style: TextStyle(
+                      //                     color: MyTheme.font_grey,
+                      //                     fontSize: 12,
+                      //                     fontWeight: FontWeight.normal),
+                      //               )),
+                      //         );
+                      //       },
+                      //       itemBuilder: (context, country) {
+                      //         print(country.toString());
+                      //         return ListTile(
+                      //           dense: true,
+                      //           title: Text(
+                      //             country.name,
+                      //             style: TextStyle(color: MyTheme.font_grey),
+                      //           ),
+                      //         );
+                      //       },
+                      //       noItemsFoundBuilder: (context) {
+                      //         return Container(
+                      //           height: 50,
+                      //           child: Center(
+                      //               child: Text(
+                      //                   AppLocalizations.of(context)
+                      //                       .address_screen_no_zone_available,
+                      //                   style: TextStyle(
+                      //                       color: MyTheme.medium_grey))),
+                      //         );
+                      //       },
+                      //       onSuggestionSelected: (zone) {
+                      //         onSelectZoneDuringAdd(zone);
+                      //       },
+                      //       textFieldConfiguration: TextFieldConfiguration(
+                      //         onTap: () {},
+                      //         //autofocus: true,
+                      //         controller: _zoneController,
+                      //         onSubmitted: (txt) {
+                      //           // keep this blank
+                      //         },
+                      //         decoration: InputDecoration(
+                      //             hintText: AppLocalizations.of(context)
+                      //                 .address_screen_enter_zone,
+                      //             hintStyle: TextStyle(
+                      //                 fontSize: 12.0,
+                      //                 color: MyTheme.textfield_grey),
+                      //             enabledBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   color: MyTheme.textfield_grey,
+                      //                   width: 0.5),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 const Radius.circular(8.0),
+                      //               ),
+                      //             ),
+                      //             focusedBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   color: MyTheme.textfield_grey,
+                      //                   width: 1.0),
+                      //               borderRadius: const BorderRadius.all(
+                      //                 const Radius.circular(8.0),
+                      //               ),
+                      //             ),
+                      //             contentPadding:
+                      //             EdgeInsets.symmetric(horizontal: 8.0)),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
@@ -1965,6 +1985,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           ),
                         ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
@@ -2006,6 +2027,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           ),
                         ),
                       ),
+
                       Container(
                         height: 250,
                         child: placePickerMethodUpdate(context, index),
@@ -2246,33 +2268,33 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 75,
-                          child: Text(
-                            AppLocalizations.of(context).address_screen_country,
-                            style: TextStyle(
-                              color: MyTheme.grey_153,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            _shippingAddressList[index].country_name,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: MyTheme.dark_grey,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(bottom: 8.0),
+                  //   child: Row(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Container(
+                  //         width: 75,
+                  //         child: Text(
+                  //           AppLocalizations.of(context).address_screen_country,
+                  //           style: TextStyle(
+                  //             color: MyTheme.grey_153,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       Container(
+                  //         width: 200,
+                  //         child: Text(
+                  //           _shippingAddressList[index].country_name,
+                  //           maxLines: 2,
+                  //           style: TextStyle(
+                  //               color: MyTheme.dark_grey,
+                  //               fontWeight: FontWeight.w600),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Row(
@@ -2301,6 +2323,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Row(

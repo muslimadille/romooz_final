@@ -183,7 +183,10 @@ class AuthRepository {
           "App-Language": app_language.$,
         },
         body: post_body);
-    print('111111111111111111111111111');
+    print('1111111111111111111111111111111111111111');
+    print(user_id.toString());
+    print(verification_code);
+    print('1111111111111111111111111111111111111111');
     print(response.body);
     return loginResponseFromJson(response.body);
   }

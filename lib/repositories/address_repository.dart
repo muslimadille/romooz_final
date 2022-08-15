@@ -35,7 +35,7 @@ class AddressRepository {
 
   Future<AddressAddResponse> getAddressAddResponse(
       {@required String address,
-        @required int country_id,
+        // @required int country_id,
         @required int state_id,
         // @required int city_id,
         @required String postal_code,
@@ -44,7 +44,7 @@ class AddressRepository {
       // "user_id": "${user_id.$}",
       "id": "${user_id.$}",
       "address": "$address",
-      "country_id": "$country_id",
+      // "country_id": "$country_id",
       "state_id": "$state_id",
       // "city_id": "$city_id",
       "postal_code": "$postal_code",
@@ -66,18 +66,18 @@ class AddressRepository {
   Future<AddressUpdateResponse> getAddressUpdateResponse(
       {@required int id,
         @required String address,
-        @required int country_id,
+        // @required int country_id,
         @required int state_id,
-        @required int city_id,
+        // @required int city_id,
         @required String postal_code,
         @required String phone}) async {
     var post_body = jsonEncode({
       "id": "${id}",
       "user_id": "${user_id.$}",
       "address": "$address",
-      "country_id": "$country_id",
+      // "country_id": "$country_id",
       "state_id": "$state_id",
-      "city_id": "$city_id",
+      // "city_id": "$city_id",
       "postal_code": "$postal_code",
       "phone": "$phone"
     });
@@ -165,10 +165,15 @@ class AddressRepository {
   }
 
   Future<MyStateResponse> getStateListByCountry(
-      {country_id = 0, name = ""}) async {
+      {country_id = "191", name = ""}) async {
+    // print('000000000000000000000000000');
+    // print(country_id);
+    // print(name);
     Uri url = Uri.parse(
         "${AppConfig.BASE_URL}/states-by-country/${country_id}?name=${name}");
     final response = await http.get(url);
+    // print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+    // print(response.body);
     return myStateResponseFromJson(response.body);
   }
 

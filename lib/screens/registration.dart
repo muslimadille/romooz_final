@@ -997,105 +997,105 @@ class _RegistrationState extends State<Registration> {
                                     ),
                                   ),
                                   ////// country
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text(
-                                      "${AppLocalizations.of(context).address_screen_country} *",
-                                      style: TextStyle(
-                                          color: MyTheme.accent_color,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 16.0),
-                                    child: Container(
-                                      height: 40,
-                                      child: TypeAheadField(
-                                        suggestionsCallback: (name) async {
-                                          var countryResponse =
-                                          await AddressRepository()
-                                              .getCountryList(name: name);
-                                          return countryResponse.countries;
-                                        },
-                                        loadingBuilder: (context) {
-                                          return Container(
-                                            height: 50,
-                                            child: Center(
-                                                child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .address_screen_loading_countries,
-                                                  style: TextStyle(
-                                                      color: MyTheme.accent_color,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.bold),
-                                                )),
-                                          );
-                                        },
-                                        itemBuilder: (context, country) {
-                                          print(country.toString());
-                                          return ListTile(
-                                            dense: true,
-                                            title: Text(
-                                              country.name,
-                                              style: TextStyle(
-                                                  color: MyTheme.font_grey),
-                                            ),
-                                          );
-                                        },
-                                        noItemsFoundBuilder: (context) {
-                                          return Container(
-                                            height: 50,
-                                            child: Center(
-                                                child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .address_screen_no_country_available,
-                                                    style: TextStyle(
-                                                        color:
-                                                        MyTheme.medium_grey))),
-                                          );
-                                        },
-                                        onSuggestionSelected: (country) {
-                                          onSelectCountryDuringAdd(country);
-                                        },
-                                        textFieldConfiguration:
-                                        TextFieldConfiguration(
-                                          onTap: () {},
-                                          //autofocus: true,
-                                          controller: _countryController,
-                                          onSubmitted: (txt) {
-                                            // keep this blank
-                                          },
-                                          decoration: InputDecoration(
-                                              hintText: AppLocalizations.of(context)
-                                                  .address_screen_enter_country,
-                                              hintStyle: TextStyle(
-                                                  fontSize: 12.0,
-                                                  color: MyTheme.textfield_grey),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: MyTheme.textfield_grey,
-                                                    width: 0.5),
-                                                borderRadius:
-                                                const BorderRadius.all(
-                                                  const Radius.circular(8.0),
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: MyTheme.textfield_grey,
-                                                    width: 1.0),
-                                                borderRadius:
-                                                const BorderRadius.all(
-                                                  const Radius.circular(8.0),
-                                                ),
-                                              ),
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  horizontal: 8.0)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(bottom: 8.0),
+                                  //   child: Text(
+                                  //     "${AppLocalizations.of(context).address_screen_country} *",
+                                  //     style: TextStyle(
+                                  //         color: MyTheme.accent_color,
+                                  //         fontSize: 12,
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  // ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(bottom: 16.0),
+                                  //   child: Container(
+                                  //     height: 40,
+                                  //     child: TypeAheadField(
+                                  //       suggestionsCallback: (name) async {
+                                  //         var countryResponse =
+                                  //         await AddressRepository()
+                                  //             .getCountryList(name: name);
+                                  //         return countryResponse.countries;
+                                  //       },
+                                  //       loadingBuilder: (context) {
+                                  //         return Container(
+                                  //           height: 50,
+                                  //           child: Center(
+                                  //               child: Text(
+                                  //                 AppLocalizations.of(context)
+                                  //                     .address_screen_loading_countries,
+                                  //                 style: TextStyle(
+                                  //                     color: MyTheme.accent_color,
+                                  //                     fontSize: 12,
+                                  //                     fontWeight: FontWeight.bold),
+                                  //               )),
+                                  //         );
+                                  //       },
+                                  //       itemBuilder: (context, country) {
+                                  //         print(country.toString());
+                                  //         return ListTile(
+                                  //           dense: true,
+                                  //           title: Text(
+                                  //             country.name,
+                                  //             style: TextStyle(
+                                  //                 color: MyTheme.font_grey),
+                                  //           ),
+                                  //         );
+                                  //       },
+                                  //       noItemsFoundBuilder: (context) {
+                                  //         return Container(
+                                  //           height: 50,
+                                  //           child: Center(
+                                  //               child: Text(
+                                  //                   AppLocalizations.of(context)
+                                  //                       .address_screen_no_country_available,
+                                  //                   style: TextStyle(
+                                  //                       color:
+                                  //                       MyTheme.medium_grey))),
+                                  //         );
+                                  //       },
+                                  //       onSuggestionSelected: (country) {
+                                  //         onSelectCountryDuringAdd(country);
+                                  //       },
+                                  //       textFieldConfiguration:
+                                  //       TextFieldConfiguration(
+                                  //         onTap: () {},
+                                  //         //autofocus: true,
+                                  //         controller: _countryController,
+                                  //         onSubmitted: (txt) {
+                                  //           // keep this blank
+                                  //         },
+                                  //         decoration: InputDecoration(
+                                  //             hintText: AppLocalizations.of(context)
+                                  //                 .address_screen_enter_country,
+                                  //             hintStyle: TextStyle(
+                                  //                 fontSize: 12.0,
+                                  //                 color: MyTheme.textfield_grey),
+                                  //             enabledBorder: OutlineInputBorder(
+                                  //               borderSide: BorderSide(
+                                  //                   color: MyTheme.textfield_grey,
+                                  //                   width: 0.5),
+                                  //               borderRadius:
+                                  //               const BorderRadius.all(
+                                  //                 const Radius.circular(8.0),
+                                  //               ),
+                                  //             ),
+                                  //             focusedBorder: OutlineInputBorder(
+                                  //               borderSide: BorderSide(
+                                  //                   color: MyTheme.textfield_grey,
+                                  //                   width: 1.0),
+                                  //               borderRadius:
+                                  //               const BorderRadius.all(
+                                  //                 const Radius.circular(8.0),
+                                  //               ),
+                                  //             ),
+                                  //             contentPadding: EdgeInsets.symmetric(
+                                  //                 horizontal: 8.0)),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
 
                                   /////// city
                                   Padding(
@@ -1121,6 +1121,8 @@ class _RegistrationState extends State<Registration> {
                                                 .getStateListByCountry(); // blank response
                                             return stateResponse.states;
                                           }
+                                          print('------------------------------');
+                                          print(name);
                                           var stateResponse =
                                           await AddressRepository()
                                               .getStateListByCountry(
