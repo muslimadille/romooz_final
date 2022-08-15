@@ -114,7 +114,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
   List<dynamic> _shippingAddressList = [];
   List<PickupPoint> _pickupList = [];
   List<City> _cityList = [];
-  List<Country> _countryList = [];
+  // List<Country> _countryList = [];
 
   String _shipping_cost_string = ". . .";
 
@@ -232,7 +232,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
     _shippingAddressList.clear();
     _cityList.clear();
     _pickupList.clear();
-    _countryList.clear();
+    // _countryList.clear();
     _shipping_cost_string = ". . .";
     _shipping_cost_string = ". . .";
     _isInitial = true;
@@ -682,33 +682,37 @@ class _ShippingInfoState extends State<ShippingInfo> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 75,
-                      child: Text(
-                        AppLocalizations.of(context).shipping_info_screen_city,
-                        style: TextStyle(
-                          color: MyTheme.grey_153,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 200,
-                      child: Text(
-                        _shippingAddressList[index].city_name,
-                        maxLines: 2,
-                        style: TextStyle(
-                            color: MyTheme.dark_grey,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
+              //city
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: 8.0),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Container(
+              //         width: 75,
+              //         child: Text(
+              //           AppLocalizations.of(context).shipping_info_screen_city,
+              //           style: TextStyle(
+              //             color: MyTheme.grey_153,
+              //           ),
+              //         ),
+              //       ),
+              //       Container(
+              //         width: 200,
+              //         child: Text(
+              //           _shippingAddressList[index].city_name,
+              //           maxLines: 2,
+              //           style: TextStyle(
+              //               color: MyTheme.dark_grey,
+              //               fontWeight: FontWeight.w600),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              // state
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
@@ -736,34 +740,39 @@ class _ShippingInfoState extends State<ShippingInfo> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 75,
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .shipping_info_screen_country,
-                        style: TextStyle(
-                          color: MyTheme.grey_153,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 200,
-                      child: Text(
-                        _shippingAddressList[index].country_name,
-                        maxLines: 2,
-                        style: TextStyle(
-                            color: MyTheme.dark_grey,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
+              //country
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: 8.0),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Container(
+              //         width: 75,
+              //         child: Text(
+              //           AppLocalizations.of(context)
+              //               .shipping_info_screen_country,
+              //           style: TextStyle(
+              //             color: MyTheme.grey_153,
+              //           ),
+              //         ),
+              //       ),
+              //       Container(
+              //         width: 200,
+              //         child: Text(
+              //           _shippingAddressList[index].country_name,
+              //           maxLines: 2,
+              //           style: TextStyle(
+              //               color: MyTheme.dark_grey,
+              //               fontWeight: FontWeight.w600),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+
+              // postal code
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
@@ -792,6 +801,9 @@ class _ShippingInfoState extends State<ShippingInfo> {
                   ],
                 ),
               ),
+
+
+              //phone
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
