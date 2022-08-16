@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class ProductRepository {
+
   Future<ProductMiniResponse> getFeaturedProducts({page = 1}) async {
     Uri url = Uri.parse(
         "${AppConfig.BASE_URL}/products/featured?page=${page}&customer_type");
@@ -105,7 +106,12 @@ class ProductRepository {
   Future<ProductDetailsResponse> getProductDetails(
       {@required int id = 0}) async {
     Uri url;
-    if (access_token.$ == "") {
+    print('1111111111111111111111111111111111111111111');
+    // print();
+    print(is_logged_in.$.toString());
+    print(access_token.$.toString());
+    // if (access_token.$ == "") {
+    if (is_logged_in.$ == false) {
       url = Uri.parse("${AppConfig.BASE_URL}/products/get/" + id.toString());
     } else {
       url = Uri.parse("${AppConfig.BASE_URL}/products/" + id.toString());

@@ -583,12 +583,16 @@ class _RegistrationState extends State<Registration> {
     } else {
       ToastComponent.showDialog(signupResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return Otp(
-          verify_by: _register_by,
-          user_id: signupResponse.user_id,
-        );
-      }));
+      if(widget.customer_type == "retail"){
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Otp(
+            verify_by: _register_by,
+            user_id: signupResponse.user_id,
+          );
+        }));
+      }else {
+        Navigator.pop(context);
+      }
     }
   }
 
