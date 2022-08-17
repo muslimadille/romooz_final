@@ -22,7 +22,8 @@ class CartRepository {
         "App-Language": app_language.$,
       },
     );
-
+    print(';;;;;;;;;;;;;;;;;;;;;;;;;');
+    print(response.body);
     return cartResponseFromJson(response.body);
   }
 

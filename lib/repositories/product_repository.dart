@@ -50,9 +50,28 @@ class ProductRepository {
       {@required int id = 0, name = "", page = 1}) async {
     print("customer_type ----- ${customer_type.$}");
 
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/products/category/" +
-        id.toString() +
-        "?page=${page}&name=${name}");
+
+    Uri url;
+    // print('***************************');
+    // print(is_logged_in.$.toString());
+    if (is_logged_in.$ == false) {
+       url = Uri.parse("${AppConfig.BASE_URL}/products/category/" +
+          id.toString() +
+          "?page=${page}&name=${name}");
+    } else {
+       url = Uri.parse("${AppConfig.BASE_URL}/products/auth/category/" +
+          id.toString() +
+          "?page=${page}&name=${name}");
+    }
+
+
+    // url = Uri.parse("${AppConfig.BASE_URL}/products/category/" +
+    //     id.toString() +
+    //     "?page=${page}&name=${name}");
+
+
+
+
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
       "Authorization": "Bearer ${access_token.$}",
@@ -106,10 +125,10 @@ class ProductRepository {
   Future<ProductDetailsResponse> getProductDetails(
       {@required int id = 0}) async {
     Uri url;
-    print('1111111111111111111111111111111111111111111');
-    // print();
-    print(is_logged_in.$.toString());
-    print(access_token.$.toString());
+    // print('1111111111111111111111111111111111111111111');
+    // // print();
+    // print(is_logged_in.$.toString());
+    // print(access_token.$.toString());
     // if (access_token.$ == "") {
     if (is_logged_in.$ == false) {
       url = Uri.parse("${AppConfig.BASE_URL}/products/get/" + id.toString());

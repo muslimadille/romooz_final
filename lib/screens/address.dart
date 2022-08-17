@@ -1211,7 +1211,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         ),
                         onPressed: () async{
                           await onAddressAdd(context);
-                          Navigator.of(context, rootNavigator: true).pop();
+                          // Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context).pop();
                         },
                       ),
                     )

@@ -440,7 +440,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                                 DateTime.now().year,
                                                 DateTime.now().month,
                                                 DateTime.now().day,
-                                                08,
+                                                10,
                                                 00),
                                             maxTime: DateTime(
                                                 DateTime.now().year,
@@ -449,7 +449,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                                     : (DateTime.now().month +
                                                         1),
                                                 DateTime.now().day,
-                                                23,
+                                                19,
                                                 59), onChanged: (date) {
                                           print(
                                               'onChanged ${_shippingSelectedDate}');

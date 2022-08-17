@@ -384,35 +384,35 @@ class _FilterState extends State<Filter> {
     /*print(_appBar.preferredSize.height.toString()+" Appbar height");
     print(kToolbarHeight.toString()+" kToolbarHeight height");
     print(MediaQuery.of(context).padding.top.toString() +" MediaQuery.of(context).padding.top");*/
-    return Text('');
-    // return Directionality(
-    //   textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
-    //   child: Scaffold(
-    //     endDrawer: buildFilterDrawer(),
-    //     key: _scaffoldKey,
-    //     backgroundColor: Colors.white,
-    //     body: Stack(overflow: Overflow.visible, children: [
-    //       _selectedFilter.option_key == 'product'
-    //           ? buildProductList()
-    //           : (_selectedFilter.option_key == 'brands'
-    //               ? buildBrandList()
-    //               : buildShopList()),
-    //       Positioned(
-    //         top: 0.0,
-    //         left: 0.0,
-    //         right: 0.0,
-    //         child: buildAppBar(context),
-    //       ),
-    //       Align(
-    //           alignment: Alignment.bottomCenter,
-    //           child: _selectedFilter.option_key == 'product'
-    //               ? buildProductLoadingContainer()
-    //               : (_selectedFilter.option_key == 'brands'
-    //                   ? buildBrandLoadingContainer()
-    //                   : buildShopLoadingContainer()))
-    //     ]),
-    //   ),
-    // );
+    // return Text('');
+    return Directionality(
+      textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
+      child: Scaffold(
+        endDrawer: buildFilterDrawer(),
+        key: _scaffoldKey,
+        backgroundColor: Colors.white,
+        body: Stack(overflow: Overflow.visible, children: [
+          _selectedFilter.option_key == 'product'
+              ? buildProductList()
+              : (_selectedFilter.option_key == 'brands'
+                  ? buildBrandList()
+                  : buildShopList()),
+          Positioned(
+            top: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: buildAppBar(context),
+          ),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: _selectedFilter.option_key == 'product'
+                  ? buildProductLoadingContainer()
+                  : (_selectedFilter.option_key == 'brands'
+                      ? buildBrandLoadingContainer()
+                      : buildShopLoadingContainer()))
+        ]),
+      ),
+    );
   }
 
   AppBar buildAppBar(BuildContext context) {
