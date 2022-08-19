@@ -297,7 +297,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
         return;
       }
     }
-
+    print('----------------11111111111111111111111');
     // pickup point is enable now we want to check address or pickup point is selected
     if (_seleted_shipping_address == 0 && _seleted_shipping_pickup_point == 0) {
       ToastComponent.showDialog(
@@ -308,7 +308,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
           duration: Toast.LENGTH_LONG);
       return;
     }
-
+    print('----------------222222222222222222222222222222222222');
     var addressUpdateInCartResponse;
 
     if (_seleted_shipping_address != 0) {
@@ -320,7 +320,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
           .getAddressUpdateInCartResponse(
               pickup_point_id: _seleted_shipping_pickup_point);
     }
-
+    print('----------------33333333333333333333333333333333333333');
     if (addressUpdateInCartResponse.result == false) {
       ToastComponent.showDialog(addressUpdateInCartResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
@@ -333,6 +333,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
           duration: Toast.LENGTH_LONG);
       return;
     }
+    print('----------------444444444444444444444444444444');
     print("_shippingSelectedDate${_shippingSelectedDate}");
 
     ToastComponent.showDialog(addressUpdateInCartResponse.message, context,
