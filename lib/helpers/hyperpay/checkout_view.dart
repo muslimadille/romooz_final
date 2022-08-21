@@ -48,11 +48,10 @@ class _CheckoutViewState extends State<CheckoutView> {
     BrandType brandType,
     double amount,
   ) async {
-    print('####################1111111111111111');
     CheckoutSettings _checkoutSettings = CheckoutSettings(
       brand: brandType,
       amount: amount,
-      // orderId: widget.order_id ?? "0",
+      orderId: widget.order_id ?? "0",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -62,14 +61,12 @@ class _CheckoutViewState extends State<CheckoutView> {
         'merchantTransactionId': '#123456',
       },
     );
-    // print("initPaymentSession ---$brandType --- ${_checkoutSettings.orderId}");
-    print('#################22222222222222222222222222222');
+    print("initPaymentSession ---$brandType --- ${_checkoutSettings.orderId}");
+
     hyperpay.initSession(checkoutSetting: _checkoutSettings);
-    print("sessionCheckoutAmount --- ==${_checkoutSettings.amount} ");
-    print('##################333333333333333333');
-    print(_checkoutSettings.headers);
+    print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
+
     sessionCheckoutID = await hyperpay.getCheckoutID;
-    print('###################444444444444444444444444');
     print("sessionCheckoutID ---$sessionCheckoutID ");
   }
 
@@ -77,7 +74,6 @@ class _CheckoutViewState extends State<CheckoutView> {
     final bool valid = Form.of(context)?.validate() ?? false;
 
     if (valid) {
-
       setState(() {
         isLoading = true;
       });
@@ -90,23 +86,17 @@ class _CheckoutViewState extends State<CheckoutView> {
         expiryMonth: expiryController.text.split('/')[0],
         expiryYear: '20' + expiryController.text.split('/')[1],
       );
-
       print("card ==== ${cardNumberController.text.replaceAll(' ', '')}");
 
       try {
         // Start transaction
         if (sessionCheckoutID.isEmpty) {
-          print('ssss777777777777777777777777');
           print("sessionCheckoutID ==== empty");
           // Only get a new checkoutID if there is no previous session pending now
           await initPaymentSession(brandType, 1);
         }
-        print('sss88888888888888888');
-        print(sessionCheckoutID);
-        print('..........................');
-        print(card.toMap().toString());
+
         final result = await hyperpay.pay(card);
-        print('sssss9999999999999999999');
         print("result${result}");
 
         switch (result) {
