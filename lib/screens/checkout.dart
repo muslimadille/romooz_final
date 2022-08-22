@@ -107,6 +107,12 @@ class _CheckoutState extends State<Checkout> {
   fetchList() async {
     var paymentTypeResponseList =
         await PaymentRepository().getPaymentResponseList(list: widget.list);
+    paymentTypeResponseList.forEach((element) {
+      if(element.payment_type=="hyperpay_payment"){
+        element.image = "https://rawiah.com/images/cards.png";
+        element.title = "Checkout with";
+      }
+    });
     _paymentTypeList.addAll(paymentTypeResponseList);
     if (_paymentTypeList.length > 0) {
       _selected_payment_method = _paymentTypeList[0].payment_type;
