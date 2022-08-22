@@ -39,7 +39,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   setup() async {
-    hyperpay = await HyperpayPlugin.setup(config: TestConfig());
+    hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
     print("hyperpay ==${hyperpay}");
   }
 
