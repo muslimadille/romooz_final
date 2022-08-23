@@ -15,9 +15,9 @@ class TestConfig implements HyperpayConfig {
 
 class LiveConfig implements HyperpayConfig {
   @override
-  String creditcardEntityID = '';
+  String creditcardEntityID = '8a8294174b7ecb28014b9699220015ca';
   @override
-  String madaEntityID = '';
+  String madaEntityID = '8a8294174b7ecb28014b9699220015ca';
   @override
   Uri checkoutEndpoint = _checkoutEndpoint;
   @override
