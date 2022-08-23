@@ -200,15 +200,23 @@ class AddressRepository {
       "shipping_type": "$shipping_type"
     });
 
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/shipping_cost");
-    final response = await http.post(url,
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/shipping_cost/$address_id");
+    print('------------------------------------------');
+    print(url);
+    print(access_token.$);
+    final response = await http.get(url,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}",
           "App-Language": app_language.$
         },
-        body: post_body);
+        // body: post_body
+    );
 
+
+
+    print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+    print(response.body);
     return shippingCostResponseFromJson(response.body);
   }
 
@@ -228,7 +236,8 @@ class AddressRepository {
           "App-Language": app_language.$
         },
         body: post_body);
-
+      print('aaaaaaaaaaaa');
+      print(response.body);
     return addressUpdateInCartResponseFromJson(response.body);
   }
 }

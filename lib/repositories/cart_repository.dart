@@ -57,7 +57,10 @@ class CartRepository {
           "App-Language": app_language.$
         },
         body: post_body);
-
+     print('xxxxxxxxxxxxxxxxxx');
+     print(cart_ids);
+     print(cart_quantities);
+     print(response.body);
     return cartProcessResponseFromJson(response.body);
   }
 
@@ -101,7 +104,7 @@ class CartRepository {
       },
     );
     print("access token ${access_token.$}");
-
+    print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
     print("cart summary res ${response.body}");
     return cartSummaryResponseFromJson(response.body);
   }

@@ -9,18 +9,19 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 class ProductRepository {
 
   Future<ProductMiniResponse> getFeaturedProducts({page = 1}) async {
-    print('00000000000000000000000000');
     Uri url;
     if (is_logged_in.$ == false) {
       url = Uri.parse(
           "${AppConfig.BASE_URL}/products/featured?page=${page}&customer_type");
     }else{
+      print('vvvvvvvvvvvvvvvvvvvvvvvv');
       url = Uri.parse(
           "${AppConfig.BASE_URL}/products/auth/featured?page=${page}");
     }
-
+    print(url);
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Authorization": "Bearer ${access_token.$}",
     });
     print('11111111111111111111111111111111');
     print(response.body);
