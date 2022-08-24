@@ -2170,6 +2170,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     return GestureDetector(
       onDoubleTap: () {
         if (_default_shipping_address != _shippingAddressList[index].id) {
+          _default_shipping_address = _shippingAddressList[index].id;
           onAddressSwitch(index);
         }
       },

@@ -29,7 +29,8 @@ class AddressRepository {
       },
     );
     print("response.body.toString()${response.body.toString()}");
-
+    print('1111111111111111133333333333333333');
+    print(response.body);
     return addressResponseFromJson(response.body);
   }
 
@@ -123,18 +124,26 @@ class AddressRepository {
       @required int id,
       ) async {
     var post_body = jsonEncode({
-      "id": "$id",
+      "address_id": "$id",
     });
+
+    print('qqqqqqqqqqqqqqqqqqqqq');
+    print("$id");
+    print("Bearer ${access_token.$}");
+    print("${AppConfig.BASE_URL}");
+
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/make_default");
     final response = await http.post(url,
         headers: {
           "Content-Type": "application/json",
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           "Authorization": "Bearer ${access_token.$}"
         },
         body: post_body);
-
+    print('111111111111111111111111111');
+    print(url);
+    print(response.body);
     return addressMakeDefaultResponseFromJson(response.body);
   }
 
