@@ -14,8 +14,22 @@ import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class PackagesRepository {
+
+  //get all packages
   Future<PackagesResponse> getAdminPackages() async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-packages");
+
+    Uri url;
+    if (is_logged_in.$ == false) {
+      url = Uri.parse(
+          "${AppConfig.BASE_URL}/packages/get/all?customer_type=retail&$customer_type");
+    }else{
+      url = Uri.parse(
+          "${AppConfig.BASE_URL}/packages/auth/get/all");
+    }
+
+
+    print('vvvvvvvvvvvvvvvvvvvvvvvv');
+    // Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-packages");
     final response = await http.get(
       url,
       headers: {
@@ -27,7 +41,9 @@ class PackagesRepository {
   }
 
   Future<PackageDetailsResponse> getAdminPackagesDetails(int package_id) async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-package/$package_id");
+    // Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-package/$package_id");
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/packages/get/$package_id");
+
     final response = await http.get(
       url,
       headers: {
@@ -35,7 +51,9 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
-    print("get-admin-package${response.body}");
+    // print('wwwwwwsssssssssssssssswwwwwwwwwwwwwwwwwwwwwww');
+    // print(response.body);
+    // print("get-admin-package${response.body}");
     return packageDetailsResponseFromJson(response.body);
   }
 

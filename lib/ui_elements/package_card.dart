@@ -45,6 +45,7 @@ class _PackageCardState extends State<PackageCard> {
                 has_bottomnav: false,
                 packageId: widget.id,
                 packageType: widget.type,
+                packageName: widget.name,
               );
             },
           ),

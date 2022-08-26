@@ -304,7 +304,7 @@ class _PackagesListState extends State<PackagesList> {
                       image: "",
                       type: "admin",
                       name: packageResponse.data[index].name,
-                      main_price: packageResponse.data[index].price,
+                      main_price: packageResponse.data[index].showPrice,
                       desc: packageResponse.data[index].desc,
                       has_discount: false,
                     );

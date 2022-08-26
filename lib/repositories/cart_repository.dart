@@ -23,6 +23,7 @@ class CartRepository {
       },
     );
     print(';;;;;;;;;;;;;;;;;;;;;;;;;');
+    print( "Bearer ${access_token.$}");
     print(response.body);
     return cartResponseFromJson(response.body);
   }

@@ -84,7 +84,7 @@ class _PackageItemsState extends State<PackageItems> {
     var cartResponseData =
         await PackagesRepository().getAdminPackagesDetails(widget.packageId);
     var cartResponseList = cartResponseData.packageItems;
-    _cartTotalString = cartResponseData.price;
+    _cartTotalString = cartResponseData.showPrice;
     print("cartResponseList${_cartTotalString}");
     // if (cartResponseData != null) {
     //   _shopList = cartResponseList;
@@ -102,9 +102,9 @@ class _PackageItemsState extends State<PackageItems> {
     var cartResponseData =
         await PackagesRepository().getUserPackagesDetails(widget.packageId);
     var cartResponseList = cartResponseData.packageItems;
-    _cartTotalString = cartResponseData.price;
+    _cartTotalString = cartResponseData.showPrice;
 
-    print("cartResponseList${cartResponseData.price}");
+    print("cartResponseList${cartResponseData.showPrice}");
     // if (cartResponseData != null) {
     //   _shopList = cartResponseList;
     // }
@@ -803,11 +803,14 @@ class _PackageItemsState extends State<PackageItems> {
             height: 100,
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/placeholder.png',
-                  image: "${_shopList[item_index].product.thumbnailImage}",
-                  fit: BoxFit.fitWidth,
-                ))),
+                child: Image(image: AssetImage('assets/placeholder.png')),
+                // child: FadeInImage.assetNetwork(
+                //   placeholder: 'assets/placeholder.png',
+                //   image: "${_shopList[item_index].image}",
+                //   fit: BoxFit.fitWidth,
+                // )
+              )
+             ),
         Container(
           width: 170,
           child: Column(
@@ -819,7 +822,7 @@ class _PackageItemsState extends State<PackageItems> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${_shopList[item_index].product.name}",
+                      "${_shopList[item_index].name}",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyle(
@@ -833,7 +836,7 @@ class _PackageItemsState extends State<PackageItems> {
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
-                            "${_shopList[item_index].product.mainPrice}",
+                            "${_shopList[item_index].price}",
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,

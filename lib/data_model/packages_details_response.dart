@@ -7,109 +7,152 @@ import 'dart:convert';
 PackageDetailsResponse packageDetailsResponseFromJson(String str) =>
     PackageDetailsResponse.fromJson(json.decode(str));
 
-String packageDetailsResponseToJson(PackageDetailsResponse data) =>
-    json.encode(data.toJson());
+// String packageDetailsResponseToJson(PackageDetailsResponse data) =>
+//     json.encode(data.toJson());
 
 class PackageDetailsResponse {
   PackageDetailsResponse({
     this.id,
     this.name,
     this.desc,
-    this.userType,
-    this.userId,
-    this.price,
+
+    this.customerType,
+    this.showPrice,
     this.qty,
-    this.createdAt,
+    this.shippingType,
+    this.duration,
+    this.visitsNum,
+
     this.packageItems,
-    this.success,
-    this.status,
+
+    this.result,
   });
+
+
+
+
+
 
   int id;
   String name;
   String desc;
-  String userType;
-  int userId;
-  String price;
+
+
+  String customerType;
+  String showPrice;
   int qty;
-  dynamic createdAt;
+  String shippingType;
+  int duration;
+  int visitsNum;
+
   List<PackageItem> packageItems;
-  bool success;
-  int status;
+
+  bool result;
+  // int status;
 
   factory PackageDetailsResponse.fromJson(Map<String, dynamic> json) =>
       PackageDetailsResponse(
-        id: json["id"],
-        name: json["name"],
-        desc: json["desc"],
-        userType: json["user_type"],
-        userId: json["user_id"],
-        price: json["price"],
-        qty: json["qty"],
-        createdAt: json["created_at"],
-        packageItems: json["package_items"] == null
-            ? []
-            : List<PackageItem>.from(
-                json["package_items"].map((x) => PackageItem.fromJson(x))),
-        success: json["success"] == null ? null : json["success"],
-        status: json["status"],
-      );
+          id: json["data"]["id"],
+          name: json["data"]["name"],
+          desc: json["data"]["desc"],
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "desc": desc,
-        "user_type": userType,
-        "user_id": userId,
-        "price": price,
-        "qty": qty,
-        "created_at": createdAt,
-        "package_items": packageItems == null
-            ? []
-            : List<dynamic>.from(packageItems.map((x) => x.toJson())),
-        "success": success == null ? null : success,
-        "status": status,
-      };
+          customerType: json["data"]["customer_type"],
+          showPrice: json["data"]["show_price"],
+          qty: json["data"]["qty"],
+          shippingType: json["data"]["shipping_type"],
+          duration: json["data"]["duration"],
+          visitsNum: json["data"]["visits_num"],
+
+
+          packageItems: json["data"]["products"] == null
+          ? []
+              : List<PackageItem>.from(
+      json["data"]["products"].map((x) => PackageItem.fromJson(x))),
+  result: json["data"]["result"] == null ? null : json["data"]["result"],
+  // status: json["data"]["status"],
+  // price: json["price"],
+  );
+
+
+
+  //
+  // Map<String, dynamic> toJson() => {
+  //       "id": id,
+  //       "name": name,
+  //       "desc": desc,
+  //       "user_type": userType,
+  //       "user_id": userId,
+  //       "price": price,
+  //       "qty": qty,
+  //       "created_at": createdAt,
+  //       "package_items": packageItems == null
+  //           ? []
+  //           : List<dynamic>.from(packageItems.map((x) => x.toJson())),
+  //       "result": result == null ? null : result,
+  //       "status": status,
+  //     };
 }
 
 class PackageItem {
   PackageItem({
     this.id,
-    this.packageId,
-    this.productId,
+    // this.packageId,
+    // this.productId,
+    this.name,
+    this.price,
     this.qty,
-    this.createdAt,
-    this.updatedAt,
-    this.product,
+    // this.createdAt,
+    // this.updatedAt,
+    // this.product,
   });
 
   int id;
-  int packageId;
-  int productId;
+  // int packageId;
+  // int productId;
+  String name;
+  String price;
   int qty;
   dynamic createdAt;
   dynamic updatedAt;
   Product product;
 
-  factory PackageItem.fromJson(Map<String, dynamic> json) => PackageItem(
+  // factory PackageItem.fromJson(Map<String, dynamic> json) => PackageItem(
+  //       id: json["id"],
+  //       packageId: json["package_id"],
+  //       productId: json["product_id"],
+  //       qty: json["qty"],
+  //       price: json["price"],
+  //       // createdAt: json["created_at"],
+  //       // updatedAt: json["updated_at"],
+  //       product: Product.fromJson(json["product"]),
+  //     );
+
+
+  factory PackageItem.fromJson(Map<String, dynamic> json) {
+    print('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+    print(json);
+   return PackageItem(
         id: json["id"],
-        packageId: json["package_id"],
-        productId: json["product_id"],
+        // packageId: json["package_id"],
+        // productId: json["product_id"],
+        name: json['name'],
+        price: json["price"],
         qty: json["qty"],
         // createdAt: json["created_at"],
         // updatedAt: json["updated_at"],
-        product: Product.fromJson(json["product"]),
+        // product: Product.fromJson(json["product"]),
       );
+}
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "package_id": packageId,
-        "product_id": productId,
-        "qty": qty,
-        // "created_at": createdAt,
-        // "updated_at": updatedAt,
-        "product": product.toJson(),
-      };
+  // Map<String, dynamic> toJson() => {
+  //       "id": id,
+  //       "package_id": packageId,
+  //       "product_id": productId,
+  //       "qty": qty,
+  //       // "created_at": createdAt,
+  //       // "updated_at": updatedAt,
+  //       "product": product.toJson(),
+  //     };
 }
 
 class Product {

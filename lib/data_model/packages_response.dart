@@ -15,28 +15,28 @@ class PackagesResponse {
     this.data,
     this.links,
     this.meta,
-    this.success,
-    this.status,
+    this.result,
+    // this.status,
   });
 
   List<Package> data;
   PackagesResponseLinks links;
   Meta meta;
-  bool success;
-  int status;
+  bool result;
+
+  // int status;
 
   factory PackagesResponse.fromJson(Map<String, dynamic> json) =>
       PackagesResponse(
         data: json["data"] == null
-            ? null
-            : List<Package>.from(json["data"].map((x) => Package.fromJson(x))),
+            ? null : List<Package>.from(json["data"].map((x) => Package.fromJson(x))),
         links: json["links"] == null
-            ? null
-            : PackagesResponseLinks.fromJson(json["links"]),
+            ? null : PackagesResponseLinks.fromJson(json["links"]),
         meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
-        success: json["success"] == null ? null : json["success"],
-        status: json["status"] == null ? null : json["status"],
+        result: json["result"] == null ? null : json["result"],
+        // status: json["status"] == null ? null : json["status"],
       );
+
 
   Map<String, dynamic> toJson() => {
         "data": data == null
@@ -44,8 +44,8 @@ class PackagesResponse {
             : List<dynamic>.from(data.map((x) => x.toJson())),
         "links": links == null ? null : links.toJson(),
         "meta": meta == null ? null : meta.toJson(),
-        "success": success == null ? null : success,
-        "status": status == null ? null : status,
+        "result": result == null ? null : result,
+        // "status": status == null ? null : status,
       };
 }
 
@@ -54,71 +54,65 @@ class Package {
     this.id,
     this.name,
     this.desc,
-    this.addedBy,
+    // this.addedBy,
     this.customerType,
-    this.price,
+    this.showPrice,
     this.qty,
     this.shippingType,
     this.duration,
     this.visitsNum,
-    this.packageItems,
-    this.createdAt,
+    // this.packageItems,
+    // this.createdAt,
     this.links,
   });
 
   int id;
   String name;
   String desc;
-  String addedBy;
+  // String addedBy;
   String customerType;
-  String price;
+  String showPrice;
   int qty;
   String shippingType;
   int duration;
   int visitsNum;
-  List<PackageItem> packageItems;
-  DateTime createdAt;
+  // List<PackageItem> packageItems;
+  // DateTime createdAt;
   DatumLinks links;
 
   factory Package.fromJson(Map<String, dynamic> json) => Package(
         id: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? null : json["name"],
         desc: json["desc"] == null ? null : json["desc"],
-        addedBy: json["added_by"] == null ? null : json["added_by"],
-        customerType:
-            json["customer_type"] == null ? null : json["customer_type"],
-        price: json["price"] == null ? null : json["price"],
+        // addedBy: json["added_by"] == null ? null : json["added_by"],
+        customerType: json["customer_type"] == null ? null : json["customer_type"],
+        showPrice: json["show_price"] == null ? null : json["show_price"],
         qty: json["qty"] == null ? null : json["qty"],
-        shippingType:
-            json["shipping_type"] == null ? null : json["shipping_type"],
+        shippingType: json["shipping_type"] == null ? null : json["shipping_type"],
         duration: json["duration"] == null ? null : json["duration"],
         visitsNum: json["visits_num"] == null ? null : json["visits_num"],
-        packageItems: json["package_items"] == null
-            ? null
-            : List<PackageItem>.from(
-                json["package_items"].map((x) => PackageItem.fromJson(x))),
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        links:
-            json["links"] == null ? null : DatumLinks.fromJson(json["links"]),
+        // packageItems: json["package_items"] == null
+        //     ? null : List<PackageItem>.from(json["package_items"].map((x) => PackageItem.fromJson(x))),
+        // createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        links:  json["links"] == null ? null : DatumLinks.fromJson(json["links"]),
       );
+
 
   Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "name": name == null ? null : name,
         "desc": desc == null ? null : desc,
-        "added_by": addedBy == null ? null : addedBy,
+        // "added_by": addedBy == null ? null : addedBy,
         "customer_type": customerType == null ? null : customerType,
-        "price": price == null ? null : price,
+        "showPrice": showPrice == null ? null : showPrice,
         "qty": qty == null ? null : qty,
         "shipping_type": shippingType == null ? null : shippingType,
         "duration": duration == null ? null : duration,
         "visits_num": visitsNum == null ? null : visitsNum,
-        "package_items": packageItems == null
-            ? null
-            : List<dynamic>.from(packageItems.map((x) => x.toJson())),
-        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
+        // "package_items": packageItems == null
+        //     ? null
+        //     : List<dynamic>.from(packageItems.map((x) => x.toJson())),
+        // "created_at": createdAt == null ? null : createdAt.toIso8601String(),
         "links": links == null ? null : links.toJson(),
       };
 }
