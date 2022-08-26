@@ -17,8 +17,6 @@ class CategoryProducts extends StatefulWidget {
 }
 
 class _CategoryProductsState extends State<CategoryProducts> {
-
-
   ScrollController _scrollController = ScrollController();
   ScrollController _xcrollController = ScrollController();
   TextEditingController _searchController = TextEditingController();
@@ -50,9 +48,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
 
         _page++;
         fetchData();
-        setState((){
-
-        });
+        setState(() {});
 
         _showLoadingContainer = true;
       }
@@ -71,11 +67,12 @@ class _CategoryProductsState extends State<CategoryProducts> {
     var productResponse = await ProductRepository().getCategoryProducts(
         id: widget.category_id, page: _page, name: _searchKey);
     print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
-    if (is_logged_in.$ == true){
+    if (is_logged_in.$ == true) {
       print('0000000000000000000000000000000000000');
       // get price based on city
-      productResponse.products.forEach((element) async{
-        var variantResponse = await ProductRepository().getVariantWiseInfo(id: element.id);
+      productResponse.products.forEach((element) async {
+        var variantResponse =
+            await ProductRepository().getVariantWiseInfo(id: element.id);
         print('111111111111111111111111111');
         print(variantResponse.price_string);
         print(variantResponse.variant);

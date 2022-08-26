@@ -8,9 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/repositories/address_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
-import 'package:active_ecommerce_flutter/data_model/city_response.dart';
 import 'package:active_ecommerce_flutter/data_model/state_response.dart';
-import 'package:active_ecommerce_flutter/data_model/country_response.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:toast/toast.dart';
@@ -40,7 +38,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   PickResult selectedPlace;
   PickResult selectedPlace_update;
   LatLng kInitialPosition =
-  LatLng(24.8132637, 46.331984); // London , arbitary value
+      LatLng(24.8132637, 46.331984); // London , arbitary value
 
   GoogleMapController _controller;
 
@@ -67,8 +65,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   setDummyInitialLocation() {
     position = getLocation();
     position.then((value) => {
-      kInitialPosition = LatLng(value.latitude, value.longitude) //
-    });
+          kInitialPosition = LatLng(value.latitude, value.longitude) //
+        });
 
     print("position===${position}");
     setState(() {});
@@ -237,18 +235,17 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   }
 
   afterAddingAnAddressUpdateLocation(address_id) async {
-    print(selectedPlace_update);
-    print(
-        "afterAddingAnAddressUpdateLocation${selectedPlace_update.geometry.location.lat} _default_shipping_address ${_shippingAddressList[0].id}");
+    fetchAll();
     var addressUpdateLocationResponse = await AddressRepository()
         .getAddressUpdateLocationResponse(
-        address_id,
-        selectedPlace_update.geometry.location.lat,
-        selectedPlace_update.geometry.location.lng);
+            address_id,
+            selectedPlace_update.geometry.location.lat,
+            selectedPlace_update.geometry.location.lng);
 
     if (addressUpdateLocationResponse.result == false) {
       ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      afterAddingAnAddress();
       return;
     }
 
@@ -293,46 +290,46 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          contentPadding: EdgeInsets.only(
-              top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
-          content: Padding(
-            padding:
-            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              AppLocalizations.of(context)
-                  .address_screen_address_remove_warning,
-              maxLines: 3,
-              style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
-            ),
-          ),
-          actions: [
-            FlatButton(
-              child: Text(
-                AppLocalizations.of(context).common_cancel_ucfirst,
-                style: TextStyle(color: MyTheme.medium_grey),
+              contentPadding: EdgeInsets.only(
+                  top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
+              content: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .address_screen_address_remove_warning,
+                  maxLines: 3,
+                  style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
+                ),
               ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            FlatButton(
-              color: MyTheme.soft_accent_color,
-              child: Text(
-                AppLocalizations.of(context).common_confirm_ucfirst,
-                style: TextStyle(color: MyTheme.dark_grey),
-              ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-                confirmDelete(id);
-              },
-            ),
-          ],
-        ));
+              actions: [
+                FlatButton(
+                  child: Text(
+                    AppLocalizations.of(context).common_cancel_ucfirst,
+                    style: TextStyle(color: MyTheme.medium_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+                FlatButton(
+                  color: MyTheme.soft_accent_color,
+                  child: Text(
+                    AppLocalizations.of(context).common_confirm_ucfirst,
+                    style: TextStyle(color: MyTheme.dark_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    confirmDelete(id);
+                  },
+                ),
+              ],
+            ));
   }
 
   confirmDelete(id) async {
     var addressDeleteResponse =
-    await AddressRepository().getAddressDeleteResponse(id);
+        await AddressRepository().getAddressDeleteResponse(id);
 
     if (addressDeleteResponse.result == false) {
       ToastComponent.showDialog(addressDeleteResponse.message, context,
@@ -398,7 +395,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     ToastComponent.showDialog(addressAddResponse.message, context,
         gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
-    afterAddingAnAddressUpdateLocation(24);
+    print("addressAddResponse.data.id${addressAddResponse.data.id}");
+
+    afterAddingAnAddressUpdateLocation(addressAddResponse.data.id);
   }
 
   onAddressUpdate(context, index, id) async {
@@ -434,15 +433,15 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     //   return;
     // }
 
-    var addressUpdateResponse = await AddressRepository()
-        .getAddressUpdateResponse(
-        id: id,
-        address: address,
-        // country_id: _selected_country_list_for_update[index].id,
-        state_id: _selected_state_list_for_update[index].id,
-        // city_id: _selected_city_list_for_update[index].id,
-        postal_code: postal_code,
-        phone: phone);
+    var addressUpdateResponse =
+        await AddressRepository().getAddressUpdateResponse(
+            id: id,
+            address: address,
+            // country_id: _selected_country_list_for_update[index].id,
+            state_id: _selected_state_list_for_update[index].id,
+            // city_id: _selected_city_list_for_update[index].id,
+            postal_code: postal_code,
+            phone: phone);
 
     if (addressUpdateResponse.result == false) {
       ToastComponent.showDialog(addressUpdateResponse.message, context,
@@ -593,37 +592,35 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
             slivers: [
               SliverList(
                   delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: buildAddressList(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: FlatButton(
-                        minWidth: MediaQuery.of(context).size.width - 16,
-                        height: 60,
-                        color: Color.fromRGBO(252, 252, 252, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side:
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: buildAddressList(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FlatButton(
+                    minWidth: MediaQuery.of(context).size.width - 16,
+                    height: 60,
+                    color: Color.fromRGBO(252, 252, 252, 1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side:
                             BorderSide(color: MyTheme.light_grey, width: 1.0)),
-                        child: Icon(
-                          FontAwesome.plus,
-                          color: MyTheme.dark_grey,
-                          size: 16,
-                        ),
-                        onPressed: () async{
-                             await buildShowAddFormDialog(context);
-                          setState(() {
-
-                          });
-                        },
-                      ),
+                    child: Icon(
+                      FontAwesome.plus,
+                      color: MyTheme.dark_grey,
+                      size: 16,
                     ),
-                    SizedBox(
-                      height: 100,
-                    )
-                  ]))
+                    onPressed: () async {
+                      await buildShowAddFormDialog(context);
+                      setState(() {});
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 100,
+                )
+              ]))
             ],
           ),
         ));
@@ -873,7 +870,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 8.0)),
+                                      EdgeInsets.symmetric(horizontal: 8.0)),
                             ),
                           ),
                         ),
@@ -975,7 +972,6 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       //     ),
                       //   ),
                       // ),
-
 
                       // Padding(
                       //   padding: const EdgeInsets.only(bottom: 8.0),
@@ -1109,7 +1105,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0)),
+                                    EdgeInsets.symmetric(horizontal: 8.0)),
                           ),
                         ),
                       ),
@@ -1151,7 +1147,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0)),
+                                    EdgeInsets.symmetric(horizontal: 8.0)),
                           ),
                         ),
                       ),
@@ -1209,7 +1205,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () async{
+                        onPressed: () async {
                           await onAddressAdd(context);
                           // Navigator.of(context, rootNavigator: true).pop();
                           Navigator.of(context).pop();
@@ -1262,84 +1258,84 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         return isSearchBarFocused
             ? Container()
             : Visibility(
-          visible: false,
-          child: FloatingCard(
-            height: 50,
-            bottomPosition: 120.0,
-            // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-            leftPosition: 0.0,
-            rightPosition: 0.0,
-            width: 500,
-            borderRadius: const BorderRadius.only(
-              topLeft: const Radius.circular(8.0),
-              bottomLeft: const Radius.circular(8.0),
-              topRight: const Radius.circular(8.0),
-              bottomRight: const Radius.circular(8.0),
-            ),
-            child: state == SearchingState.Searching
-                ? Center(
-                child: Text(
-                  AppLocalizations.of(context)
-                      .map_location_screen_calculating,
-                  style: TextStyle(color: MyTheme.font_grey),
-                ))
-                : Visibility(
-              visible: false,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 2.0, right: 2.0),
-                            child: Text(
-                              selectedPlace.formattedAddress,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: MyTheme.medium_grey),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: FlatButton(
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(4.0),
-                              bottomLeft: const Radius.circular(4.0),
-                              topRight: const Radius.circular(4.0),
-                              bottomRight: const Radius.circular(4.0),
-                            )),
-                        child: Text(
+                visible: false,
+                child: FloatingCard(
+                  height: 50,
+                  bottomPosition: 120.0,
+                  // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                  leftPosition: 0.0,
+                  rightPosition: 0.0,
+                  width: 500,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: const Radius.circular(8.0),
+                    bottomLeft: const Radius.circular(8.0),
+                    topRight: const Radius.circular(8.0),
+                    bottomRight: const Radius.circular(8.0),
+                  ),
+                  child: state == SearchingState.Searching
+                      ? Center(
+                          child: Text(
                           AppLocalizations.of(context)
-                              .map_location_screen_pick_here,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-                          //            this will override default 'Select here' Button.
-                          /*print("do something with [selectedPlace] data");
+                              .map_location_screen_calculating,
+                          style: TextStyle(color: MyTheme.font_grey),
+                        ))
+                      : Visibility(
+                          visible: false,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 2.0, right: 2.0),
+                                        child: Text(
+                                          selectedPlace.formattedAddress,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: MyTheme.medium_grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: FlatButton(
+                                    color: MyTheme.accent_color,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.only(
+                                      topLeft: const Radius.circular(4.0),
+                                      bottomLeft: const Radius.circular(4.0),
+                                      topRight: const Radius.circular(4.0),
+                                      bottomRight: const Radius.circular(4.0),
+                                    )),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .map_location_screen_pick_here,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+                                      //            this will override default 'Select here' Button.
+                                      /*print("do something with [selectedPlace] data");
                                     print(selectedPlace.formattedAddress);
                                     print(selectedPlace.geometry.location.lat);
                                     print(selectedPlace.geometry.location.lng);*/
 
-                          onTapPickHere(selectedPlace);
-                        },
-                      ),
-                    ),
-                  ],
+                                      onTapPickHere(selectedPlace);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                 ),
-              ),
-            ),
-          ),
-        );
+              );
       },
       pinBuilder: (context, state) {
         if (state == PinState.Idle) {
@@ -1395,84 +1391,84 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         return isSearchBarFocused
             ? Container()
             : Visibility(
-          visible: false,
-          child: FloatingCard(
-            height: 50,
-            bottomPosition: 120.0,
-            // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-            leftPosition: 0.0,
-            rightPosition: 0.0,
-            width: 500,
-            borderRadius: const BorderRadius.only(
-              topLeft: const Radius.circular(8.0),
-              bottomLeft: const Radius.circular(8.0),
-              topRight: const Radius.circular(8.0),
-              bottomRight: const Radius.circular(8.0),
-            ),
-            child: state == SearchingState.Searching
-                ? Center(
-                child: Text(
-                  AppLocalizations.of(context)
-                      .map_location_screen_calculating,
-                  style: TextStyle(color: MyTheme.font_grey),
-                ))
-                : Visibility(
-              visible: false,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 2.0, right: 2.0),
-                            child: Text(
-                              selectedPlace.formattedAddress,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: MyTheme.medium_grey),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: FlatButton(
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(4.0),
-                              bottomLeft: const Radius.circular(4.0),
-                              topRight: const Radius.circular(4.0),
-                              bottomRight: const Radius.circular(4.0),
-                            )),
-                        child: Text(
+                visible: false,
+                child: FloatingCard(
+                  height: 50,
+                  bottomPosition: 120.0,
+                  // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                  leftPosition: 0.0,
+                  rightPosition: 0.0,
+                  width: 500,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: const Radius.circular(8.0),
+                    bottomLeft: const Radius.circular(8.0),
+                    topRight: const Radius.circular(8.0),
+                    bottomRight: const Radius.circular(8.0),
+                  ),
+                  child: state == SearchingState.Searching
+                      ? Center(
+                          child: Text(
                           AppLocalizations.of(context)
-                              .map_location_screen_pick_here,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-                          //            this will override default 'Select here' Button.
-                          /*print("do something with [selectedPlace] data");
+                              .map_location_screen_calculating,
+                          style: TextStyle(color: MyTheme.font_grey),
+                        ))
+                      : Visibility(
+                          visible: false,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 2.0, right: 2.0),
+                                        child: Text(
+                                          selectedPlace.formattedAddress,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: MyTheme.medium_grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: FlatButton(
+                                    color: MyTheme.accent_color,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: const BorderRadius.only(
+                                      topLeft: const Radius.circular(4.0),
+                                      bottomLeft: const Radius.circular(4.0),
+                                      topRight: const Radius.circular(4.0),
+                                      bottomRight: const Radius.circular(4.0),
+                                    )),
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .map_location_screen_pick_here,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+                                      //            this will override default 'Select here' Button.
+                                      /*print("do something with [selectedPlace] data");
                                     print(selectedPlace.formattedAddress);
                                     print(selectedPlace.geometry.location.lat);
                                     print(selectedPlace.geometry.location.lng);*/
 
-                          onTapPickHere(selectedPlace);
-                        },
-                      ),
-                    ),
-                  ],
+                                      onTapPickHere(selectedPlace);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                 ),
-              ),
-            ),
-          ),
-        );
+              );
       },
       pinBuilder: (context, state) {
         if (state == PinState.Idle) {
@@ -1550,7 +1546,6 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           ),
                         ),
                       ),
-
 
                       //
                       // Padding(
@@ -1643,8 +1638,6 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       //   ),
                       // ),
 
-
-
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
@@ -1659,8 +1652,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           child: TypeAheadField(
                             suggestionsCallback: (name) async {
                               var stateResponse = await AddressRepository()
-                                    .getStateListByCountry(); // blank response
-                                return stateResponse.states;
+                                  .getStateListByCountry(); // blank response
+                              return stateResponse.states;
                               // if (_selected_country_list_for_update[index] ==
                               //     null) {
                               //   var stateResponse = await AddressRepository()
@@ -1744,7 +1737,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                   contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 8.0)),
+                                      EdgeInsets.symmetric(horizontal: 8.0)),
                             ),
                           ),
                         ),
@@ -1957,7 +1950,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           height: 40,
                           child: TextField(
                             controller:
-                            _postalCodeControllerListForUpdate[index],
+                                _postalCodeControllerListForUpdate[index],
                             autofocus: false,
                             decoration: InputDecoration(
                                 hintText: AppLocalizations.of(context)
@@ -1982,7 +1975,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0)),
+                                    EdgeInsets.symmetric(horizontal: 8.0)),
                           ),
                         ),
                       ),
@@ -2024,7 +2017,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0)),
+                                    EdgeInsets.symmetric(horizontal: 8.0)),
                           ),
                         ),
                       ),
@@ -2084,7 +2077,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
-                        onPressed: () async{
+                        onPressed: () async {
                           await onAddressUpdate(
                               context, index, _shippingAddressList[index].id);
                           Navigator.of(context, rootNavigator: true).pop();
@@ -2133,9 +2126,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).common_login_warning,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).common_login_warning,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     } else if (_isInitial && _shippingAddressList.length == 0) {
       return SingleChildScrollView(
           child: ShimmerHelper()
@@ -2160,9 +2153,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).common_no_address_added,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).common_no_address_added,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     }
   }
 
@@ -2358,130 +2351,130 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
             ),
             app_language_rtl.$
                 ? Positioned(
-                left: 0.0,
-                top: 0.0,
-                child: InkWell(
-                  onTap: () {
-                    buildShowUpdateFormDialog(context, index);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 16.0, left: 16.0, right: 16.0, bottom: 12.0),
-                    child: Icon(
-                      Icons.edit,
-                      color: MyTheme.dark_grey,
-                      size: 16,
-                    ),
-                  ),
-                ))
+                    left: 0.0,
+                    top: 0.0,
+                    child: InkWell(
+                      onTap: () {
+                        buildShowUpdateFormDialog(context, index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 16.0, left: 16.0, right: 16.0, bottom: 12.0),
+                        child: Icon(
+                          Icons.edit,
+                          color: MyTheme.dark_grey,
+                          size: 16,
+                        ),
+                      ),
+                    ))
                 : Positioned(
-                right: 0.0,
-                top: 0.0,
-                child: InkWell(
-                  onTap: () {
-                    buildShowUpdateFormDialog(context, index);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 16.0, left: 16.0, right: 16.0, bottom: 12.0),
-                    child: Icon(
-                      Icons.edit,
-                      color: MyTheme.dark_grey,
-                      size: 16,
-                    ),
-                  ),
-                )),
+                    right: 0.0,
+                    top: 0.0,
+                    child: InkWell(
+                      onTap: () {
+                        buildShowUpdateFormDialog(context, index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 16.0, left: 16.0, right: 16.0, bottom: 12.0),
+                        child: Icon(
+                          Icons.edit,
+                          color: MyTheme.dark_grey,
+                          size: 16,
+                        ),
+                      ),
+                    )),
             app_language_rtl.$
                 ? Positioned(
-                left: 0,
-                top: 40.0,
-                child: InkWell(
-                  onTap: () {
-                    onPressDelete(_shippingAddressList[index].id);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
-                    child: Icon(
-                      Icons.delete_forever_outlined,
-                      color: MyTheme.dark_grey,
-                      size: 16,
+                    left: 0,
+                    top: 40.0,
+                    child: InkWell(
+                      onTap: () {
+                        onPressDelete(_shippingAddressList[index].id);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
+                        child: Icon(
+                          Icons.delete_forever_outlined,
+                          color: MyTheme.dark_grey,
+                          size: 16,
+                        ),
+                      ),
+                    ))
+                : Positioned(
+                    right: 0,
+                    top: 40.0,
+                    child: InkWell(
+                      onTap: () {
+                        onPressDelete(_shippingAddressList[index].id);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
+                        child: Icon(
+                          Icons.delete_forever_outlined,
+                          color: MyTheme.dark_grey,
+                          size: 16,
+                        ),
+                      ),
                     ),
                   ),
-                ))
-                : Positioned(
-              right: 0,
-              top: 40.0,
-              child: InkWell(
-                onTap: () {
-                  onPressDelete(_shippingAddressList[index].id);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
-                  child: Icon(
-                    Icons.delete_forever_outlined,
-                    color: MyTheme.dark_grey,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ),
             OtherConfig.USE_GOOGLE_MAP
                 ? app_language_rtl.$
-                ? Positioned(
-                left: 0,
-                top: 80.0,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                          return MapLocation(
-                              address: _shippingAddressList[index]);
-                        })).then((value) {
-                      onPopped(value);
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 12.0,
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 16.0),
-                    child: Icon(
-                      Icons.location_on,
-                      color: MyTheme.dark_grey,
-                      size: 16,
-                    ),
-                  ),
-                ))
-                : Positioned(
-              right: 0,
-              top: 80.0,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        return MapLocation(
-                            address: _shippingAddressList[index]);
-                      })).then((value) {
-                    onPopped(value);
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 12.0,
-                      left: 16.0,
-                      right: 16.0,
-                      bottom: 16.0),
-                  child: Icon(
-                    Icons.location_on,
-                    color: MyTheme.dark_grey,
-                    size: 16,
-                  ),
-                ),
-              ),
-            )
+                    ? Positioned(
+                        left: 0,
+                        top: 80.0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MapLocation(
+                                  address: _shippingAddressList[index]);
+                            })).then((value) {
+                              onPopped(value);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 12.0,
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: 16.0),
+                            child: Icon(
+                              Icons.location_on,
+                              color: MyTheme.dark_grey,
+                              size: 16,
+                            ),
+                          ),
+                        ))
+                    : Positioned(
+                        right: 0,
+                        top: 80.0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MapLocation(
+                                  address: _shippingAddressList[index]);
+                            })).then((value) {
+                              onPopped(value);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 12.0,
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: 16.0),
+                            child: Icon(
+                              Icons.location_on,
+                              color: MyTheme.dark_grey,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      )
                 : Container(),
           ],
         ),
