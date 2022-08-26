@@ -15,20 +15,24 @@ String productMiniResponseToJson(ProductMiniResponse data) =>
     json.encode(data.toJson());
 
 class ProductMiniResponse {
-  ProductMiniResponse({
-    this.products,
-    this.meta,
-    this.success,
-    this.status,
-  });
+  ProductMiniResponse(
+      {this.products,
+      this.meta,
+      this.success,
+      this.status,
+      this.message,
+      this.result});
 
   List<Product> products;
 
   bool success;
+  bool result;
 
   int status;
 
   Meta meta;
+
+  String message;
 
   factory ProductMiniResponse.fromJson(Map<String, dynamic> json) =>
       ProductMiniResponse(
@@ -36,6 +40,8 @@ class ProductMiniResponse {
             ? null
             : List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
         meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
+        message: json["message"] == null ? null : json["message"],
+        result: json["result"] == null ? null : json["result"],
         success: json["success"],
         status: json["status"],
       );
@@ -46,6 +52,8 @@ class ProductMiniResponse {
             ? null
             : List<dynamic>.from(products.map((x) => x.toJson())),
         "meta": meta == null ? null : meta.toJson(),
+        "message": message == null ? null : message,
+        "result": message == null ? null : result,
         "success": success,
         "status": status,
       };

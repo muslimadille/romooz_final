@@ -1,6 +1,7 @@
 import 'package:active_ecommerce_flutter/custom/CommonFunctoins.dart';
 import 'package:active_ecommerce_flutter/data_model/notification_count.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/screens/address.dart';
 import 'package:active_ecommerce_flutter/screens/comparison_list.dart';
 import 'package:active_ecommerce_flutter/screens/filter.dart';
 import 'package:active_ecommerce_flutter/screens/package_admin_list.dart';
@@ -137,12 +138,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     var productResponse = await ProductRepository().getFeaturedProducts(
       page: _productPage,
     );
+    if (productResponse.result == false) {
+      ToastComponent.showDialog(productResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
-    _featuredProductList.addAll(productResponse.products);
-    _isProductInitial = false;
-    _totalProductData = productResponse.meta.total;
-    _showProductLoadingContainer = false;
-    setState(() {});
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return Address();
+      }));
+    } else {
+      print("productResponse${productResponse}");
+
+      _featuredProductList.addAll(productResponse.products);
+      _isProductInitial = false;
+      _totalProductData = productResponse.meta.total;
+      _showProductLoadingContainer = false;
+      setState(() {});
+    }
   }
 
   reset() {
