@@ -9,6 +9,7 @@ import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductCard extends StatefulWidget {
   int id;
@@ -134,8 +135,8 @@ class _ProductCardState extends State<ProductCard> {
                     child: new IconButton(
                         icon: new Icon(Icons.add_shopping_cart,color: Colors.white,size: 17,),onPressed: ()async {
                       if (is_logged_in.$ == false) {
-                        // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
-                        //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                        ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
+                            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                         return;
                       }
@@ -153,33 +154,32 @@ class _ProductCardState extends State<ProductCard> {
                             gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
                         return;
                       } else {
-                        // SnackBar(
-                        //   content: Text(
-                        //     AppLocalizations.of(context)
-                        //         .product_details_screen_snackbar_added_to_cart,
-                        //     style: TextStyle(color: MyTheme.font_grey),
-                        //   ),
-                        //   backgroundColor: MyTheme.soft_accent_color,
-                        //   duration: const Duration(seconds: 3),
-                        //   action: SnackBarAction(
-                        //     label: AppLocalizations.of(context)
-                        //         .product_details_screen_snackbar_show_cart,
-                        //     onPressed: () {
-                        //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        //         return Cart(has_bottomnav: false);
-                        //       })).then((value) {
-                        //         onPopped(value);
-                        //       });
-                        //     },
-                        //     textColor: MyTheme.accent_color,
-                        //     disabledTextColor: Colors.grey,
-                        //   ),
-                        // ),
-                        // if (snackbar != null && context != null) {
-                        //   Scaffold.of(context).showSnackBar(snackbar);
-                        // }
-                        // reset();
-                        // fetchAll();
+                        // ToastComponent.showDialog(cartAddResponse.message, context,
+                        //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                        Scaffold.of(context).showSnackBar( SnackBar(
+                          content: Text(
+                            AppLocalizations.of(context)
+                                .product_details_screen_snackbar_added_to_cart,
+                            style: TextStyle(color: MyTheme.font_grey),
+                          ),
+                          backgroundColor: MyTheme.soft_accent_color,
+                          duration: const Duration(seconds: 3),
+                          action: SnackBarAction(
+                            label: AppLocalizations.of(context)
+                                .product_details_screen_snackbar_show_cart,
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return Cart(has_bottomnav: false);
+                              }));
+                            },
+                            textColor: MyTheme.accent_color,
+                            disabledTextColor: Colors.grey,
+                          ),
+                        ));
+                       // ,
+                       //  if (snackbar != null && context != null) {
+                       //    Scaffold.of(context).showSnackBar(snackbar);
+                       //  }
                       }
                     }),
                   )

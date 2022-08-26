@@ -165,6 +165,8 @@ class _MainState extends State<Main> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         AppLocalizations.of(context)
+                            .main_screen_bottom_navigation_cart=='العربة'?'السلة':
+                        AppLocalizations.of(context)
                             .main_screen_bottom_navigation_cart,
                         style: TextStyle(fontSize: 12),
                       ),
