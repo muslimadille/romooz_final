@@ -116,6 +116,15 @@ class _OtpState extends State<Otp> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                    Row(
+                      children: [
+                        IconButton(
+                            icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+                            onPressed: () {
+                              return Navigator.of(context).pop();
+                            }),
+                      ],
+                    ),
                       Padding(
                         padding: const EdgeInsets.only(top: 40.0, bottom: 15),
                         child: Container(

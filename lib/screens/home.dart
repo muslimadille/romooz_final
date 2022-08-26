@@ -673,15 +673,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         ),
         GestureDetector(
           onTap: () {
-            if (customer_type.$ == 'retail' || customer_type.$ == "null") {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return PackagesList();
-              }));
-            } else {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return PackagesList();
-              }));
-            }
+            // if (customer_type.$ == 'retail' || customer_type.$ == "null") {
+            //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //     return PackagesList();
+            //   }));
+            // } else {
+            //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //     return PackagesList();
+            //   }));
+            // }
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return PackagesList();
+            }));
           },
           child: Container(
             height: 100,

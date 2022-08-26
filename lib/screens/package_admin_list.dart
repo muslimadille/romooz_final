@@ -91,7 +91,7 @@ class _PackagesListState extends State<PackagesList> {
         ),
       ),
       title: Text(
-        AppLocalizations.of(context).home_screen_packges,
+        AppLocalizations.of(context).romooz_packges,
         style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
       ),
       elevation: 0.0,
@@ -271,80 +271,32 @@ class _PackagesListState extends State<PackagesList> {
             return Container();
           } else if (snapshot.hasData) {
             var packageResponse = snapshot.data;
-            return ListView(
+            return GridView.builder(
+              // 2
+              //addAutomaticKeepAlives: true,
+              itemCount: packageResponse.data.length,
+              // controller: _featuredProductScrollController,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.618),
+              padding: EdgeInsets.all(8),
+              physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    16.0,
-                    16.0,
-                    16.0,
-                    0.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).romooz_packges,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                ListView.builder(
-                  itemCount: packageResponse.data.length,
-                  scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    print("PackageCard${packageResponse.data[index].id}");
-                    return PackageCard(
-                      id: packageResponse.data[index].id,
-                      data: packageResponse.data[index],
-                      image: "",
-                      type: "admin",
-                      name: packageResponse.data[index].name,
-                      main_price: packageResponse.data[index].showPrice,
-                      desc: packageResponse.data[index].desc,
-                      has_discount: false,
-                    );
-                  },
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 16.0, right: 16.0, left: 16.0),
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: MyTheme.textfield_grey, width: 1),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0))),
-                    child: FlatButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      //height: 50,
-                      color: Color.fromRGBO(252, 252, 252, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0))),
-                      child: Text(
-                        AppLocalizations.of(context).add_packges,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            height: 1.6,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () {
-                        buildShowAddFormDialog(context);
-                      },
-                    ),
-                  ),
-                ),
-              ],
+              itemBuilder: (context, index) {
+                // 3
+                return PackageCard(
+                  id: packageResponse.data[index].id,
+                  data: packageResponse.data[index],
+                  image: "https://adventuresofegypt.com/uploads/all/UaQp6jKrzRuuMEN2AWjU2f9dpqSLjarBR8Vw5sQ0.jpg",
+                  type: "admin",
+                  name: packageResponse.data[index].name,
+                  main_price: packageResponse.data[index].showPrice,
+                  desc: packageResponse.data[index].desc,
+                  has_discount: false,
+                );
+              },
             );
           } else {
             return SingleChildScrollView(

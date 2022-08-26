@@ -21,7 +21,7 @@ class PackagesRepository {
     Uri url;
     if (is_logged_in.$ == false) {
       url = Uri.parse(
-          "${AppConfig.BASE_URL}/packages/get/all?customer_type=retail&$customer_type");
+          "${AppConfig.BASE_URL}/packages/get/all?customer_type=$customer_type");
     }else{
       url = Uri.parse(
           "${AppConfig.BASE_URL}/packages/auth/get/all");
@@ -37,6 +37,8 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
+    print('zzzzzzzzzzzzzzzzzzzzzzzz');
+    print(response.body);
     return packagesResponseFromJson(response.body);
   }
 

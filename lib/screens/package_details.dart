@@ -881,27 +881,7 @@ class _PackageItemsState extends State<PackageItems> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              SizedBox(
-                width: 28,
-                height: 28,
-                child: RaisedButton(
-                  padding: EdgeInsets.all(0),
-                  child: Icon(
-                    Icons.add,
-                    color: MyTheme.accent_color,
-                    size: 18,
-                  ),
-                  shape: CircleBorder(
-                    side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
-                  ),
-                  color: Colors.white,
-                  onPressed: widget.packageType == 'user'
-                      ? () {
-                          //onQuantityDecrease(seller_index, item_index);
-                        }
-                      : null,
-                ),
-              ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: Text(
@@ -909,27 +889,7 @@ class _PackageItemsState extends State<PackageItems> {
                   style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
                 ),
               ),
-              SizedBox(
-                width: 28,
-                height: 28,
-                child: RaisedButton(
-                  padding: EdgeInsets.all(0),
-                  child: Icon(
-                    Icons.remove,
-                    color: MyTheme.accent_color,
-                    size: 18,
-                  ),
-                  shape: CircleBorder(
-                    side: new BorderSide(color: MyTheme.light_grey, width: 1.0),
-                  ),
-                  color: Colors.white,
-                  onPressed: widget.packageType == 'user'
-                      ? () {
-                          //onQuantityDecrease(seller_index, item_index);
-                        }
-                      : null,
-                ),
-              )
+
             ],
           ),
         )
