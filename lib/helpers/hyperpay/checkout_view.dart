@@ -47,7 +47,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   @override
   void initState() {
     super.initState();
-    print("orderCreateResponse${widget.order_id}");
+    //print("orderCreateResponse${widget.order_id}");
     setup();
   }
 

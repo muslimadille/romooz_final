@@ -2,9 +2,9 @@ import 'package:hyperpay/hyperpay.dart';
 
 class TestConfig implements HyperpayConfig {
   @override
-  String creditcardEntityID = '8acda4c8758dc6750175977e90726ef8';
+  String creditcardEntityID = '8a8294174b7ecb28014b9699220015ca';
   @override
-  String madaEntityID = '8acda4c8758dc6750175977f0d676eff';
+  String madaEntityID = '8a8294174b7ecb28014b9699220015ca';
   @override
   Uri checkoutEndpoint = _checkoutEndpoint;
   @override

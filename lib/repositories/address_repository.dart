@@ -36,16 +36,16 @@ class AddressRepository {
 
   Future<AddressAddResponse> getAddressAddResponse(
       {@required String address,
-        // @required int country_id,
-        @required int state_id,
-        // @required int city_id,
-        @required String postal_code,
-        @required String phone}) async {
+      // @required int country_id,
+      @required int state_id,
+      // @required int city_id,
+      @required String postal_code,
+      @required String phone}) async {
     var post_body = jsonEncode({
       // "user_id": "${user_id.$}",
       "id": "${user_id.$}",
       "address": "$address",
-      // "country_id": "$country_id",
+      "country_id": "191",
       "state_id": "$state_id",
       // "city_id": "$city_id",
       "postal_code": "$postal_code",
@@ -66,12 +66,12 @@ class AddressRepository {
 
   Future<AddressUpdateResponse> getAddressUpdateResponse(
       {@required int id,
-        @required String address,
-        // @required int country_id,
-        @required int state_id,
-        // @required int city_id,
-        @required String postal_code,
-        @required String phone}) async {
+      @required String address,
+      // @required int country_id,
+      @required int state_id,
+      // @required int city_id,
+      @required String postal_code,
+      @required String phone}) async {
     var post_body = jsonEncode({
       "id": "${id}",
       "user_id": "${user_id.$}",
@@ -96,10 +96,10 @@ class AddressRepository {
   }
 
   Future<AddressUpdateLocationResponse> getAddressUpdateLocationResponse(
-      @required int id,
-      @required double latitude,
-      @required double longitude,
-      ) async {
+    @required int id,
+    @required double latitude,
+    @required double longitude,
+  ) async {
     var post_body = jsonEncode({
       "id": "${id}",
       "user_id": "${user_id.$}",
@@ -121,8 +121,8 @@ class AddressRepository {
   }
 
   Future<AddressMakeDefaultResponse> getAddressMakeDefaultResponse(
-      @required int id,
-      ) async {
+    @required int id,
+  ) async {
     var post_body = jsonEncode({
       "address_id": "$id",
     });
@@ -131,7 +131,6 @@ class AddressRepository {
     print("$id");
     print("Bearer ${access_token.$}");
     print("${AppConfig.BASE_URL}");
-
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/make_default");
     final response = await http.post(url,
@@ -148,8 +147,8 @@ class AddressRepository {
   }
 
   Future<AddressDeleteResponse> getAddressDeleteResponse(
-      @required int id,
-      ) async {
+    @required int id,
+  ) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/delete/$id");
     final response = await http.get(
       url,
@@ -200,9 +199,9 @@ class AddressRepository {
 
   Future<ShippingCostResponse> getShippingCostResponse(
       {@required int user_id,
-        int address_id = 0,
-        int pick_up_id = 0,
-        shipping_type = "home_delivery"}) async {
+      int address_id = 0,
+      int pick_up_id = 0,
+      shipping_type = "home_delivery"}) async {
     var post_body = jsonEncode({
       "address_id": "$address_id",
       "pickup_point_id": "$pick_up_id",
@@ -213,16 +212,15 @@ class AddressRepository {
     print('------------------------------------------');
     print(url);
     print(access_token.$);
-    final response = await http.get(url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer ${access_token.$}",
-          "App-Language": app_language.$
-        },
-        // body: post_body
+    final response = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$
+      },
+      // body: post_body
     );
-
-
 
     print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
     print(response.body);
@@ -245,8 +243,8 @@ class AddressRepository {
           "App-Language": app_language.$
         },
         body: post_body);
-      print('aaaaaaaaaaaa');
-      print(response.body);
+    print('aaaaaaaaaaaa');
+    print(response.body);
     return addressUpdateInCartResponseFromJson(response.body);
   }
 }
