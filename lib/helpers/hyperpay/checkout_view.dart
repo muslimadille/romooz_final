@@ -9,6 +9,19 @@ import 'package:hyperpay/hyperpay.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// Kindly find the Live credentials as requested for "Romooz":
+
+// Links used in the integration in the code:  https://oppwa.com/
+
+// Access Token (Authorization): OGFjZGE0Yzg3NThkYzY3NTAxNzU5NzdlMWI2ZTZlZjF8RGpLZHM0dG5Tdw==
+// Entity ID  (VISA, MASTER ): 8acda4c8758dc6750175977e90726ef8
+// Entity ID (MADA): 8acda4c8758dc6750175977f0d676eff
+// Entity ID (APPLEPAY):8acda4ca7646bafb017661b532c3047b
+
+// Currency: SAR only
+// PaymentType: DB only
+// Payment Methods: VISA, MASTER, MADA ,APPLEPAY
+
 class CheckoutView extends StatefulWidget {
   CheckoutView({Key key, this.order_id = "0"}) : super(key: key);
 
@@ -39,7 +52,6 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   setup() async {
-
     // hyperpay = await HyperpayPlugin.setup(config: TestConfig());
     hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
     print("hyperpay ==${hyperpay}");

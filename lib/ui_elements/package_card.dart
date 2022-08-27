@@ -64,18 +64,20 @@ class _PackageCardState extends State<PackageCard> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                  // width: double.infinity,
-                  //height: 158,
-                  height: ((MediaQuery.of(context).size.width - 28) / 3) ,
-                  child: ClipRRect(
-                      clipBehavior: Clip.hardEdge,
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(16), bottom: Radius.zero),
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/placeholder.png',
-                        image: widget.image,
-                        fit: BoxFit.cover,
-                      ))),
+                // width: double.infinity,
+                //height: 158,
+                height: ((MediaQuery.of(context).size.width - 28) / 3),
+                child: ClipRRect(
+                  clipBehavior: Clip.hardEdge,
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16), bottom: Radius.zero),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/placeholder.png',
+                    image: widget.image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               Text(
                 widget.name,
                 textAlign: TextAlign.justify,

@@ -13,7 +13,8 @@ import 'dart:convert';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class AuthRepository {
-  Future<LoginResponse> getLoginResponse(@required String email, String password) async {
+  Future<LoginResponse> getLoginResponse(
+      @required String email, String password) async {
     print("email${email}");
     var post_body = jsonEncode({
       "phone": "${email}",
@@ -76,26 +77,21 @@ class AuthRepository {
   }
 
   Future<SignupResponse> getSignupResponse(
-      Map<String,dynamic> data,
-      // @required String name,
-      // @required String email_or_phone,
-      // @required String customer_type,
-      // // @required String password,
-      // // @required String passowrd_confirmation,
-      // // @required String register_by,
-      // @required String owner_name,
-      // @required String commercial_name,
-      // @required String commercial_registration_no,
-      // @required String commercial_registry,
-      // @required String tax_number,
-      // @required String tax_number_certificate,
-      // @required String state_id,
-      ) async {
-
-
-
-
-
+    Map<String, dynamic> data,
+    // @required String name,
+    // @required String email_or_phone,
+    // @required String customer_type,
+    // // @required String password,
+    // // @required String passowrd_confirmation,
+    // // @required String register_by,
+    // @required String owner_name,
+    // @required String commercial_name,
+    // @required String commercial_registration_no,
+    // @required String commercial_registry,
+    // @required String tax_number,
+    // @required String tax_number_certificate,
+    // @required String state_id,
+  ) async {
     // var data = {
     //   "name": "$name",
     //   "email_or_phone": "${email_or_phone}",
@@ -121,7 +117,6 @@ class AuthRepository {
     // }
 
     var post_body = jsonEncode(data);
-
 
     //var  post_body = jsonEncode({
     //   "name": "$name",
@@ -160,7 +155,7 @@ class AuthRepository {
   Future<ResendCodeResponse> getResendCodeResponse(
       @required int user_id, @required String verify_by) async {
     var post_body =
-    jsonEncode({"user_id": "$user_id", "register_by": "$verify_by"});
+        jsonEncode({"user_id": "$user_id", "register_by": "$verify_by"});
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/resend_code");
     final response = await http.post(url,
@@ -173,7 +168,8 @@ class AuthRepository {
     return resendCodeResponseFromJson(response.body);
   }
 
-  Future<LoginResponse> getConfirmCodeResponse(@required int user_id, @required String verification_code) async {
+  Future<LoginResponse> getConfirmCodeResponse(
+      @required int user_id, @required String verification_code) async {
     var post_body = jsonEncode(
         {"user_id": "$user_id", "verification_code": "$verification_code"});
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/confirm_code");
@@ -248,7 +244,7 @@ class AuthRepository {
   Future<UserByTokenResponse> getUserByTokenResponse() async {
     var post_body = jsonEncode({"access_token": "${access_token.$}"});
 
-    print("===== post_body ${post_body}");
+    print("===== post_body ${post_body} ${user_id.$}");
     Uri url = Uri.parse("${AppConfig.BASE_URL}/get-user-by-access_token");
     final response = await http.post(url,
         headers: {

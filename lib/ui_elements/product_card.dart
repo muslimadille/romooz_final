@@ -36,7 +36,7 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
-    print((MediaQuery.of(context).size.width - 48) / 2);
+    // print((MediaQuery.of(context).size.width - 48) / );
     return InkWell(
       onTap: () {
         print("ProductCard ${widget.id}");
@@ -58,18 +58,20 @@ class _ProductCardState extends State<ProductCard> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                  width: double.infinity,
-                  //height: 158,
-                  height: ((MediaQuery.of(context).size.width - 28) / 2) + 2,
-                  child: ClipRRect(
-                      clipBehavior: Clip.hardEdge,
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(16), bottom: Radius.zero),
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/placeholder.png',
-                        image: widget.image,
-                        fit: BoxFit.cover,
-                      ))),
+                width: double.infinity,
+                //height: 158,
+                height: ((MediaQuery.of(context).size.width - 28) / 2) + 2,
+                child: ClipRRect(
+                  clipBehavior: Clip.hardEdge,
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16), bottom: Radius.zero),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/placeholder.png',
+                    image: widget.image,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: Text(
@@ -91,7 +93,6 @@ class _ProductCardState extends State<ProductCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         Padding(
                           padding: EdgeInsets.fromLTRB(16, 4, 16, 0),
                           child: Text(
@@ -107,19 +108,19 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                         widget.has_discount
                             ? Padding(
-                          padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-                          child: Text(
-                            widget.stroked_price,
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: MyTheme.medium_grey,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        )
+                                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+                                child: Text(
+                                  widget.stroked_price,
+                                  textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: MyTheme.medium_grey,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
                             : Container(),
                       ],
                     ),
@@ -133,59 +134,74 @@ class _ProductCardState extends State<ProductCard> {
                       color: Colors.green,
                     ),
                     child: new IconButton(
-                        icon: new Icon(Icons.add_shopping_cart,color: Colors.white,size: 17,),onPressed: ()async {
-                      if (is_logged_in.$ == false) {
-                        ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
-                            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-                        return;
-                      }
+                        icon: new Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.white,
+                          size: 17,
+                        ),
+                        onPressed: () async {
+                          if (is_logged_in.$ == false) {
+                            ToastComponent.showDialog(
+                                AppLocalizations.of(context)
+                                    .common_login_warning,
+                                context,
+                                gravity: Toast.CENTER,
+                                duration: Toast.LENGTH_LONG);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()));
+                            return;
+                          }
 
-                      // print(widget.id);
-                      // print(_variant);
-                      // print(user_id.$);
-                      // print(_quantity);
+                          // print(widget.id);
+                          // print(_variant);
+                          // print(user_id.$);
+                          // print(_quantity);
 
-                      var cartAddResponse = await CartRepository().getCartAddResponse(
-                          widget.id, "", user_id.$, "1");
+                          var cartAddResponse = await CartRepository()
+                              .getCartAddResponse(
+                                  widget.id, "", user_id.$, "1");
 
-                      if (cartAddResponse.result == false) {
-                        ToastComponent.showDialog(cartAddResponse.message, context,
-                            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-                        return;
-                      } else {
-                        // ToastComponent.showDialog(cartAddResponse.message, context,
-                        //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-                        Scaffold.of(context).showSnackBar( SnackBar(
-                          content: Text(
-                            AppLocalizations.of(context)
-                                .product_details_screen_snackbar_added_to_cart,
-                            style: TextStyle(color: MyTheme.font_grey),
-                          ),
-                          backgroundColor: MyTheme.soft_accent_color,
-                          duration: const Duration(seconds: 3),
-                          action: SnackBarAction(
-                            label: AppLocalizations.of(context)
-                                .product_details_screen_snackbar_show_cart,
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return Cart(has_bottomnav: false);
-                              }));
-                            },
-                            textColor: MyTheme.accent_color,
-                            disabledTextColor: Colors.grey,
-                          ),
-                        ));
-                       // ,
-                       //  if (snackbar != null && context != null) {
-                       //    Scaffold.of(context).showSnackBar(snackbar);
-                       //  }
-                      }
-                    }),
+                          if (cartAddResponse.result == false) {
+                            ToastComponent.showDialog(
+                                cartAddResponse.message, context,
+                                gravity: Toast.CENTER,
+                                duration: Toast.LENGTH_LONG);
+                            return;
+                          } else {
+                            // ToastComponent.showDialog(cartAddResponse.message, context,
+                            //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                AppLocalizations.of(context)
+                                    .product_details_screen_snackbar_added_to_cart,
+                                style: TextStyle(color: MyTheme.font_grey),
+                              ),
+                              backgroundColor: MyTheme.soft_accent_color,
+                              duration: const Duration(seconds: 3),
+                              action: SnackBarAction(
+                                label: AppLocalizations.of(context)
+                                    .product_details_screen_snackbar_show_cart,
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return Cart(has_bottomnav: false);
+                                  }));
+                                },
+                                textColor: MyTheme.accent_color,
+                                disabledTextColor: Colors.grey,
+                              ),
+                            ));
+                            // ,
+                            //  if (snackbar != null && context != null) {
+                            //    Scaffold.of(context).showSnackBar(snackbar);
+                            //  }
+                          }
+                        }),
                   )
                 ],
               ),
-
             ]),
       ),
     );

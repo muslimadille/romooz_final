@@ -103,7 +103,8 @@ class PaymentRepository {
 
     String formattedTime = DateFormat('HH:mm:ss').format(delivery_date);
 
-    print("formattedDate${formattedDate} ${formattedTime} ${delivery_date}");
+    print(
+        "formattedDate${formattedDate} ${formattedTime} ${delivery_date}  ${payment_method} ${user_id.$}");
 
     var post_body = jsonEncode({
       "user_id": "${user_id.$}",
@@ -113,7 +114,6 @@ class PaymentRepository {
     });
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/order/store");
-
 
     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
