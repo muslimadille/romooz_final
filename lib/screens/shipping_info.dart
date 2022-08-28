@@ -19,6 +19,9 @@ import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/screens/address.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:intl/intl.dart' as intlTime;
+
+
 class CustomPicker extends CommonPickerModel {
   String digits(int value, int length) {
     return '$value'.padLeft(length, "0");
@@ -361,6 +364,10 @@ class _ShippingInfoState extends State<ShippingInfo> {
     _mainScrollController.dispose();
   }
 
+  // TimeOfDay selectedTime = TimeOfDay.now();
+  // DateTime selectedDate = DateTime.now();
+  final dateFormat = intlTime.DateFormat('yyyy - MM - dd – h:mm a');
+
   @override
   Widget build(BuildContext context) {
     mHeight = MediaQuery.of(context).size.height;
@@ -430,10 +437,11 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                   height: 40,
                                   child: Center(
                                     child: InkWell(
-                                      onTap: () {
+                                      onTap: () async{
                                         print(
                                             "DateTime.now()${DateTime.now().year} ${app_language.$}");
-                                        DatePicker.showDateTimePicker(context,
+
+                                        await DatePicker.showDatePicker(context,
                                             showTitleActions: true,
                                             theme: DatePickerTheme(
                                                 backgroundColor: MyTheme.white),
@@ -442,7 +450,8 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                                 DateTime.now().month,
                                                 DateTime.now().day,
                                                 10,
-                                                00),
+                                                00
+                                            ),
                                             maxTime: DateTime(
                                                 DateTime.now().year,
                                                 (DateTime.now().month + 1) >= 12
@@ -451,7 +460,8 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                                         1),
                                                 DateTime.now().day,
                                                 19,
-                                                59), onChanged: (date) {
+                                                59),
+                                            onChanged: (date) {
                                           print(
                                               'onChanged ${_shippingSelectedDate}');
                                           var day_name = intl.DateFormat('EEEE')
@@ -519,6 +529,29 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                             locale: app_language.$ == 'ar'
                                                 ? LocaleType.ar
                                                 : LocaleType.en);
+                                        await DatePicker.showTime12hPicker(context, showTitleActions: true,
+                                            onChanged: (date) {
+                                              print('change $date in time zone ' +
+                                                  date.timeZoneOffset.inHours.toString());
+                                            },
+                                            onConfirm: (date) {
+                                              setState(() {
+                                                _shippingSelectedDate = DateTime(
+                                                    _shippingSelectedDate.year,
+                                                    _shippingSelectedDate.month,
+                                                    _shippingSelectedDate.day,
+                                                    date.hour,
+                                                    date.minute
+                                                );
+                                                _shippingSelectedValid = true;
+                                              });
+                                              print('confirm $date');
+                                            },
+                                            currentTime: DateTime.now(),
+                                            locale: app_language.$ == 'ar'
+                                                ? LocaleType.ar
+                                                : LocaleType.en
+                                        );
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -543,7 +576,8 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                 _shippingSelectedDate == null
                                     ? AppLocalizations.of(context)
                                         .shipping_info_screen_delivery_warning
-                                    : "${_shippingSelectedDate}",
+                                    : "${dateFormat.format(DateTime.parse(_shippingSelectedDate.toString()))}",
+
                                 style: TextStyle(
                                     fontSize: 14,
                                     decoration: TextDecoration.none,
@@ -568,6 +602,36 @@ class _ShippingInfoState extends State<ShippingInfo> {
           )),
     );
   }
+
+  // Future<void> _selectTime(BuildContext context) async {
+  //   print('2222222222222222222');
+  //   final TimeOfDay picked_s = await showTimePicker(
+  //       context: context,
+  //       initialTime: selectedTime, builder: (BuildContext context, Widget child) {
+  //     return MediaQuery(
+  //       data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+  //       child: child,
+  //     );});
+  //
+  //   if (picked_s != null && picked_s != selectedTime )
+  //     setState(() {
+  //       selectedTime = picked_s;
+  //     });
+  // }
+  //
+  // Future<void> _selectDate(BuildContext context) async {
+  //   print('11111111111111111111');
+  //   final DateTime picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: selectedDate,
+  //       firstDate: DateTime(2015, 8),
+  //       lastDate: DateTime(2101));
+  //   if (picked != null && picked != selectedDate) {
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  //   }
+  // }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
