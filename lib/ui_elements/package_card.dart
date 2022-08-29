@@ -72,11 +72,9 @@ class _PackageCardState extends State<PackageCard> {
                   clipBehavior: Clip.hardEdge,
                   borderRadius: BorderRadius.vertical(
                       top: Radius.circular(16), bottom: Radius.zero),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/placeholder.png',
-                    image: widget.image,
-                    fit: BoxFit.cover,
-                  ),
+                  child: widget.image!=null?
+                  Image.network(widget.image):
+                   Image.asset('assets/placeholder.png'),
                 ),
               ),
               Text(

@@ -803,12 +803,12 @@ class _PackageItemsState extends State<PackageItems> {
             height: 100,
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Image(image: AssetImage('assets/placeholder.png')),
-                // child: FadeInImage.assetNetwork(
-                //   placeholder: 'assets/placeholder.png',
-                //   image: "${_shopList[item_index].image}",
-                //   fit: BoxFit.fitWidth,
-                // )
+                // child: Image(image: AssetImage('assets/placeholder.png')),
+                child: FadeInImage.assetNetwork(
+                  placeholder: 'assets/placeholder.png',
+                  image: "${_shopList[item_index].logo}",
+                  fit: BoxFit.fitWidth,
+                )
               )
              ),
         Container(

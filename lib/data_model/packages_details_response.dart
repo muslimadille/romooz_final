@@ -101,6 +101,7 @@ class PackageItem {
     this.name,
     this.price,
     this.qty,
+    this.logo,
     // this.createdAt,
     // this.updatedAt,
     // this.product,
@@ -112,9 +113,10 @@ class PackageItem {
   String name;
   String price;
   int qty;
-  dynamic createdAt;
-  dynamic updatedAt;
-  Product product;
+  String logo;
+  // dynamic createdAt;
+  // dynamic updatedAt;
+  // Product product;
 
   // factory PackageItem.fromJson(Map<String, dynamic> json) => PackageItem(
   //       id: json["id"],
@@ -138,6 +140,7 @@ class PackageItem {
         name: json['name'],
         price: json["price"],
         qty: json["qty"],
+        logo: json["logo"],
         // createdAt: json["created_at"],
         // updatedAt: json["updated_at"],
         // product: Product.fromJson(json["product"]),

@@ -552,7 +552,7 @@ class _ProfileState extends State<Profile> {
             Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  AppLocalizations.of(context).profile_screen_in_ordered,
+                  AppLocalizations.of(context).profile_screen_in_ordered=='في المدار'?'في الطلب':AppLocalizations.of(context).profile_screen_in_ordered,
                   style: TextStyle(
                     color: MyTheme.medium_grey,
                   ),
