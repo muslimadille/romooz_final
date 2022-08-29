@@ -289,7 +289,7 @@ class _PackagesListState extends State<PackagesList> {
                 return PackageCard(
                   id: packageResponse.data[index].id,
                   data: packageResponse.data[index],
-                  image: "https://adventuresofegypt.com/uploads/all/UaQp6jKrzRuuMEN2AWjU2f9dpqSLjarBR8Vw5sQ0.jpg",
+                  image: packageResponse.data[index].logo,
                   type: "admin",
                   name: packageResponse.data[index].name,
                   main_price: packageResponse.data[index].showPrice,

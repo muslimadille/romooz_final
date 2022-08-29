@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
+import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/package_details.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,92 +102,86 @@ class _PackageCardState extends State<PackageCard> {
                     fontWeight: FontWeight.w600),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    "مدة الباقة",
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: MyTheme.font_grey,
-                        fontSize: 14,
-                        height: 1.6,
-                        fontWeight: FontWeight.w600),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        app_language.$ == 'ar'?
+                        "مدة الباقة":"Package duration",
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.font_grey,
+                            fontSize: 12,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        app_language.$ == 'ar'?
+                        "تصنيف الباقة":"Package type",
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.font_grey,
+                            fontSize: 12,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        app_language.$ == 'ar'?
+                        "عدد الزيارت":"number of visits",
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.font_grey,
+                            fontSize: 12,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "${widget.data.duration} شهور",
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: MyTheme.accent_color2,
-                        fontSize: 14,
-                        height: 1.6,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "تصنيف الباقة",
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: MyTheme.font_grey,
-                        fontSize: 14,
-                        height: 1.6,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "${widget.data.shippingType}",
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: MyTheme.accent_color2,
-                        fontSize: 14,
-                        height: 1.6,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "عدد الزيارت",
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: MyTheme.font_grey,
-                        fontSize: 14,
-                        height: 1.6,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "${widget.data.visitsNum}",
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: MyTheme.accent_color2,
-                        fontSize: 14,
-                        height: 1.6,
-                        fontWeight: FontWeight.w600),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${widget.data.duration} شهور",
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.accent_color2,
+                            fontSize: 12,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        "${widget.data.shippingType}",
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.accent_color2,
+                            fontSize: 12,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        "${widget.data.visitsNum}",
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: MyTheme.accent_color2,
+                            fontSize: 12,
+                            height: 1.6,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
                 ],
               ),

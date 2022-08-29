@@ -56,6 +56,7 @@ class Package {
     this.desc,
     // this.addedBy,
     this.customerType,
+    this.logo,
     this.showPrice,
     this.qty,
     this.shippingType,
@@ -71,6 +72,7 @@ class Package {
   String desc;
   // String addedBy;
   String customerType;
+  String logo;
   String showPrice;
   int qty;
   String shippingType;
@@ -86,6 +88,7 @@ class Package {
         desc: json["desc"] == null ? null : json["desc"],
         // addedBy: json["added_by"] == null ? null : json["added_by"],
         customerType: json["customer_type"] == null ? null : json["customer_type"],
+        logo: json["logo"] == null ? null : json["logo"],
         showPrice: json["show_price"] == null ? null : json["show_price"],
         qty: json["qty"] == null ? null : json["qty"],
         shippingType: json["shipping_type"] == null ? null : json["shipping_type"],
