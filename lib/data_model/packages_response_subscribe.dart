@@ -19,7 +19,7 @@ class PackagesResponseSubscribe {
 
   String message;
   int packageId;
-  String status;
+  bool status;
 
   factory PackagesResponseSubscribe.fromJson(Map<String, dynamic> json) =>
       PackagesResponseSubscribe(

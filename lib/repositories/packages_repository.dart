@@ -82,7 +82,6 @@ class PackagesRepository {
     );
     return packageDetailsResponseFromJson(response.body);
   }
-
   Future<PackageAddResponse> createPackage(
       {@required String name, String desc}) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/package");
@@ -178,7 +177,19 @@ class PackagesRepository {
 
   Future<PackagesResponseSubscribe> subscribeAdminPackages(
       int package_id, String days, String times) async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/user/subscribe-package");
+    print('ssssssssssssssssssssssss');
+    print(package_id);
+    print(days);
+    print(times);
+    String times_=times;
+    int length= days.split(',').length;
+    for(var i=1; i < length; i++){
+      times_+= ','+times;
+    }
+    print(times_);
+
+    // Uri url = Uri.parse("${AppConfig.BASE_URL}/user/subscribe-package");
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/packages/subscribe");
 
     //  print("post_body${post_body}");
 
@@ -189,7 +200,8 @@ class PackagesRepository {
     }, body: {
       "package_id": "${package_id}",
       "days": "${days}",
-      "times": "${times}",
+      // "times": "${times}",
+      "times": "${times_}",
     });
     print("get-admin-package${response.body}");
     return packagesResponseSubscribeFromJson(response.body);
