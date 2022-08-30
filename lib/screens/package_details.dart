@@ -791,6 +791,8 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   buildCartSellerItemCard(item_index) {
+    print('1111111111111111111111111111111111111111111111');
+    print(_shopList[item_index].logo);
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(color: MyTheme.light_grey, width: 1.0),
@@ -804,95 +806,43 @@ class _PackageItemsState extends State<PackageItems> {
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 // child: Image(image: AssetImage('assets/placeholder.png')),
-                child: FadeInImage.assetNetwork(
+                child: _shopList[item_index].logo==null?
+                Image.asset('assets/placeholder.png'):
+                FadeInImage.assetNetwork(
                   placeholder: 'assets/placeholder.png',
                   image: "${_shopList[item_index].logo}",
                   fit: BoxFit.fitWidth,
                 )
               )
              ),
-        Container(
-          width: 170,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${_shopList[item_index].name}",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                          color: MyTheme.font_grey,
-                          fontSize: 14,
-                          height: 1.6,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "${_shopList[item_index].price}",
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: MyTheme.accent_color,
-                                fontSize: 14,
-                                height: 1.6,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Spacer(),
-                        SizedBox(
-                          height: 28,
-                          child: InkWell(
-                            onTap: () {},
-                            child: IconButton(
-                              onPressed: () {
-                                // onPressDelete(_shopList[seller_index]
-                                //     .cart_items[item_index]
-                                //     .id);
-                              },
-                              icon: Icon(
-                                Icons.delete_forever_outlined,
-                                color: widget.packageType == "admin"
-                                    ? MyTheme.white
-                                    : MyTheme.medium_grey,
-                                size: 24,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+      Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        child:  Text(
+          "${_shopList[item_index].name}",
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+          style: TextStyle(
+              color: MyTheme.font_grey,
+              fontSize: 14,
+              height: 1.6,
+              fontWeight: FontWeight.w400),
         ),
+      ),
         Spacer(),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Text(
-                  _shopList[item_index].qty.toString(),
-                  style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
-                ),
-              ),
-
-            ],
+      Row(
+        children: [
+          Text(
+            _shopList[item_index].qty.toString(),
+            style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
           ),
-        )
+          SizedBox(width: 10,),
+          Text(
+            _shopList[item_index].unit,
+            style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
+          ),
+        ],
+      ),
+
       ]),
     );
   }

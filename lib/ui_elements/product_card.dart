@@ -65,7 +65,9 @@ class _ProductCardState extends State<ProductCard> {
                   clipBehavior: Clip.hardEdge,
                   borderRadius: BorderRadius.vertical(
                       top: Radius.circular(16), bottom: Radius.zero),
-                  child: FadeInImage.assetNetwork(
+                  child: widget.image==null?
+                      Image.asset('assets/placeholder.png'):
+                  FadeInImage.assetNetwork(
                     placeholder: 'assets/placeholder.png',
                     image: widget.image,
                     fit: BoxFit.fitWidth,

@@ -711,16 +711,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             Border.all(color: MyTheme.light_grey, width: 1)),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.asset("assets/flash_deal.png"),
+                      child: Image.asset("assets/package.png"),
                     )),
                 Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                        (customer_type.$ == 'retail' ||
-                                customer_type.$ == "null")
-                            ? AppLocalizations.of(context)
-                                .home_screen_flash_deal
-                            : AppLocalizations.of(context).home_screen_packges,
+                        AppLocalizations.of(context).home_screen_packges,
+                        // (customer_type.$ == 'retail' ||
+                        //         customer_type.$ == "null")
+                        //     ? AppLocalizations.of(context)
+                        //         .home_screen_flash_deal
+                        //     : AppLocalizations.of(context).home_screen_packges,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color.fromRGBO(132, 132, 132, 1),

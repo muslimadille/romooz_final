@@ -15,28 +15,19 @@ class PackageDetailsResponse {
     this.id,
     this.name,
     this.desc,
-
     this.customerType,
     this.showPrice,
     this.qty,
     this.shippingType,
     this.duration,
     this.visitsNum,
-
     this.packageItems,
-
     this.result,
   });
-
-
-
-
-
 
   int id;
   String name;
   String desc;
-
 
   String customerType;
   String showPrice;
@@ -52,28 +43,25 @@ class PackageDetailsResponse {
 
   factory PackageDetailsResponse.fromJson(Map<String, dynamic> json) =>
       PackageDetailsResponse(
-          id: json["data"]["id"],
-          name: json["data"]["name"],
-          desc: json["data"]["desc"],
+        id: json["data"]["id"],
+        name: json["data"]["name"],
+        desc: json["data"]["desc"],
 
-          customerType: json["data"]["customer_type"],
-          showPrice: json["data"]["show_price"],
-          qty: json["data"]["qty"],
-          shippingType: json["data"]["shipping_type"],
-          duration: json["data"]["duration"],
-          visitsNum: json["data"]["visits_num"],
+        customerType: json["data"]["customer_type"],
+        showPrice: json["data"]["show_price"],
+        qty: json["data"]["qty"],
+        shippingType: json["data"]["shipping_type"],
+        duration: json["data"]["duration"],
+        visitsNum: json["data"]["visits_num"],
 
-
-          packageItems: json["data"]["products"] == null
-          ? []
-              : List<PackageItem>.from(
-      json["data"]["products"].map((x) => PackageItem.fromJson(x))),
-  result: json["data"]["result"] == null ? null : json["data"]["result"],
-  // status: json["data"]["status"],
-  // price: json["price"],
-  );
-
-
+        packageItems: json["data"]["products"] == null
+            ? []
+            : List<PackageItem>.from(
+                json["data"]["products"].map((x) => PackageItem.fromJson(x))),
+        result: json["data"]["result"] == null ? null : json["data"]["result"],
+        // status: json["data"]["status"],
+        // price: json["price"],
+      );
 
   //
   // Map<String, dynamic> toJson() => {
@@ -102,6 +90,7 @@ class PackageItem {
     this.price,
     this.qty,
     this.logo,
+    this.unit,
     // this.createdAt,
     // this.updatedAt,
     // this.product,
@@ -114,6 +103,7 @@ class PackageItem {
   String price;
   int qty;
   String logo;
+  String unit;
   // dynamic createdAt;
   // dynamic updatedAt;
   // Product product;
@@ -129,23 +119,23 @@ class PackageItem {
   //       product: Product.fromJson(json["product"]),
   //     );
 
-
   factory PackageItem.fromJson(Map<String, dynamic> json) {
     print('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
     print(json);
-   return PackageItem(
-        id: json["id"],
-        // packageId: json["package_id"],
-        // productId: json["product_id"],
-        name: json['name'],
-        price: json["price"],
-        qty: json["qty"],
-        logo: json["logo"],
-        // createdAt: json["created_at"],
-        // updatedAt: json["updated_at"],
-        // product: Product.fromJson(json["product"]),
-      );
-}
+    return PackageItem(
+      id: json["id"],
+      // packageId: json["package_id"],
+      // productId: json["product_id"],
+      name: json['name'],
+      price: json["price"],
+      qty: json["qty"],
+      logo: json["logo"],
+      unit: json["unit"],
+      // createdAt: json["created_at"],
+      // updatedAt: json["updated_at"],
+      // product: Product.fromJson(json["product"]),
+    );
+  }
 
   // Map<String, dynamic> toJson() => {
   //       "id": id,
