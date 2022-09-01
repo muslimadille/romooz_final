@@ -295,6 +295,7 @@ class _PackagesListState extends State<PackagesList> {
                   main_price: packageResponse.data[index].showPrice,
                   desc: packageResponse.data[index].desc,
                   has_discount: false,
+                  numberOfVisits: packageResponse.data[index].visitsNum,
                 );
               },
             );

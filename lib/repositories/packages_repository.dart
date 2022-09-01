@@ -158,6 +158,9 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
+    print('wwwwwwww');
+
+    print(response.body);
     return dailyTimeDeliveryResponseFromJson(response.body);
   }
 
@@ -177,16 +180,16 @@ class PackagesRepository {
 
   Future<PackagesResponseSubscribe> subscribeAdminPackages(
       int package_id, String days, String times) async {
-    print('ssssssssssssssssssssssss');
-    print(package_id);
-    print(days);
-    print(times);
-    String times_=times;
-    int length= days.split(',').length;
-    for(var i=1; i < length; i++){
-      times_+= ','+times;
-    }
-    print(times_);
+    // print('ssssssssssssssssssssssss');
+    // print(package_id);
+    // print(days);
+    // print(times);
+    // String times_=times;
+    // int length= days.split(',').length;
+    // for(var i=1; i < length; i++){
+    //   times_+= ','+times;
+    // }
+    // print(times_);
 
     // Uri url = Uri.parse("${AppConfig.BASE_URL}/user/subscribe-package");
     Uri url = Uri.parse("${AppConfig.BASE_URL}/packages/subscribe");
@@ -201,7 +204,7 @@ class PackagesRepository {
       "package_id": "${package_id}",
       "days": "${days}",
       // "times": "${times}",
-      "times": "${times_}",
+      "times": "${times}",
     });
     print("get-admin-package${response.body}");
     return packagesResponseSubscribeFromJson(response.body);

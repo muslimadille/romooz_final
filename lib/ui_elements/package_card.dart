@@ -15,7 +15,7 @@ class PackageCard extends StatefulWidget {
   String type;
   bool has_discount;
   Package data;
-
+  int numberOfVisits;
   PackageCard(
       {Key key,
       this.id,
@@ -25,7 +25,8 @@ class PackageCard extends StatefulWidget {
       this.desc,
       this.data,
       this.type,
-      this.has_discount})
+      this.has_discount,
+      this.numberOfVisits})
       : super(key: key);
 
   @override
@@ -48,6 +49,7 @@ class _PackageCardState extends State<PackageCard> {
                 packageId: widget.id,
                 packageType: widget.type,
                 packageName: widget.name,
+                numberOfVisits: widget.numberOfVisits,
               );
             },
           ),
