@@ -13,24 +13,25 @@ String packagesResponseSubscribeToJson(PackagesResponseSubscribe data) =>
 class PackagesResponseSubscribe {
   PackagesResponseSubscribe({
     this.message,
-    this.packageId,
+    this.user_package_id,
     this.status,
   });
 
   String message;
-  int packageId;
+  int user_package_id;
   bool status;
 
   factory PackagesResponseSubscribe.fromJson(Map<String, dynamic> json) =>
       PackagesResponseSubscribe(
         message: json["message"] == null ? null : json["message"],
-        packageId: json["package_id"] == null ? null : json["package_id"],
+        user_package_id:
+            json["user_package_id"] == null ? null : json["user_package_id"],
         status: json["status"] == null ? null : json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "message": message == null ? null : message,
-        "package_id": packageId == null ? null : packageId,
+        "user_package_id": user_package_id == null ? null : user_package_id,
         "status": status == null ? null : status,
       };
 }

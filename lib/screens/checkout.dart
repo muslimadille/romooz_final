@@ -108,7 +108,7 @@ class _CheckoutState extends State<Checkout> {
     var paymentTypeResponseList =
         await PaymentRepository().getPaymentResponseList(list: widget.list);
     paymentTypeResponseList.forEach((element) {
-      if(element.payment_type=="hyperpay_payment"){
+      if (element.payment_type == "hyperpay_payment") {
         element.image = "https://rawiah.com/images/cards.png";
         element.title = "Checkout with";
       }
@@ -233,8 +233,7 @@ class _CheckoutState extends State<Checkout> {
       // })).then((value) {
       //   onPopped(value);
       // });
-    }
-    else if (_selected_payment_method == "paypal_payment") {
+    } else if (_selected_payment_method == "paypal_payment") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -252,8 +251,7 @@ class _CheckoutState extends State<Checkout> {
         onPopped(value);
       });
       ;
-    }
-    else if (_selected_payment_method == "razorpay") {
+    } else if (_selected_payment_method == "razorpay") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -270,8 +268,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "paystack") {
+    } else if (_selected_payment_method == "paystack") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -288,8 +285,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "iyzico") {
+    } else if (_selected_payment_method == "iyzico") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -306,8 +302,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "bkash") {
+    } else if (_selected_payment_method == "bkash") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -324,8 +319,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "nagad") {
+    } else if (_selected_payment_method == "nagad") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -342,8 +336,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "sslcommerz_payment") {
+    } else if (_selected_payment_method == "sslcommerz_payment") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -360,8 +353,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "flutterwave") {
+    } else if (_selected_payment_method == "flutterwave") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -378,8 +370,7 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    }
-    else if (_selected_payment_method == "paytm") {
+    } else if (_selected_payment_method == "paytm") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -473,7 +464,10 @@ class _CheckoutState extends State<Checkout> {
     }
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return CheckoutView(order_id: orderCreateResponse.orders_id);
+      return CheckoutView(
+        order_id: orderCreateResponse.orders_id,
+        order_type: "1",
+      );
     }));
   }
 

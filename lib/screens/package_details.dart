@@ -1,6 +1,7 @@
 import 'package:active_ecommerce_flutter/data_model/daily_time_delivery_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_details_response.dart';
 import 'package:active_ecommerce_flutter/data_model/subscribed_package_show_response.dart';
+import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/screens/shipping_info.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,6 @@ class _PackageItemsState extends State<PackageItems> {
   SubscribedPackageShowResponse subscribed_package_show_response =
       SubscribedPackageShowResponse();
 
-
-
   // time and date new style   --Muhammad--
   final _currentDate = DateTime.now();
   var formatter = new intllll.DateFormat('yyyy-MM-dd h:mm a');
@@ -71,7 +70,6 @@ class _PackageItemsState extends State<PackageItems> {
 
   int numberOfSelectedDays = 0;
   String chosenDaysStr, chosenTimesStr;
-
 
   @override
   void initState() {
@@ -155,9 +153,10 @@ class _PackageItemsState extends State<PackageItems> {
         checkedDays.add(false);
         // print(DateTime.parse(formatter.format(_currentDate)+' '+_dayList[i].startTime));
         // print();
-        
+
         //must be _dayList[index].date
-        visits.add(DateTime(_currentDate.year, _currentDate.month, _currentDate.day, 10, 0));
+        visits.add(DateTime(
+            _currentDate.year, _currentDate.month, _currentDate.day, 10, 0));
         // visits.add(DateTime.parse(formatter.format(_currentDate)+' '+_dayList[i].startTime));
       }
     }
@@ -321,7 +320,7 @@ class _PackageItemsState extends State<PackageItems> {
         .subscribeAdminPackages(
             widget.packageId, _selectedDayString, formattedTime);
 
-    if (subscribeProcessResponse.status != 200) {
+    if (subscribeProcessResponse.status == false) {
       ToastComponent.showDialog(subscribeProcessResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
@@ -329,10 +328,9 @@ class _PackageItemsState extends State<PackageItems> {
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return ShippingInfo();
-      })).then((value) {
-        onPopped(value);
-      });
+        return CheckoutView(
+            order_id: subscribeProcessResponse.user_package_id.toString());
+      }));
     }
   }
 
@@ -405,16 +403,18 @@ class _PackageItemsState extends State<PackageItems> {
     fetchData();
   }
 
-  bool validChoices(){
+  bool validChoices() {
     chosenDaysStr = chosenTimesStr = "";
-    if(numberOfSelectedDays!=widget.numberOfVisits)return false;
-    for(var index = 0; index < visits.length; index++){
-      if(checkedDays[index]){
-        if(chosenDaysStr.isNotEmpty)chosenDaysStr+=',';
-        chosenDaysStr+= _dayList[index].id.toString();
+    if (numberOfSelectedDays != widget.numberOfVisits) return false;
+    for (var index = 0; index < visits.length; index++) {
+      if (checkedDays[index]) {
+        if (chosenDaysStr.isNotEmpty) chosenDaysStr += ',';
+        chosenDaysStr += _dayList[index].id.toString();
 
-        if(chosenTimesStr.isNotEmpty)chosenTimesStr+=',';
-        chosenTimesStr+= visits[index].hour.toString()+':'+visits[index].minute.toString();
+        if (chosenTimesStr.isNotEmpty) chosenTimesStr += ',';
+        chosenTimesStr += visits[index].hour.toString() +
+            ':' +
+            visits[index].minute.toString();
       }
     }
     print('fffffffffffffffffffffffffff');
@@ -603,7 +603,7 @@ class _PackageItemsState extends State<PackageItems> {
                             fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         //onPressUpdate();
                         await selectVisits();
                         // _showMultiSelect(context);
@@ -665,28 +665,40 @@ class _PackageItemsState extends State<PackageItems> {
                             fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () async{
-                        if(validChoices()){
-                          var subscribeProcessResponse = await PackagesRepository()
-                              .subscribeAdminPackages(widget.packageId, chosenDaysStr, chosenTimesStr);
-
+                      onPressed: () async {
+                        if (validChoices()) {
+                          var subscribeProcessResponse =
+                              await PackagesRepository().subscribeAdminPackages(
+                                  widget.packageId,
+                                  chosenDaysStr,
+                                  chosenTimesStr);
 
                           if (subscribeProcessResponse.status != 200) {
-                            ToastComponent.showDialog(subscribeProcessResponse.message, context,
-                                gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                            ToastComponent.showDialog(
+                                subscribeProcessResponse.message, context,
+                                gravity: Toast.CENTER,
+                                duration: Toast.LENGTH_LONG);
                           } else {
-                            ToastComponent.showDialog(subscribeProcessResponse.message, context,
-                                gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                            ToastComponent.showDialog(
+                                subscribeProcessResponse.message, context,
+                                gravity: Toast.CENTER,
+                                duration: Toast.LENGTH_LONG);
 
-                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
                               return ShippingInfo();
                             })).then((value) {
                               onPopped(value);
                             });
                           }
-
-                        }else ToastComponent.showDialog('يجب تحديب ' +widget.numberOfVisits.toString()+' من الايام للزيارة', context,
-                            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+                        } else
+                          ToastComponent.showDialog(
+                              'يجب تحديب ' +
+                                  widget.numberOfVisits.toString() +
+                                  ' من الايام للزيارة',
+                              context,
+                              gravity: Toast.CENTER,
+                              duration: Toast.LENGTH_LONG);
                       },
                       // onPressed: subscribed_package_show_response.id != null
                       //     ? () {
@@ -710,8 +722,6 @@ class _PackageItemsState extends State<PackageItems> {
     );
   }
 
-
-
   Future<bool> selectVisits() async {
     await showDialog(
         context: context,
@@ -724,82 +734,93 @@ class _PackageItemsState extends State<PackageItems> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text('تحديد الزيارات', style: TextStyle(fontSize: 25)),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Directionality(
                         textDirection: TextDirection.rtl,
                         child: Expanded(
-                            child: ListView.builder(
-                                itemCount: _dayList.length,
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Checkbox(
-                                        value: checkedDays[index],
-                                        onChanged: (bool value) {
+                          child: ListView.builder(
+                              itemCount: _dayList.length,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Checkbox(
+                                      value: checkedDays[index],
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          if (value == true &&
+                                              numberOfSelectedDays ==
+                                                  widget.numberOfVisits) {
+                                            ToastComponent.showDialog(
+                                                'يجب الاتتعدي ' +
+                                                    widget.numberOfVisits
+                                                        .toString() +
+                                                    ' من الايام للزيارة',
+                                                context,
+                                                gravity: Toast.CENTER,
+                                                duration: Toast.LENGTH_LONG);
+                                            return;
+                                          }
+
+                                          if (value == true) {
+                                            numberOfSelectedDays++;
+                                          } else {
+                                            numberOfSelectedDays--;
+                                          }
+
+                                          checkedDays[index] = value;
+                                        });
+                                      },
+                                    ),
+                                    Text(_dayList[index].name),
+                                    Text(formatter.format(visits[index])),
+                                    // Text(visits[index]),
+                                    FlatButton(
+                                      textColor: MyTheme.accent_color,
+                                      child: Text('تغيير الوقت'),
+                                      onPressed: () async {
+                                        await DatePicker.showTime12hPicker(
+                                            context,
+                                            showTitleActions: true,
+                                            onChanged: (date) {
+                                          print('change $date in time zone ' +
+                                              date.timeZoneOffset.inHours
+                                                  .toString());
+                                        }, onConfirm: (date) {
+                                          if (date.hour < 10 ||
+                                              date.hour > 22) {
+                                            ToastComponent.showDialog(
+                                                'يجب تحديد موعد مابين 10 صباخا و 10 مساءا',
+                                                context,
+                                                gravity: Toast.CENTER,
+                                                duration: Toast.LENGTH_LONG);
+                                            return;
+                                          }
                                           setState(() {
-                                            if(value == true&&numberOfSelectedDays==widget.numberOfVisits) {
-                                              ToastComponent.showDialog(
-                                                  'يجب الاتتعدي ' +
-                                                      widget.numberOfVisits
-                                                          .toString() +
-                                                      ' من الايام للزيارة',
-                                                  context,
-                                                  gravity: Toast.CENTER,
-                                                  duration: Toast.LENGTH_LONG);
-                                              return;
-                                            }
-
-                                            if(value == true){
-                                              numberOfSelectedDays++;
-                                            }else {
-                                              numberOfSelectedDays--;
-                                            }
-
-                                            checkedDays[index]=value;
+                                            visits[index] = new DateTime(
+                                                visits[index].year,
+                                                visits[index].month,
+                                                visits[index].day,
+                                                date.hour,
+                                                date.minute);
                                           });
                                         },
-                                      ),
-                                      Text(_dayList[index].name),
-                                      Text(formatter.format(visits[index])),
-                                       // Text(visits[index]),
-                                       FlatButton(
-                                        textColor: MyTheme.accent_color,
-                                        child: Text('تغيير الوقت'),
-                                        onPressed: () async{
-                                          await DatePicker.showTime12hPicker(context,
-                                              showTitleActions: true,
-                                              onChanged: (date) {
-                                                print('change $date in time zone ' +
-                                                    date.timeZoneOffset.inHours.toString());
-                                              },
-                                              onConfirm: (date) {
-                                                if(date.hour<10 || date.hour>22 ){
-                                                  ToastComponent.showDialog(
-                                                      'يجب تحديد موعد مابين 10 صباخا و 10 مساءا',
-                                                      context,
-                                                      gravity: Toast.CENTER,
-                                                      duration: Toast.LENGTH_LONG);
-                                                  return;
-                                                }
-                                                setState(() {
-                                                  visits[index] = new DateTime(visits[index].year, visits[index].month, visits[index].day, date.hour, date.minute);
-                                                });
-                                              },
-                                              currentTime: DateTime.now(),
-                                              locale: app_language.$ == 'ar'
-                                                  ? LocaleType.ar
-                                                  : LocaleType.en
-                                          );
-
-                                        },
-                                      ),
-                                    ],
-                                  );
-
-                                }),
+                                            currentTime: DateTime.now(),
+                                            locale: app_language.$ == 'ar'
+                                                ? LocaleType.ar
+                                                : LocaleType.en);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }),
                         ),
                       ),
                       RaisedButton(
@@ -807,9 +828,8 @@ class _PackageItemsState extends State<PackageItems> {
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         onPressed: () {
-
                           Navigator.pop(context);
                         },
                         child: Text(
@@ -995,44 +1015,41 @@ class _PackageItemsState extends State<PackageItems> {
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 // child: Image(image: AssetImage('assets/placeholder.png')),
-                child: _shopList[item_index].logo==null?
-                Image.asset('assets/placeholder.png'):
-                FadeInImage.assetNetwork(
-                  placeholder: 'assets/placeholder.png',
-                  image: "${_shopList[item_index].logo}",
-                  fit: BoxFit.fitWidth,
-                )
-              )
-             ),
-      Padding(
-        padding: EdgeInsets.only(left: 8.0),
-        child:  Text(
-          "${_shopList[item_index].name}",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-          style: TextStyle(
-              color: MyTheme.font_grey,
-              fontSize: 14,
-              height: 1.6,
-              fontWeight: FontWeight.w400),
-        ),
-      ),
-        Spacer(),
+                child: _shopList[item_index].logo == null
+                    ? Image.asset('assets/placeholder.png')
+                    : FadeInImage.assetNetwork(
+                        placeholder: 'assets/placeholder.png',
+                        image: "${_shopList[item_index].logo}",
+                        fit: BoxFit.fitWidth,
+                      ))),
         Padding(
           padding: EdgeInsets.only(left: 8.0),
-          child:  Row(
-            children: [
-              Text(
-                _shopList[item_index].qty.toString(),
-                style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
-              ),
-              SizedBox(width: 10,),
-              Text(
-                _shopList[item_index].unit,
-                style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
-              ),
-            ],
+          child: Text(
+            "${_shopList[item_index].name}",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: TextStyle(
+                color: MyTheme.font_grey,
+                fontSize: 14,
+                height: 1.6,
+                fontWeight: FontWeight.w400),
           ),
+        ),
+        Spacer(),
+        Row(
+          children: [
+            Text(
+              _shopList[item_index].qty.toString(),
+              style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              _shopList[item_index].unit,
+              style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
+            ),
+          ],
         ),
       ]),
     );
