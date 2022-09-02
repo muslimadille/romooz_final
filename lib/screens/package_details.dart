@@ -49,7 +49,6 @@ class _PackageItemsState extends State<PackageItems> {
   var _cartTotalString = ". . .";
   List<PackageItem> _shopList = [];
 
-  List<Day> _dayList = [];
 
   List<Day> _selectedDay = [];
   String _selectedDayString = null;
@@ -66,16 +65,18 @@ class _PackageItemsState extends State<PackageItems> {
 
   // List<DateTime> dates = [];
   List<bool> checkedDays = [];
-  List<DateTime> visits = [];
+  List<PackageVisit> visitsList = [];
+  List<int> hoursList = [];
+  List<int> minutesList = [];
 
   int numberOfSelectedDays = 0;
-  String chosenDaysStr, chosenTimesStr;
+  String chosenDatesStr, chosenTimesStr;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getTimeDateDelivery();
+    // getTimeDateDelivery();
     getSubscribedPackageShow();
 
     /*print("user data");
@@ -100,22 +101,30 @@ class _PackageItemsState extends State<PackageItems> {
 
   fetchData() async {
     var cartResponseData =
-        await PackagesRepository().getAdminPackagesDetails(widget.packageId);
+    await PackagesRepository().getAdminPackagesDetails(widget.packageId);
     var cartResponseList = cartResponseData.packageItems;
-    _cartTotalString = cartResponseData.showPrice;
-    print("cartResponseList${_cartTotalString}");
-    // if (cartResponseData != null) {
-    //   _shopList = cartResponseList;
-    // }
+    print('ffffffffffffffffffffffffffffffffffffffffffffffffffff');
+    print(cartResponseList);
     if (cartResponseList != null && cartResponseList.length > 0) {
       _shopList = cartResponseList;
+      _cartTotalString = cartResponseData.showPrice;
+    }
+    visitsList = cartResponseData.packageVisits;
+    numberOfSelectedDays = 0;
+    checkedDays = [];
+    hoursList = [];
+    minutesList = [];
+    for (int i = 0; i < visitsList.length; i++) {
+      checkedDays.add(false);
+      hoursList.add(int.parse(visitsList[i].startTime.substring(0,2)));
+      minutesList.add(int.parse(visitsList[i].startTime.substring(3,5)));
     }
     _isInitial = false;
     _cartTotal = 0.00;
     // getSetCartTotal();
     setState(() {});
-  }
 
+  }
   fetchData2() async {
     var cartResponseData =
         await PackagesRepository().getUserPackagesDetails(widget.packageId);
@@ -135,35 +144,35 @@ class _PackageItemsState extends State<PackageItems> {
     setState(() {});
   }
 
-  getTimeDateDelivery() async {
-    var timeResponseData =
-        await PackagesRepository().getDailyTimeDeliveryResponse();
-    var timeResponseDataList = timeResponseData.days;
-
-    print("timeResponseDataList${timeResponseDataList}");
-    // if (cartResponseData != null) {
-    //   _shopList = cartResponseList;
-    // }
-    if (timeResponseDataList != null && timeResponseDataList.length > 0) {
-      _dayList = timeResponseDataList;
-      checkedDays = [];
-      numberOfSelectedDays = 0;
-      for (int i = 0; i < _dayList.length; i++) {
-        //dates.add(_currentDate.add(Duration(days: i)));
-        checkedDays.add(false);
-        // print(DateTime.parse(formatter.format(_currentDate)+' '+_dayList[i].startTime));
-        // print();
-
-        //must be _dayList[index].date
-        visits.add(DateTime(
-            _currentDate.year, _currentDate.month, _currentDate.day, 10, 0));
-        // visits.add(DateTime.parse(formatter.format(_currentDate)+' '+_dayList[i].startTime));
-      }
-    }
-
-    // getSetCartTotal();
-    setState(() {});
-  }
+  // getTimeDateDelivery() async {
+  //   var timeResponseData =
+  //       await PackagesRepository().getDailyTimeDeliveryResponse();
+  //   var timeResponseDataList = timeResponseData.days;
+  //
+  //   print("timeResponseDataList${timeResponseDataList}");
+  //   // if (cartResponseData != null) {
+  //   //   _shopList = cartResponseList;
+  //   // }
+  //   if (timeResponseDataList != null && timeResponseDataList.length > 0) {
+  //     _dayList = timeResponseDataList;
+  //     checkedDays = [];
+  //     numberOfSelectedDays = 0;
+  //     for (int i = 0; i < _dayList.length; i++) {
+  //       //dates.add(_currentDate.add(Duration(days: i)));
+  //       checkedDays.add(false);
+  //       // print(DateTime.parse(formatter.format(_currentDate)+' '+_dayList[i].startTime));
+  //       // print();
+  //
+  //       //must be _dayList[index].date
+  //       visits.add(DateTime(
+  //           _currentDate.year, _currentDate.month, _currentDate.day, 10, 0));
+  //       // visits.add(DateTime.parse(formatter.format(_currentDate)+' '+_dayList[i].startTime));
+  //     }
+  //   }
+  //
+  //   // getSetCartTotal();
+  //   setState(() {});
+  // }
 
   getSubscribedPackageShow() async {
     var packgeResponseData = await PackagesRepository()
@@ -307,6 +316,7 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   onPressSubscribeAdminPackages() async {
+
     var replacingTime = selectedTime.replacing(
         hour: selectedTime.hour, minute: selectedTime.minute);
 
@@ -404,22 +414,20 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   bool validChoices() {
-    chosenDaysStr = chosenTimesStr = "";
+    chosenDatesStr = chosenTimesStr = "";
     if (numberOfSelectedDays != widget.numberOfVisits) return false;
-    for (var index = 0; index < visits.length; index++) {
+    for (var index = 0; index < visitsList.length; index++) {
       if (checkedDays[index]) {
-        if (chosenDaysStr.isNotEmpty) chosenDaysStr += ',';
-        chosenDaysStr += _dayList[index].id.toString();
+        if (chosenDatesStr.isNotEmpty) chosenDatesStr += ',';
+        chosenDatesStr += visitsList[index].date;
 
         if (chosenTimesStr.isNotEmpty) chosenTimesStr += ',';
-        chosenTimesStr += visits[index].hour.toString() +
-            ':' +
-            visits[index].minute.toString();
+        chosenTimesStr += hoursList[index].toString()+':'+minutesList[index].toString();
       }
     }
-    print('fffffffffffffffffffffffffff');
-    print(chosenDaysStr);
-    print(chosenTimesStr);
+    // print('fffffffffffffffffffffffffffffffffffffffffffffffff');
+    // print(chosenDatesStr);
+    // print(chosenTimesStr);
     return true;
   }
 
@@ -670,7 +678,7 @@ class _PackageItemsState extends State<PackageItems> {
                           var subscribeProcessResponse =
                               await PackagesRepository().subscribeAdminPackages(
                                   widget.packageId,
-                                  chosenDaysStr,
+                                  chosenDatesStr,
                                   chosenTimesStr);
 
                           if (subscribeProcessResponse.status == false ||
@@ -726,6 +734,14 @@ class _PackageItemsState extends State<PackageItems> {
     );
   }
 
+  String getTime(int index){
+    return timeFormatter.format(DateTime(_currentDate.year,_currentDate.month,_currentDate.day,hoursList[index],minutesList[index]));
+  }
+
+  String getTimePrint(int hours, int minutes){
+    return timeFormatter.format(DateTime(_currentDate.year,_currentDate.month,_currentDate.day,hours,minutes));
+  }
+
   Future<bool> selectVisits() async {
     await showDialog(
         context: context,
@@ -749,7 +765,7 @@ class _PackageItemsState extends State<PackageItems> {
                         textDirection: TextDirection.rtl,
                         child: Expanded(
                           child: ListView.builder(
-                              itemCount: _dayList.length,
+                              itemCount: visitsList.length,
                               itemBuilder: (context, index) {
                                 return Row(
                                   mainAxisAlignment:
@@ -783,8 +799,9 @@ class _PackageItemsState extends State<PackageItems> {
                                         });
                                       },
                                     ),
-                                    Text(_dayList[index].name),
-                                    Text(formatter.format(visits[index])),
+                                    Text(visitsList[index].name),
+                                    Text(visitsList[index].date),
+                                    Text(getTime(index)),
                                     // Text(visits[index]),
                                     FlatButton(
                                       textColor: MyTheme.accent_color,
@@ -798,22 +815,27 @@ class _PackageItemsState extends State<PackageItems> {
                                               date.timeZoneOffset.inHours
                                                   .toString());
                                         }, onConfirm: (date) {
-                                          if (date.hour < 10 ||
-                                              date.hour > 22) {
+                                              int time = date.hour*60 + date.minute;
+                                              int startTime = int.parse(visitsList[index].startTime.substring(0,2))*60+
+                                              int.parse(visitsList[index].startTime.substring(3,5));
+
+                                              int endTime = int.parse(visitsList[index].endTime.substring(0,2))*60+
+                                               int.parse(visitsList[index].endTime.substring(3,5));
+                                          if (time < startTime ||
+                                              time > endTime) {
                                             ToastComponent.showDialog(
-                                                'يجب تحديد موعد مابين 10 صباخا و 10 مساءا',
+                                              'يجب تحديد موعد مابين '+
+                                                  getTimePrint((startTime/60).toInt(),endTime%60)+
+                                                  ' و '+
+                                                  getTimePrint((endTime/60).toInt(),endTime%60),
                                                 context,
                                                 gravity: Toast.CENTER,
                                                 duration: Toast.LENGTH_LONG);
                                             return;
                                           }
                                           setState(() {
-                                            visits[index] = new DateTime(
-                                                visits[index].year,
-                                                visits[index].month,
-                                                visits[index].day,
-                                                date.hour,
-                                                date.minute);
+                                            hoursList[index] =  date.hour;
+                                            minutesList[index] =  date.minute;
                                           });
                                         },
                                             currentTime: DateTime.now(),
@@ -848,69 +870,69 @@ class _PackageItemsState extends State<PackageItems> {
         });
   }
 
-  void _showMultiSelect(BuildContext context) async {
-    await showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return FractionallySizedBox(
-            heightFactor: 0.3,
-            child: Container(
-              child: Column(
-                children: [
-                  Container(
-                    child: MultiSelectDialogField<Day>(
-                      buttonText: Text(
-                        AppLocalizations.of(context)
-                            .package_screen_time_day_choose,
-                        style: TextStyle(color: MyTheme.accent_color),
-                      ),
-                      separateSelectedItems: true,
-                      items: _dayList
-                          .map((e) => MultiSelectItem(e, e.name))
-                          .toList(),
-                      listType: MultiSelectListType.CHIP,
-                      selectedColor: MyTheme.accent_color,
-                      onConfirm: (values) {
-                        _selectedDay = values;
-                        print("_selectedDay${_selectedDay}");
-                        var concatenate = StringBuffer();
-                        var _selectedDayString2 = StringBuffer();
-                        print("concatenate${concatenate}");
-                        _selectedDay.forEach((item) {
-                          concatenate.write(",${item.name}");
-                          _selectedDayString2.write(",${item.id}");
-
-                          print("item.name${item.name}");
-                        });
-
-                        this._selectedDayString =
-                            _selectedDayString2.toString().substring(1);
-                        this._selectedDayStringName =
-                            concatenate.toString().substring(1);
-
-                        print(
-                            "_selectedDayString${this._selectedDayString}${this._selectedDayStringName}");
-                      },
-                    ),
-                  ),
-                  Container(
-                    child: FlatButton(
-                      child: Text(
-                        AppLocalizations.of(context).package_screen_time_choose,
-                        style: TextStyle(color: MyTheme.accent_color),
-                      ),
-                      onPressed: () {
-                        selectTime(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
+  // void _showMultiSelect(BuildContext context) async {
+  //   await showModalBottomSheet(
+  //       context: context,
+  //       isScrollControlled: true,
+  //       builder: (context) {
+  //         return FractionallySizedBox(
+  //           heightFactor: 0.3,
+  //           child: Container(
+  //             child: Column(
+  //               children: [
+  //                 Container(
+  //                   child: MultiSelectDialogField<Day>(
+  //                     buttonText: Text(
+  //                       AppLocalizations.of(context)
+  //                           .package_screen_time_day_choose,
+  //                       style: TextStyle(color: MyTheme.accent_color),
+  //                     ),
+  //                     separateSelectedItems: true,
+  //                     items: _dayList
+  //                         .map((e) => MultiSelectItem(e, e.name))
+  //                         .toList(),
+  //                     listType: MultiSelectListType.CHIP,
+  //                     selectedColor: MyTheme.accent_color,
+  //                     onConfirm: (values) {
+  //                       _selectedDay = values;
+  //                       print("_selectedDay${_selectedDay}");
+  //                       var concatenate = StringBuffer();
+  //                       var _selectedDayString2 = StringBuffer();
+  //                       print("concatenate${concatenate}");
+  //                       _selectedDay.forEach((item) {
+  //                         concatenate.write(",${item.name}");
+  //                         _selectedDayString2.write(",${item.id}");
+  //
+  //                         print("item.name${item.name}");
+  //                       });
+  //
+  //                       this._selectedDayString =
+  //                           _selectedDayString2.toString().substring(1);
+  //                       this._selectedDayStringName =
+  //                           concatenate.toString().substring(1);
+  //
+  //                       print(
+  //                           "_selectedDayString${this._selectedDayString}${this._selectedDayStringName}");
+  //                     },
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   child: FlatButton(
+  //                     child: Text(
+  //                       AppLocalizations.of(context).package_screen_time_choose,
+  //                       style: TextStyle(color: MyTheme.accent_color),
+  //                     ),
+  //                     onPressed: () {
+  //                       selectTime(context);
+  //                     },
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
 
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(

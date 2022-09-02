@@ -49,8 +49,8 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
-    // print('wwwwwwsssssssssssssssswwwwwwwwwwwwwwwwwwwwwww');
-    // print(response.body);
+    print('wwwwwwsssssssssssssssswwwwwwwwwwwwwwwwwwwwwww');
+    print(response.body);
     // print("get-admin-package${response.body}");
     return packageDetailsResponseFromJson(response.body);
   }

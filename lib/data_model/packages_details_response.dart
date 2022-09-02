@@ -22,6 +22,7 @@ class PackageDetailsResponse {
     this.duration,
     this.visitsNum,
     this.packageItems,
+    this.packageVisits,
     this.result,
   });
 
@@ -37,6 +38,7 @@ class PackageDetailsResponse {
   int visitsNum;
 
   List<PackageItem> packageItems;
+  List<PackageVisit> packageVisits;
 
   bool result;
   // int status;
@@ -58,6 +60,10 @@ class PackageDetailsResponse {
             ? []
             : List<PackageItem>.from(
                 json["data"]["products"].map((x) => PackageItem.fromJson(x))),
+        packageVisits: json["data"]["dates"] == null
+            ? []
+            : List<PackageVisit>.from(
+                json["data"]["dates"].map((x) => PackageVisit.fromJson(x))),
         result: json["data"]["result"] == null ? null : json["data"]["result"],
         // status: json["data"]["status"],
         // price: json["price"],
@@ -146,6 +152,42 @@ class PackageItem {
   //       // "updated_at": updatedAt,
   //       "product": product.toJson(),
   //     };
+}
+
+class PackageVisit {
+  PackageVisit({
+    this.date,
+    this.name,
+    this.startTime,
+    this.endTime,
+  });
+
+  String date;
+  String name;
+  String startTime;
+  String endTime;
+
+
+  factory PackageVisit.fromJson(Map<String, dynamic> json) {
+    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+    print(json);
+    return PackageVisit(
+      date: json["date"],
+      name: json['name'],
+      startTime: json["start_time"],
+      endTime: json["end_time"],
+    );
+  }
+
+// Map<String, dynamic> toJson() => {
+//       "id": id,
+//       "package_id": packageId,
+//       "product_id": productId,
+//       "qty": qty,
+//       // "created_at": createdAt,
+//       // "updated_at": updatedAt,
+//       "product": product.toJson(),
+//     };
 }
 
 class Product {
