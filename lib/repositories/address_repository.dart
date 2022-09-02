@@ -49,8 +49,11 @@ class AddressRepository {
       "state_id": "$state_id",
       // "city_id": "$city_id",
       "postal_code": "$postal_code",
-      "phone": "$phone"
+      "phone": "$phone",
+      "latitude": 121.321,
+      "longitude": 21.3213,
     });
+
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/create");
     final response = await http.post(url,

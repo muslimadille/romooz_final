@@ -138,6 +138,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     var productResponse = await ProductRepository().getFeaturedProducts(
       page: _productPage,
     );
+    print('ccccccccccccccccccccccccccccccccc');
+    print(productResponse.products);
     if (productResponse.result == false) {
       ToastComponent.showDialog(productResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
@@ -711,7 +713,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             Border.all(color: MyTheme.light_grey, width: 1)),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.asset("assets/package.png"),
+                      child: Image.asset("assets/package_logo.PNG"),
                     )),
                 Padding(
                     padding: const EdgeInsets.only(top: 8),

@@ -18,6 +18,8 @@ class ProductRepository {
       url = Uri.parse(
           "${AppConfig.BASE_URL}/products/auth/featured?page=${page}");
     }
+    print('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+    print(access_token.$);
     print(url);
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
