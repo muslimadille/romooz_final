@@ -320,7 +320,7 @@ class _PackageItemsState extends State<PackageItems> {
         .subscribeAdminPackages(
             widget.packageId, _selectedDayString, formattedTime);
 
-    if (subscribeProcessResponse.status == false) {
+    if (subscribeProcessResponse.result == false) {
       ToastComponent.showDialog(subscribeProcessResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
@@ -673,12 +673,13 @@ class _PackageItemsState extends State<PackageItems> {
                                   chosenDaysStr,
                                   chosenTimesStr);
 
-                          if (subscribeProcessResponse.status != 200) {
+                          if (subscribeProcessResponse.status == false ||
+                              subscribeProcessResponse.result == false) {
                             ToastComponent.showDialog(
                                 subscribeProcessResponse.message, context,
                                 gravity: Toast.CENTER,
                                 duration: Toast.LENGTH_LONG);
-                          } else {
+                          } else if (subscribeProcessResponse.result == true) {
                             ToastComponent.showDialog(
                                 subscribeProcessResponse.message, context,
                                 gravity: Toast.CENTER,
@@ -686,10 +687,13 @@ class _PackageItemsState extends State<PackageItems> {
 
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ShippingInfo();
-                            })).then((value) {
-                              onPopped(value);
-                            });
+                              return CheckoutView(
+                                order_id: subscribeProcessResponse
+                                    .user_package_id
+                                    .toString(),
+                                order_type: "2",
+                              );
+                            }));
                           }
                         } else
                           ToastComponent.showDialog(

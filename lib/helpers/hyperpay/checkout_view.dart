@@ -78,7 +78,8 @@ class _CheckoutViewState extends State<CheckoutView> {
         'merchantTransactionId': '#123456',
       },
     );
-    print("initPaymentSession ---$brandType --- ${_checkoutSettings.orderId}");
+    print(
+        "initPaymentSession ---$brandType --- ${_checkoutSettings.orderId} ===${widget.order_type}");
 
     hyperpay.initSession(checkoutSetting: _checkoutSettings);
     print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");

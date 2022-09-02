@@ -14,19 +14,15 @@ import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class PackagesRepository {
-
   //get all packages
   Future<PackagesResponse> getAdminPackages() async {
-
     Uri url;
     if (is_logged_in.$ == false) {
       url = Uri.parse(
           "${AppConfig.BASE_URL}/packages/get/all?customer_type=$customer_type");
-    }else{
-      url = Uri.parse(
-          "${AppConfig.BASE_URL}/packages/auth/get/all");
+    } else {
+      url = Uri.parse("${AppConfig.BASE_URL}/packages/auth/get/all");
     }
-
 
     print('vvvvvvvvvvvvvvvvvvvvvvvv');
     // Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-packages");
@@ -82,6 +78,7 @@ class PackagesRepository {
     );
     return packageDetailsResponseFromJson(response.body);
   }
+
   Future<PackageAddResponse> createPackage(
       {@required String name, String desc}) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/package");
@@ -202,7 +199,7 @@ class PackagesRepository {
       "Accept": "application/json"
     }, body: {
       "package_id": "${package_id}",
-      "days": "${days}",
+      "dates": "${days}",
       // "times": "${times}",
       "times": "${times}",
     });
