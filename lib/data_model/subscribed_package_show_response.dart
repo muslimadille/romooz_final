@@ -20,7 +20,7 @@ class SubscribedPackageShowResponse {
     this.startDate,
     this.endDate,
     this.remainingVisits,
-    this.days,
+    this.dates,
     this.times,
     this.success,
     this.status,
@@ -32,7 +32,7 @@ class SubscribedPackageShowResponse {
   DateTime startDate;
   DateTime endDate;
   int remainingVisits;
-  String days;
+  String dates;
   String times;
   bool success;
   int status;
@@ -49,7 +49,7 @@ class SubscribedPackageShowResponse {
             json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
         remainingVisits:
             json["remaining_visits"] == null ? null : json["remaining_visits"],
-        days: json["days"] == null ? null : json["days"],
+        dates: json["dates"] == null ? null : json["dates"],
         times: json["times"] == null ? null : json["times"],
         success: json["success"] == null ? null : json["success"],
         status: json["status"] == null ? null : json["status"],
@@ -66,7 +66,7 @@ class SubscribedPackageShowResponse {
             ? null
             : "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
         "remaining_visits": remainingVisits == null ? null : remainingVisits,
-        "days": days == null ? null : days,
+        "dates": dates == null ? null : dates,
         "times": times == null ? null : times,
         "success": success == null ? null : success,
         "status": status == null ? null : status,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/my_subscribed_package_response.dart';
 import 'package:active_ecommerce_flutter/data_model/daily_time_delivery_response.dart';
 import 'package:active_ecommerce_flutter/data_model/package_add_item_response.dart';
 import 'package:active_ecommerce_flutter/data_model/package_delete_response.dart';
@@ -9,6 +10,7 @@ import 'package:active_ecommerce_flutter/data_model/packages_details_response.da
 import 'package:active_ecommerce_flutter/data_model/packages_response.dart';
 import 'package:active_ecommerce_flutter/data_model/packages_response_subscribe.dart';
 import 'package:active_ecommerce_flutter/data_model/subscribed_package_show_response.dart';
+import 'package:active_ecommerce_flutter/data_model/my_subscribed_package_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -25,6 +27,7 @@ class PackagesRepository {
     }
 
     print('vvvvvvvvvvvvvvvvvvvvvvvv');
+    print(access_token.$);
     // Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-packages");
     final response = await http.get(
       url,
@@ -33,8 +36,8 @@ class PackagesRepository {
         "App-Language": app_language.$,
       },
     );
-    print('zzzzzzzzzzzzzzzzzzzzzzzz');
-    print(response.body);
+    // print('zzzzzzzzzzzzzzzzzzzzzzzz');
+    // print(response.body);
     return packagesResponseFromJson(response.body);
   }
 
@@ -173,6 +176,23 @@ class PackagesRepository {
       },
     );
     return subscribedPackageShowResponseFromJson(response.body);
+  }
+
+
+  Future<MySubscribedPackagesResponse> getMySubscribedPackageResponse() async {
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    Uri url = Uri.parse(
+        "${AppConfig.BASE_URL}/packages/my/subscribed");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+    );
+    print('sssssssssssssssssssssssssssssssssssssss');
+    print(response.body);
+    return mySubscribedPackagesResponseFromJson(response.body);
   }
 
   Future<PackagesResponseSubscribe> subscribeAdminPackages(

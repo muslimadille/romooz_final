@@ -7,6 +7,7 @@ import 'package:active_ecommerce_flutter/screens/wallet.dart';
 import 'package:active_ecommerce_flutter/screens/profile_edit.dart';
 import 'package:active_ecommerce_flutter/screens/address.dart';
 import 'package:active_ecommerce_flutter/screens/order_list.dart';
+import 'package:active_ecommerce_flutter/screens/subscribed_packages_list.dart';
 import 'package:active_ecommerce_flutter/screens/club_point.dart';
 import 'package:active_ecommerce_flutter/screens/refund_request.dart';
 import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
@@ -210,6 +211,38 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   AppLocalizations.of(context).profile_screen_orders,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: MyTheme.font_grey, fontWeight: FontWeight.w300),
+                ),
+              )
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return SubscribedPackages();
+            }));
+          },
+          child: Column(
+            children: [
+              Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: MyTheme.light_grey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset("assets/package_logo.PNG"),
+                  )),
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  app_language.$ == 'ar'?
+                  "باقاتي":"My Packages",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: MyTheme.font_grey, fontWeight: FontWeight.w300),
