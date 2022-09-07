@@ -713,7 +713,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             Border.all(color: MyTheme.light_grey, width: 1)),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.asset("assets/package_logo.PNG"),
+                      child: Image.asset("assets/package_logo.png"),
                     )),
                 Padding(
                     padding: const EdgeInsets.only(top: 8),

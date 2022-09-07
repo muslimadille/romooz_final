@@ -236,7 +236,7 @@ class _ProfileState extends State<Profile> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset("assets/package_logo.PNG"),
+                    child: Image.asset("assets/package_logo.png"),
                   )),
               Padding(
                 padding: const EdgeInsets.only(top: 8),
