@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -72,7 +73,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return CustomSplashScreen(
       //comment this
-      seconds: 3,
+      seconds: 4,
 
       //comment this
       navigateAfterSeconds: Main(),
@@ -106,22 +107,28 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       //         "assets/black-logo.png",
       //       ),
       //     )),
-      image: AnimatedBuilder(
-        animation: animationController,
-        child: Container(
-          child: Image.asset("assets/black-logo.png"),
-        ),
-        builder: (BuildContext context, Widget _widget) {
-          return new Transform.rotate(
-            angle: animationController.value,
-            child: _widget,
-          );
-        },
+      // image: AnimatedBuilder(
+      //   animation: animationController,
+      //   child: Container(
+      //     child: Image.asset("assets/black-logo.png"),
+      //   ),
+      //   builder: (BuildContext context, Widget _widget) {
+      //     return new Transform.rotate(
+      //       angle: animationController.value,
+      //       child: _widget,
+      //     );
+      //   },
+      // ),
+      //image: Image.asset("assets/black-logo.png"),
+      image: FadeIn(
+        child: Image.asset("assets/black-logo.png"),
+        // Optional paramaters
+        duration: Duration(milliseconds: 2000),
+        curve: Curves.fastLinearToSlowEaseIn,
       ),
-
       photoSize: 60.0,
       imageBackground:
-          Image.asset("assets/splash_fr.png", fit: BoxFit.fitHeight),
+          Image.asset("assets/splash2_auto_x2.jpg", fit: BoxFit.fitHeight),
       backgroundPhotoSize: 140.0,
     );
   }
