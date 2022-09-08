@@ -4,6 +4,7 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:active_ecommerce_flutter/screens/order_list.dart';
+import 'package:active_ecommerce_flutter/screens/subscribed_packages_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyperpay/hyperpay.dart';
@@ -55,8 +56,8 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   setup() async {
-    hyperpay = await HyperpayPlugin.setup(config: TestConfig());
-    // hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
+    // hyperpay = await HyperpayPlugin.setup(config: TestConfig());
+    hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
     print("hyperpay ==${hyperpay}");
   }
 
@@ -147,13 +148,22 @@ class _CheckoutViewState extends State<CheckoutView> {
                 backgroundColor: Colors.green,
               ),
             );
-            final PageRouteBuilder _homeRoute = new PageRouteBuilder(
-              pageBuilder: (BuildContext context, _, __) {
-                return Main();
-              },
-            );
-            Navigator.pushAndRemoveUntil(
-                context, _homeRoute, (Route<dynamic> r) => false);
+            if (widget.order_type == "1") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return OrderList(from_checkout: true);
+              }));
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SubscribedPackages();
+              }));
+              // final PageRouteBuilder _homeRoute = new PageRouteBuilder(
+              //   pageBuilder: (BuildContext context, _, __) {
+              //     return Main();
+              //   },
+              // );
+              // Navigator.pushAndRemoveUntil(
+              //     context, _homeRoute, (Route<dynamic> r) => false);
+            }
 
             /////// pushing
             break;

@@ -15,7 +15,7 @@ class Splash extends StatefulWidget {
   _SplashState createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   PackageInfo _packageInfo = PackageInfo(
     appName: AppConfig.app_name,
     packageName: 'Unknown',
@@ -23,11 +23,26 @@ class _SplashState extends State<Splash> {
     buildNumber: 'Unknown',
   );
 
+  AnimationController animationController;
+
   @override
   void initState() {
     //on Splash Screen hide statusbar
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+
     super.initState();
+    animationController = new AnimationController(
+      vsync: this,
+      duration: new Duration(milliseconds: 500),
+    );
+    animationController.forward();
+    animationController.addListener(() {
+      setState(() {
+        if (animationController.status == AnimationStatus.completed) {
+          animationController.repeat();
+        }
+      });
+    });
     _initPackageInfo();
   }
 
@@ -36,6 +51,7 @@ class _SplashState extends State<Splash> {
     //before going to other screen show statusbar
     SystemChrome.setEnabledSystemUIOverlays(
         [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    animationController.dispose();
     super.dispose();
   }
 
@@ -79,8 +95,28 @@ class _SplashState extends State<Splash> {
       //     color: MyTheme.dark_grey,
       //   ),
       // ),
-      image: Image.asset(
-        "assets/black-logo.png",
+      // image:
+
+      // image: AnimatedBuilder(
+      //     animation: animationController,
+      //     child: new Container(
+      //       height: 80.0,
+      //       width: 80.0,
+      //       child: Image.asset(
+      //         "assets/black-logo.png",
+      //       ),
+      //     )),
+      image: AnimatedBuilder(
+        animation: animationController,
+        child: Container(
+          child: Image.asset("assets/black-logo.png"),
+        ),
+        builder: (BuildContext context, Widget _widget) {
+          return new Transform.rotate(
+            angle: animationController.value,
+            child: _widget,
+          );
+        },
       ),
 
       photoSize: 60.0,
@@ -119,7 +155,7 @@ class CustomSplashScreen extends StatefulWidget {
   final Color loaderColor;
 
   /// Main image mainly used for logos and like that
-  final Image image;
+  final Widget image;
 
   final Widget backgroundImage;
 
