@@ -22,6 +22,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.0"
+  animated_text_kit:
+    dependency: "direct main"
+    description:
+      name: animated_text_kit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.2.1"
   archive:
     dependency: transitive
     description:
@@ -295,6 +302,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  dots_indicator:
+    dependency: transitive
+    description:
+      name: dots_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   dotted_line:
     dependency: "direct main"
     description:
@@ -749,6 +763,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.0+2"
+  introduction_screen:
+    dependency: "direct main"
+    description:
+      name: introduction_screen
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
   io:
     dependency: transitive
     description:
@@ -1489,6 +1510,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  wave_image:
+    dependency: "direct main"
+    description:
+      name: wave_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   web_socket_channel:
     dependency: transitive
     description:

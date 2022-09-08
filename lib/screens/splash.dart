@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/screens/introduction_screen.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:package_info/package_info.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
+import 'package:wave_image/wave_image.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -76,17 +79,35 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       seconds: 4,
 
       //comment this
-      navigateAfterSeconds: Main(),
+      navigateAfterSeconds: IntroductionSreen(),
 
       //navigateAfterFuture: loadFromFuture(), //uncomment this
-      // title: Text(
-      //   "V " + _packageInfo.version,
-      //   style: TextStyle(
-      //     fontWeight: FontWeight.bold,
-      //     fontSize: 14.0,
-      //     color: MyTheme.dark_grey,
-      //   ),
-      // ),
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          DefaultTextStyle(
+            style: const TextStyle(
+              fontSize: 40.0,
+              fontFamily: 'Tajawal',
+            ),
+            child: AnimatedTextKit(
+              animatedTexts: [
+                TyperAnimatedText('We',
+                    textStyle: TextStyle(color: Colors.black)),
+                TyperAnimatedText('Make Groceries',
+                    textStyle: TextStyle(color: Colors.black)),
+                TyperAnimatedText('Better',
+                    textStyle: TextStyle(
+                        color: MyTheme.accent_color,
+                        fontWeight: FontWeight.bold)),
+              ],
+              onTap: () {
+                print("Tap Event");
+              },
+            ),
+          ),
+        ],
+      ),
       useLoader: false,
       // loadingText: Text(
       //   AppConfig.copyright_text,
@@ -119,17 +140,21 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       //     );
       //   },
       // ),
-      //image: Image.asset("assets/black-logo.png"),
-      image: FadeIn(
-        child: Image.asset("assets/black-logo.png"),
-        // Optional paramaters
-        duration: Duration(milliseconds: 2000),
-        curve: Curves.fastLinearToSlowEaseIn,
-      ),
-      photoSize: 60.0,
+      image: Image.asset("assets/black-logo.png"),
+      // image: WaveImage(
+      //   boarderColor: Colors.transparent,
+      //   boarderWidth: 2,
+      //   imageSize: 100,
+      //   imageUrl: 'assets/black-logo.png',
+      //   radius: 50,
+      //   speed: 200,
+      //   waveColor: MyTheme.accent_color2,
+      // ),
+      photoSize: 100.0,
       imageBackground:
-          Image.asset("assets/splash2_auto_x2.jpg", fit: BoxFit.fitHeight),
-      backgroundPhotoSize: 140.0,
+          Image.asset("assets/splash_fr.png", fit: BoxFit.fitHeight),
+      // backgroundColor: MyTheme.white,
+      backgroundPhotoSize: 100.0,
     );
   }
 }
@@ -139,7 +164,7 @@ class CustomSplashScreen extends StatefulWidget {
   final int seconds;
 
   /// App title, shown in the middle of screen in case of no image available
-  final Text title;
+  final Widget title;
 
   /// Page background color
   final Color backgroundColor;
