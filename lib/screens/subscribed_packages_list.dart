@@ -20,7 +20,7 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:one_context/one_context.dart';
-
+import 'package:intl/intl.dart' as INTL;
 class PaymentStatusOrder {
   String option_key;
 
@@ -530,8 +530,21 @@ class _SubscribedPackagesState extends State<SubscribedPackages> {
 
     }
   }
+
+  Map<String,String> daysInArabic = {
+    "Saturday": "السبت",
+    "Sunday": "الاحد",
+    "Monday": "الاثنين",
+    "Tuesday": "الثلاثاء",
+    "Wednesday": "الاربعاء",
+    "Thursday": "الخميس",
+    "Friday": "الجمعة",
+  };
+
   Future showVisitsDetails(int packageIndex) async {
     List<String> times = _packagesList[packageIndex].times.split(',');
+    List<String> dates = _packagesList[packageIndex].dates.split(',');
+
     await showDialog(
         context: context,
         builder: (context) {
@@ -568,8 +581,10 @@ class _SubscribedPackagesState extends State<SubscribedPackages> {
                                     // onChanged: (bool value) {
                                     // },
                                   ),
-                                  Text('السبت'),
-                                  Text('20-10-2022'),
+                                  app_language.$ == 'ar'?
+                                  Text(daysInArabic[INTL.DateFormat('EEEE').format(DateTime.parse(dates[index]))]):
+                                  Text(INTL.DateFormat('EEEE').format(DateTime.parse(dates[index]))),
+                                  Text(dates[index]),
                                   Text(times[index]),
                                 ],
                               );
