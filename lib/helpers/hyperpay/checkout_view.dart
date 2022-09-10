@@ -2,7 +2,9 @@ import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
+import 'package:active_ecommerce_flutter/screens/main.dart';
 import 'package:active_ecommerce_flutter/screens/order_list.dart';
+import 'package:active_ecommerce_flutter/screens/subscribed_packages_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyperpay/hyperpay.dart';
@@ -49,7 +51,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   @override
   void initState() {
     super.initState();
-    //print("orderCreateResponse${widget.order_id}");
+    print("orderCreateResponse${widget.order_type}${widget.order_id} ");
     setup();
   }
 
@@ -146,9 +148,22 @@ class _CheckoutViewState extends State<CheckoutView> {
                 backgroundColor: Colors.green,
               ),
             );
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return OrderList(from_checkout: true);
-            }));
+            if (widget.order_type == "1") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return OrderList(from_checkout: true);
+              }));
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SubscribedPackages();
+              }));
+              // final PageRouteBuilder _homeRoute = new PageRouteBuilder(
+              //   pageBuilder: (BuildContext context, _, __) {
+              //     return Main();
+              //   },
+              // );
+              // Navigator.pushAndRemoveUntil(
+              //     context, _homeRoute, (Route<dynamic> r) => false);
+            }
 
             /////// pushing
             break;
@@ -157,12 +172,21 @@ class _CheckoutViewState extends State<CheckoutView> {
         }
       } on HyperpayException catch (exception) {
         sessionCheckoutID = '';
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(exception.details ?? exception.message),
             backgroundColor: Colors.red,
           ),
         );
+
+        final PageRouteBuilder _homeRoute = new PageRouteBuilder(
+          pageBuilder: (BuildContext context, _, __) {
+            return Main();
+          },
+        );
+        Navigator.pushAndRemoveUntil(
+            context, _homeRoute, (Route<dynamic> r) => false);
       } catch (exception) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

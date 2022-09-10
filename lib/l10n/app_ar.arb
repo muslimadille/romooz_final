@@ -521,6 +521,8 @@
            "registration_commercial_registration_no_image": "صورة السجل التجاري",
     "registration_commercial_registration_no_warning_image": "ادخل صورة السجل الضريبى" ,
     "shipping_info_screen_delivery_warning": "اختر تاريخ ووقت التوصيل",
-     "shipping_info_screen_delivery_not_valid_warning": "تاريخ غير متاح"
+     "shipping_info_screen_delivery_not_valid_warning": "تاريخ غير متاح" ,
+      "skip":"تخطى",
+        "next":"التالى"
 
 }

@@ -79,6 +79,10 @@ dependencies:
   multi_select_flutter:
   loading_indicator: ^3.0.3
   flutter_datetime_picker: ^1.5.1
+  flutter_fadein: ^2.0.0
+  introduction_screen: ^3.0.2
+  animated_text_kit:
+  wave_image: ^0.0.6
  # hyperpay: ^0.0.9-alpha
 
 dev_dependencies:

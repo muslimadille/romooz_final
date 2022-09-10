@@ -113,6 +113,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     fetchRelatedProducts();
     fetchTopProducts();
   }
+
   // getCityPrice() async{
   //   var color_string = _colorList.length > 0
   //       ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
@@ -915,8 +916,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ])),
 
-
-
                 // Main Price Row
                 SliverList(
                     delegate: SliverChildListDelegate([
@@ -934,10 +933,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                   ),
                 ])),
-
-
-
-
 
                 SliverList(
                     delegate: SliverChildListDelegate([
@@ -960,8 +955,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     height: 24.0,
                   ),
                 ])),
-
-
 
                 SliverList(
                     delegate: SliverChildListDelegate([
@@ -986,7 +979,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                   ),
                 ),
-
 
                 //quantity Row
                 SliverList(

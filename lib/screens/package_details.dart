@@ -339,7 +339,9 @@ class _PackageItemsState extends State<PackageItems> {
 
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return CheckoutView(
-            order_id: subscribeProcessResponse.user_package_id.toString());
+          order_id: subscribeProcessResponse.user_package_id.toString(),
+          order_type: "2",
+        );
       }));
     }
   }
@@ -680,6 +682,9 @@ class _PackageItemsState extends State<PackageItems> {
                                   widget.packageId,
                                   chosenDatesStr,
                                   chosenTimesStr);
+
+                          print(
+                              "subscribeProcessResponse${subscribeProcessResponse.user_package_id}");
 
                           if (subscribeProcessResponse.status == false ||
                               subscribeProcessResponse.result == false) {

@@ -517,7 +517,9 @@
     "registration_commercial_registration_no_warning_image": "Enter your Commercial Registration No"  ,
     "shipping_info_screen_delivery_warning": "Select a Delivery Date & Time" ,
       "shipping_info_screen_delivery_not_valid_warning": "Unavailable Delivery Date",
-       "package_screen_proceed_to_shipping_exist":"You Already SUBSCRIBED"
+       "package_screen_proceed_to_shipping_exist":"You Already SUBSCRIBED" ,
+       "skip":"Skip",
+        "next":"Next"
 
 
 }
