@@ -126,8 +126,8 @@ class PackageItem {
   //     );
 
   factory PackageItem.fromJson(Map<String, dynamic> json) {
-    print('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
-    print(json);
+    // print('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+    // print(json);
     return PackageItem(
       id: json["id"],
       // packageId: json["package_id"],
@@ -160,13 +160,14 @@ class PackageVisit {
     this.name,
     this.startTime,
     this.endTime,
+    this.isSelected,
   });
 
   String date;
   String name;
   String startTime;
   String endTime;
-
+  bool isSelected;
 
   factory PackageVisit.fromJson(Map<String, dynamic> json) {
     print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
@@ -176,6 +177,7 @@ class PackageVisit {
       name: json['name'],
       startTime: json["start_time"],
       endTime: json["end_time"],
+      isSelected: json["is_selected"],
     );
   }
 

@@ -115,7 +115,8 @@ class _PackageItemsState extends State<PackageItems> {
     hoursList = [];
     minutesList = [];
     for (int i = 0; i < visitsList.length; i++) {
-      checkedDays.add(false);
+      checkedDays.add(visitsList[i].isSelected);
+      numberOfSelectedDays+= visitsList[i].isSelected?1:0;
       hoursList.add(int.parse(visitsList[i].startTime.substring(0,2)));
       minutesList.add(int.parse(visitsList[i].startTime.substring(3,5)));
     }
