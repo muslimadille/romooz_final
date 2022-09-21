@@ -132,12 +132,15 @@ class _LoginState extends State<Login> {
       //   return Main();
       // }));
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
+      await Navigator.push(context, MaterialPageRoute(builder: (context) {
         return Otp(
           verify_by: _login_by,
           user_id: loginResponse.user_id,
         );
       }));
+      setState(() {
+        showLoader = false;
+      });
     }
   }
 

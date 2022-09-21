@@ -386,7 +386,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
               child: Stack(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(top: 100),
+                    padding: EdgeInsets.only(top: 70),
                     child: CustomScrollView(
                       controller: _mainScrollController,
                       physics: const BouncingScrollPhysics(
@@ -1083,7 +1083,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
       child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               color: MyTheme.white,
@@ -1116,72 +1116,85 @@ class _ShippingInfoState extends State<ShippingInfo> {
               color: MyTheme.light_grey,
               height: 1,
             ),
-            pick_up_status.$
-                ? ScrollToHideWidget(
-                    child: Container(
-                        color: MyTheme.white,
-                        //MyTheme.light_grey,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            FlatButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                setState(() {
-                                  changeShippingOption(true);
-                                });
-                              },
-                              child: Container(
-                                  color: MyTheme.white,
-                                  height: 50,
-                                  width: (mWidth / 2) - 1,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .address_screen_address,
-                                    style: TextStyle(
-                                        color: _shippingOptionIsAddress
-                                            ? MyTheme.dark_grey
-                                            : MyTheme.medium_grey_50,
-                                        fontWeight: _shippingOptionIsAddress
-                                            ? FontWeight.w700
-                                            : FontWeight.normal),
-                                  )),
-                            ),
-                            Container(
-                              width: 0.5,
-                              height: 30,
-                              color: MyTheme.grey_153,
-                            ),
-                            FlatButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () {
-                                setState(() {
-                                  changeShippingOption(false);
-                                });
-                              },
-                              child: Container(
-                                  color: MyTheme.white,
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: (mWidth / 2) - 1,
-                                  child: Text(
-                                    AppLocalizations.of(context).pickup_point,
-                                    style: TextStyle(
-                                        color: _shippingOptionIsAddress
-                                            ? MyTheme.medium_grey_50
-                                            : MyTheme.dark_grey,
-                                        fontWeight: !_shippingOptionIsAddress
-                                            ? FontWeight.w700
-                                            : FontWeight.normal),
-                                  )),
-                            ),
-                          ],
-                        )),
-                    scrollController: _mainScrollController,
-                    childHeight: 40,
-                  )
-                : Container(),
+             SizedBox(height:10),
+             Text(
+              AppLocalizations.of(context)
+                  .address_screen_address,
+              style: TextStyle(
+                  color: _shippingOptionIsAddress
+                      ? MyTheme.dark_grey
+                      : MyTheme.medium_grey_50,
+                  fontWeight: _shippingOptionIsAddress
+                      ? FontWeight.w700
+                      : FontWeight.normal),
+            ),
+
+            // pick_up_status.$
+            //     ? ScrollToHideWidget(
+            //         child: Container(
+            //             color: MyTheme.white,
+            //             //MyTheme.light_grey,
+            //             child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //               children: [
+            //                 FlatButton(
+            //                   padding: EdgeInsets.zero,
+            //                   onPressed: () {
+            //                     setState(() {
+            //                       changeShippingOption(true);
+            //                     });
+            //                   },
+            //                   child: Container(
+            //                       color: MyTheme.white,
+            //                       height: 50,
+            //                       width: (mWidth / 2) - 1,
+            //                       alignment: Alignment.center,
+            //                       child: Text(
+            //                         AppLocalizations.of(context)
+            //                             .address_screen_address,
+            //                         style: TextStyle(
+            //                             color: _shippingOptionIsAddress
+            //                                 ? MyTheme.dark_grey
+            //                                 : MyTheme.medium_grey_50,
+            //                             fontWeight: _shippingOptionIsAddress
+            //                                 ? FontWeight.w700
+            //                                 : FontWeight.normal),
+            //                       )),
+            //                 ),
+            //                 Container(
+            //                   width: 0.5,
+            //                   height: 30,
+            //                   color: MyTheme.grey_153,
+            //                 ),
+            //                 FlatButton(
+            //                   padding: EdgeInsets.zero,
+            //                   onPressed: () {
+            //                     setState(() {
+            //                       changeShippingOption(false);
+            //                     });
+            //                   },
+            //                   child: Container(
+            //                       color: MyTheme.white,
+            //                       alignment: Alignment.center,
+            //                       height: 50,
+            //                       width: (mWidth / 2) - 1,
+            //                       child: Text(
+            //                         AppLocalizations.of(context).pickup_point,
+            //                         style: TextStyle(
+            //                             color: _shippingOptionIsAddress
+            //                                 ? MyTheme.medium_grey_50
+            //                                 : MyTheme.dark_grey,
+            //                             fontWeight: !_shippingOptionIsAddress
+            //                                 ? FontWeight.w700
+            //                                 : FontWeight.normal),
+            //                       )),
+            //                 ),
+            //               ],
+            //             )),
+            //         scrollController: _mainScrollController,
+            //         childHeight: 40,
+            //       )
+            //     : Container(),
             //:Container()
           ],
         ),

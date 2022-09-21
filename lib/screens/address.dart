@@ -344,6 +344,20 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   }
 
   onAddressAdd(context) async {
+
+
+    // print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+    // print(selectedPlace);
+
+
+
+    if (selectedPlace == null) {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).address_screen_state_warning, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
     print("onAddressAdd${selectedPlace_update}");
 
     var address = _addressController.text.toString();
@@ -384,7 +398,10 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         state_id: _selected_state.id,
         // city_id: _selected_city.id,
         postal_code: postal_code,
-        phone: phone);
+        phone: phone,
+        latitude: selectedPlace.geometry.location.lat,
+        longitude: selectedPlace.geometry.location.lng
+    );
 
     if (addressAddResponse.result == false) {
       ToastComponent.showDialog(addressAddResponse.message, context,
@@ -1153,7 +1170,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       ),
 
                       Container(
-                        height: 250,
+                        height: 400,
                         child: placePickerMethod(context),
                       ),
                     ],
@@ -1376,100 +1393,131 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       //autocompleteLanguage: "ko",
       //region: 'au',
       //selectInitialPosition: true,
-      selectedPlaceWidgetBuilder:
-          (_, selectedPlace, state, isSearchBarFocused) {
-        print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-        selectedPlace_update = selectedPlace;
 
-        print("-------------");
-        // onTapPickHere(selectedPlace);
-        /*
-      if(!isSearchBarFocused && state != SearchingState.Searching){
-        ToastComponent.showDialog("Hello", context,
-            gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      }*/
+
+      selectedPlaceWidgetBuilder: (_, _selectedPlace, state, isSearchBarFocused) {
         return isSearchBarFocused
             ? Container()
-            : Visibility(
-                visible: false,
-                child: FloatingCard(
-                  height: 50,
-                  bottomPosition: 120.0,
-                  // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-                  leftPosition: 0.0,
-                  rightPosition: 0.0,
-                  width: 500,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: const Radius.circular(8.0),
-                    bottomLeft: const Radius.circular(8.0),
-                    topRight: const Radius.circular(8.0),
-                    bottomRight: const Radius.circular(8.0),
-                  ),
-                  child: state == SearchingState.Searching
-                      ? Center(
-                          child: Text(
-                          AppLocalizations.of(context)
-                              .map_location_screen_calculating,
-                          style: TextStyle(color: MyTheme.font_grey),
-                        ))
-                      : Visibility(
-                          visible: false,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 2.0, right: 2.0),
-                                        child: Text(
-                                          selectedPlace.formattedAddress,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: MyTheme.medium_grey),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: FlatButton(
-                                    color: MyTheme.accent_color,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: const BorderRadius.only(
-                                      topLeft: const Radius.circular(4.0),
-                                      bottomLeft: const Radius.circular(4.0),
-                                      topRight: const Radius.circular(4.0),
-                                      bottomRight: const Radius.circular(4.0),
-                                    )),
-                                    child: Text(
-                                      AppLocalizations.of(context)
-                                          .map_location_screen_pick_here,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: () {
-                                      // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-                                      //            this will override default 'Select here' Button.
-                                      /*print("do something with [selectedPlace] data");
-                                    print(selectedPlace.formattedAddress);
-                                    print(selectedPlace.geometry.location.lat);
-                                    print(selectedPlace.geometry.location.lng);*/
-
-                                      onTapPickHere(selectedPlace);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                ),
-              );
+        // Use FloatingCard or just create your own Widget.
+            : FloatingCard(
+          bottomPosition: 0.0,    // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+          leftPosition: 0.0,
+          rightPosition: 0.0,
+          width: 500,
+          borderRadius: BorderRadius.circular(12.0),
+          child: state == SearchingState.Searching ?
+          Center(child: CircularProgressIndicator()) :
+          RaisedButton(
+            child: Text(AppLocalizations.of(context).map_location_screen_pick_here),
+            onPressed: () {
+            // print('1111111111111111111111111111111111112222');
+            // print(_selectedPlace.geometry.location.lat);
+            // print(_selectedPlace.geometry.location.lng);
+            // print(_selectedPlace);
+            selectedPlace = _selectedPlace;
+            // print("do something with [selectedPlace] data");
+            },),
+        );
       },
+
+
+      // selectedPlaceWidgetBuilder:
+      //     (_, selectedPlace, state, isSearchBarFocused) {
+      //   print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+      //   selectedPlace_update = selectedPlace;
+      //
+      //   print("-------------");
+      //   // onTapPickHere(selectedPlace);
+      //   /*
+      // if(!isSearchBarFocused && state != SearchingState.Searching){
+      //   ToastComponent.showDialog("Hello", context,
+      //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      // }*/
+      //   return isSearchBarFocused
+      //       ? Container()
+      //       : Visibility(
+      //           visible: false,
+      //           child: FloatingCard(
+      //             height: 50,
+      //             bottomPosition: 120.0,
+      //             // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+      //             leftPosition: 0.0,
+      //             rightPosition: 0.0,
+      //             width: 500,
+      //             borderRadius: const BorderRadius.only(
+      //               topLeft: const Radius.circular(8.0),
+      //               bottomLeft: const Radius.circular(8.0),
+      //               topRight: const Radius.circular(8.0),
+      //               bottomRight: const Radius.circular(8.0),
+      //             ),
+      //             child: state == SearchingState.Searching
+      //                 ? Center(
+      //                     child: Text(
+      //                     AppLocalizations.of(context)
+      //                         .map_location_screen_calculating,
+      //                     style: TextStyle(color: MyTheme.font_grey),
+      //                   ))
+      //                 : Visibility(
+      //                     visible: false,
+      //                     child: Padding(
+      //                       padding: const EdgeInsets.all(8.0),
+      //                       child: Row(
+      //                         children: [
+      //                           Expanded(
+      //                             flex: 2,
+      //                             child: Container(
+      //                               child: Center(
+      //                                 child: Padding(
+      //                                   padding: const EdgeInsets.only(
+      //                                       left: 2.0, right: 2.0),
+      //                                   child: Text(
+      //                                     selectedPlace.formattedAddress,
+      //                                     maxLines: 2,
+      //                                     style: TextStyle(
+      //                                         color: MyTheme.medium_grey),
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                             ),
+      //                           ),
+      //                           Expanded(
+      //                             flex: 1,
+      //                             child: FlatButton(
+      //                               color: MyTheme.accent_color,
+      //                               shape: RoundedRectangleBorder(
+      //                                   borderRadius: const BorderRadius.only(
+      //                                 topLeft: const Radius.circular(4.0),
+      //                                 bottomLeft: const Radius.circular(4.0),
+      //                                 topRight: const Radius.circular(4.0),
+      //                                 bottomRight: const Radius.circular(4.0),
+      //                               )),
+      //                               child: Text(
+      //                                 AppLocalizations.of(context)
+      //                                     .map_location_screen_pick_here,
+      //                                 style: TextStyle(color: Colors.white),
+      //                               ),
+      //                               onPressed: () {
+      //                                 // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+      //                                 //            this will override default 'Select here' Button.
+      //                                 /*print("do something with [selectedPlace] data");
+      //                               print(selectedPlace.formattedAddress);
+      //                               print(selectedPlace.geometry.location.lat);
+      //                               print(selectedPlace.geometry.location.lng);*/
+      //
+      //                                 onTapPickHere(selectedPlace);
+      //                               },
+      //                             ),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //                   ),
+      //           ),
+      //         );
+      // },
+
+
+
       pinBuilder: (context, state) {
         if (state == PinState.Idle) {
           return Image.asset(

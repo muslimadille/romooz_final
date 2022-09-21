@@ -40,7 +40,11 @@ class AddressRepository {
       @required int state_id,
       // @required int city_id,
       @required String postal_code,
-      @required String phone}) async {
+      @required String phone,
+      @required double latitude,
+      @required double longitude
+
+      }) async {
     var post_body = jsonEncode({
       // "user_id": "${user_id.$}",
       "id": "${user_id.$}",
@@ -50,10 +54,12 @@ class AddressRepository {
       // "city_id": "$city_id",
       "postal_code": "$postal_code",
       "phone": "$phone",
-      "latitude": 121.321,
-      "longitude": 21.3213,
+      "latitude": "$latitude",
+      "longitude": "$longitude",
     });
-
+    print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww');
+    print(latitude.toString());
+    print(longitude.toString());
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/user/shipping/create");
     final response = await http.post(url,
