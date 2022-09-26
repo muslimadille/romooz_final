@@ -344,24 +344,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   }
 
   onAddressAdd(context) async {
-
-
-    // print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
-    // print(selectedPlace);
-
-
-
-    if (selectedPlace == null) {
-      ToastComponent.showDialog(
-          AppLocalizations.of(context).address_screen_state_warning, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
-    }
-
-    print("onAddressAdd${selectedPlace_update}");
-
     var address = _addressController.text.toString();
-    var postal_code = _postalCodeController.text.toString();
+    var postal_code = "";
     var phone = _phoneController.text.toString();
 
     if (address == "") {
@@ -371,26 +355,31 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       return;
     }
 
-    // if (_selected_country == null) {
-    //   ToastComponent.showDialog(
-    //       AppLocalizations.of(context).address_screen_country_warning, context,
-    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-    //   return;
-    // }
-
     if (_selected_state == null) {
       ToastComponent.showDialog(
-          AppLocalizations.of(context).address_screen_state_warning, context,
+          AppLocalizations.of(context).address_screen_country_warning, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
 
-    // if (_selected_city == null) {
-    //   ToastComponent.showDialog(
-    //       AppLocalizations.of(context).address_screen_city_warning, context,
-    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-    //   return;
-    // }
+    if (phone == "") {
+      ToastComponent.showDialog(
+          AppLocalizations.of(context).address_screen_enter_phone ==
+                  "أدخل التليفون"
+              ? "أدخل الجوال"
+              : AppLocalizations.of(context).address_screen_enter_phone,
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+      return;
+    }
+
+    if (selectedPlace == null) {
+      ToastComponent.showDialog(
+          "قم بتحديد الموقع ثم اضغط علي - التقط هنا -", context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
 
     var addressAddResponse = await AddressRepository().getAddressAddResponse(
         address: address,
@@ -400,8 +389,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         postal_code: postal_code,
         phone: phone,
         latitude: selectedPlace.geometry.location.lat,
-        longitude: selectedPlace.geometry.location.lng
-    );
+        longitude: selectedPlace.geometry.location.lng);
 
     if (addressAddResponse.result == false) {
       ToastComponent.showDialog(addressAddResponse.message, context,
@@ -795,8 +783,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                            // "${AppLocalizations.of(context).address_screen_state} *",
-                            "المدينة",
+                            "${AppLocalizations.of(context).shipping_info_screen_city} *",
+                            // "المدينة",
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 12)),
                       ),
@@ -826,7 +814,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                 child: Center(
                                     child: Text(
                                         AppLocalizations.of(context)
-                                            .address_screen_loading_states,
+                                            .address_screen_loading_countries,
                                         style: TextStyle(
                                             color: MyTheme.medium_grey))),
                               );
@@ -866,7 +854,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               },
                               decoration: InputDecoration(
                                   hintText: AppLocalizations.of(context)
-                                      .address_screen_enter_state,
+                                      .address_screen_enter_city,
                                   hintStyle: TextStyle(
                                       fontSize: 12.0,
                                       color: MyTheme.textfield_grey),
@@ -1083,54 +1071,58 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       //     ),
                       //   ),
                       // ),
+                      //
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 8.0),
+                      //   child: Text(
+                      //       AppLocalizations.of(context)
+                      //           .address_screen_postal_code,
+                      //       style: TextStyle(
+                      //           color: MyTheme.font_grey, fontSize: 12)),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 16.0),
+                      //   child: Container(
+                      //     height: 40,
+                      //     child: TextField(
+                      //       controller: _postalCodeController,
+                      //       autofocus: false,
+                      //       decoration: InputDecoration(
+                      //           hintText: AppLocalizations.of(context)
+                      //               .address_screen_enter_postal_code,
+                      //           hintStyle: TextStyle(
+                      //               fontSize: 12.0,
+                      //               color: MyTheme.textfield_grey),
+                      //           enabledBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: MyTheme.textfield_grey,
+                      //                 width: 0.5),
+                      //             borderRadius: const BorderRadius.all(
+                      //               const Radius.circular(8.0),
+                      //             ),
+                      //           ),
+                      //           focusedBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: MyTheme.textfield_grey,
+                      //                 width: 1.0),
+                      //             borderRadius: const BorderRadius.all(
+                      //               const Radius.circular(8.0),
+                      //             ),
+                      //           ),
+                      //           contentPadding:
+                      //               EdgeInsets.symmetric(horizontal: 8.0)),
+                      //     ),
+                      //   ),
+                      // ),
 
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                            AppLocalizations.of(context)
-                                .address_screen_postal_code,
-                            style: TextStyle(
-                                color: MyTheme.font_grey, fontSize: 12)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          height: 40,
-                          child: TextField(
-                            controller: _postalCodeController,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)
-                                    .address_screen_enter_postal_code,
-                                hintStyle: TextStyle(
-                                    fontSize: 12.0,
-                                    color: MyTheme.textfield_grey),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: MyTheme.textfield_grey,
-                                      width: 0.5),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(8.0),
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: MyTheme.textfield_grey,
-                                      width: 1.0),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(8.0),
-                                  ),
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 8.0)),
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                            AppLocalizations.of(context).address_screen_phone,
+                            AppLocalizations.of(context).address_screen_phone ==
+                                    "التليفون"
+                                ? "الجوال"
+                                : AppLocalizations.of(context)
+                                    .address_screen_phone,
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 12)),
                       ),
@@ -1143,7 +1135,11 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                             autofocus: false,
                             decoration: InputDecoration(
                                 hintText: AppLocalizations.of(context)
-                                    .address_screen_enter_phone,
+                                            .address_screen_enter_phone ==
+                                        "أدخل التليفون"
+                                    ? "أدخل الجوال"
+                                    : AppLocalizations.of(context)
+                                        .address_screen_enter_phone,
                                 hintStyle: TextStyle(
                                     fontSize: 12.0,
                                     color: MyTheme.textfield_grey),
@@ -1225,7 +1221,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         onPressed: () async {
                           await onAddressAdd(context);
                           // Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context).pop();
+                          // Navigator.of(context).pop();
                         },
                       ),
                     )
@@ -1261,9 +1257,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       //region: 'au',
       //selectInitialPosition: true,
       selectedPlaceWidgetBuilder:
-          (_, selectedPlace, state, isSearchBarFocused) {
+          (_, _selectedPlace, state, isSearchBarFocused) {
         print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-        selectedPlace_update = selectedPlace;
+        // selectedPlace_update = selectedPlace;
 
         print("-------------");
         // onTapPickHere(selectedPlace);
@@ -1342,8 +1338,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                     print(selectedPlace.formattedAddress);
                                     print(selectedPlace.geometry.location.lat);
                                     print(selectedPlace.geometry.location.lng);*/
-
-                                      onTapPickHere(selectedPlace);
+                                      selectedPlace = _selectedPlace;
+                                      // onTapPickHere(selectedPlace);
                                     },
                                   ),
                                 ),
@@ -1394,32 +1390,34 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       //region: 'au',
       //selectInitialPosition: true,
 
-
-      selectedPlaceWidgetBuilder: (_, _selectedPlace, state, isSearchBarFocused) {
+      selectedPlaceWidgetBuilder:
+          (_, _selectedPlace, state, isSearchBarFocused) {
         return isSearchBarFocused
             ? Container()
-        // Use FloatingCard or just create your own Widget.
+            // Use FloatingCard or just create your own Widget.
             : FloatingCard(
-          bottomPosition: 0.0,    // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-          leftPosition: 0.0,
-          rightPosition: 0.0,
-          width: 500,
-          borderRadius: BorderRadius.circular(12.0),
-          child: state == SearchingState.Searching ?
-          Center(child: CircularProgressIndicator()) :
-          RaisedButton(
-            child: Text(AppLocalizations.of(context).map_location_screen_pick_here),
-            onPressed: () {
-            // print('1111111111111111111111111111111111112222');
-            // print(_selectedPlace.geometry.location.lat);
-            // print(_selectedPlace.geometry.location.lng);
-            // print(_selectedPlace);
-            selectedPlace = _selectedPlace;
-            // print("do something with [selectedPlace] data");
-            },),
-        );
+                bottomPosition:
+                    0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                leftPosition: 0.0,
+                rightPosition: 0.0,
+                width: 500,
+                borderRadius: BorderRadius.circular(12.0),
+                child: state == SearchingState.Searching
+                    ? Center(child: CircularProgressIndicator())
+                    : RaisedButton(
+                        child: Text(AppLocalizations.of(context)
+                            .map_location_screen_pick_here),
+                        onPressed: () {
+                          // print('1111111111111111111111111111111111112222');
+                          // print(_selectedPlace.geometry.location.lat);
+                          // print(_selectedPlace.geometry.location.lng);
+                          // print(_selectedPlace);
+                          selectedPlace = _selectedPlace;
+                          // print("do something with [selectedPlace] data");
+                        },
+                      ),
+              );
       },
-
 
       // selectedPlaceWidgetBuilder:
       //     (_, selectedPlace, state, isSearchBarFocused) {
@@ -1515,8 +1513,6 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       //           ),
       //         );
       // },
-
-
 
       pinBuilder: (context, state) {
         if (state == PinState.Idle) {
@@ -1764,7 +1760,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               },
                               decoration: InputDecoration(
                                   hintText: AppLocalizations.of(context)
-                                      .address_screen_enter_state,
+                                      .address_screen_loading_countries,
                                   hintStyle: TextStyle(
                                       fontSize: 12.0,
                                       color: MyTheme.textfield_grey),
@@ -1984,49 +1980,49 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       //   ),
                       // ),
 
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                            AppLocalizations.of(context)
-                                .address_screen_postal_code,
-                            style: TextStyle(
-                                color: MyTheme.font_grey, fontSize: 12)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          height: 40,
-                          child: TextField(
-                            controller:
-                                _postalCodeControllerListForUpdate[index],
-                            autofocus: false,
-                            decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)
-                                    .address_screen_enter_postal_code,
-                                hintStyle: TextStyle(
-                                    fontSize: 12.0,
-                                    color: MyTheme.textfield_grey),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: MyTheme.textfield_grey,
-                                      width: 0.5),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(8.0),
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: MyTheme.textfield_grey,
-                                      width: 1.0),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(8.0),
-                                  ),
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 8.0)),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 8.0),
+                      //   child: Text(
+                      //       AppLocalizations.of(context)
+                      //           .address_screen_postal_code,
+                      //       style: TextStyle(
+                      //           color: MyTheme.font_grey, fontSize: 12)),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(bottom: 16.0),
+                      //   child: Container(
+                      //     height: 40,
+                      //     child: TextField(
+                      //       controller:
+                      //           _postalCodeControllerListForUpdate[index],
+                      //       autofocus: false,
+                      //       decoration: InputDecoration(
+                      //           hintText: AppLocalizations.of(context)
+                      //               .address_screen_enter_postal_code,
+                      //           hintStyle: TextStyle(
+                      //               fontSize: 12.0,
+                      //               color: MyTheme.textfield_grey),
+                      //           enabledBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: MyTheme.textfield_grey,
+                      //                 width: 0.5),
+                      //             borderRadius: const BorderRadius.all(
+                      //               const Radius.circular(8.0),
+                      //             ),
+                      //           ),
+                      //           focusedBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color: MyTheme.textfield_grey,
+                      //                 width: 1.0),
+                      //             borderRadius: const BorderRadius.all(
+                      //               const Radius.circular(8.0),
+                      //             ),
+                      //           ),
+                      //           contentPadding:
+                      //               EdgeInsets.symmetric(horizontal: 8.0)),
+                      //     ),
+                      //   ),
+                      // ),
 
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
@@ -2208,6 +2204,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   }
 
   GestureDetector buildAddressItemCard(index) {
+    print('111111111111111111111111111');
+    print(_shippingAddressList[index]);
     return GestureDetector(
       onDoubleTap: () {
         if (_default_shipping_address != _shippingAddressList[index].id) {
@@ -2223,308 +2221,126 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
           borderRadius: BorderRadius.circular(8.0),
         ),
         elevation: 0.0,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 75,
-                          child: Text(
-                            AppLocalizations.of(context).address_screen_address,
-                            style: TextStyle(
-                              color: MyTheme.grey_153,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 175,
-                          child: Text(
-                            _shippingAddressList[index].address,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: MyTheme.dark_grey,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
+                  Container(
+                    width: 75,
+                    child: Text(
+                      AppLocalizations.of(context).address_screen_address,
+                      style: TextStyle(
+                        color: MyTheme.grey_153,
+                      ),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(bottom: 8.0),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Container(
-                  //         width: 75,
-                  //         child: Text(
-                  //           AppLocalizations.of(context).address_screen_city,
-                  //           style: TextStyle(
-                  //             color: MyTheme.grey_153,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       Container(
-                  //         width: 200,
-                  //         child: Text(
-                  //           _shippingAddressList[index].city_name,
-                  //           maxLines: 2,
-                  //           style: TextStyle(
-                  //               color: MyTheme.dark_grey,
-                  //               fontWeight: FontWeight.w600),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 75,
-                          child: Text(
-                            AppLocalizations.of(context).address_screen_state,
-                            style: TextStyle(
-                              color: MyTheme.grey_153,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            _shippingAddressList[index].state_name,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: MyTheme.dark_grey,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
+                  Container(
+                    width: 175,
+                    child: Text(
+                      _shippingAddressList[index].address,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: MyTheme.dark_grey,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(bottom: 8.0),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Container(
-                  //         width: 75,
-                  //         child: Text(
-                  //           AppLocalizations.of(context).address_screen_country,
-                  //           style: TextStyle(
-                  //             color: MyTheme.grey_153,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       Container(
-                  //         width: 200,
-                  //         child: Text(
-                  //           _shippingAddressList[index].country_name,
-                  //           maxLines: 2,
-                  //           style: TextStyle(
-                  //               color: MyTheme.dark_grey,
-                  //               fontWeight: FontWeight.w600),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 75,
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .address_screen_postal_code,
-                            style: TextStyle(
-                              color: MyTheme.grey_153,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            _shippingAddressList[index].postal_code,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: MyTheme.dark_grey,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 75,
-                          child: Text(
-                            AppLocalizations.of(context).address_screen_phone,
-                            style: TextStyle(
-                              color: MyTheme.grey_153,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            _shippingAddressList[index].phone,
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: MyTheme.dark_grey,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
+                  Spacer(),
+                  InkWell(
+                    onTap: () {
+                      buildShowUpdateFormDialog(context, index);
+                    },
+                    child: Icon(
+                      Icons.edit,
+                      color: MyTheme.dark_grey,
+                      size: 16,
                     ),
                   ),
                 ],
               ),
-            ),
-            app_language_rtl.$
-                ? Positioned(
-                    left: 0.0,
-                    top: 0.0,
-                    child: InkWell(
-                      onTap: () {
-                        buildShowUpdateFormDialog(context, index);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 16.0, left: 16.0, right: 16.0, bottom: 12.0),
-                        child: Icon(
-                          Icons.edit,
-                          color: MyTheme.dark_grey,
-                          size: 16,
-                        ),
-                      ),
-                    ))
-                : Positioned(
-                    right: 0.0,
-                    top: 0.0,
-                    child: InkWell(
-                      onTap: () {
-                        buildShowUpdateFormDialog(context, index);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 16.0, left: 16.0, right: 16.0, bottom: 12.0),
-                        child: Icon(
-                          Icons.edit,
-                          color: MyTheme.dark_grey,
-                          size: 16,
-                        ),
-                      ),
-                    )),
-            app_language_rtl.$
-                ? Positioned(
-                    left: 0,
-                    top: 40.0,
-                    child: InkWell(
-                      onTap: () {
-                        onPressDelete(_shippingAddressList[index].id);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
-                        child: Icon(
-                          Icons.delete_forever_outlined,
-                          color: MyTheme.dark_grey,
-                          size: 16,
-                        ),
-                      ),
-                    ))
-                : Positioned(
-                    right: 0,
-                    top: 40.0,
-                    child: InkWell(
-                      onTap: () {
-                        onPressDelete(_shippingAddressList[index].id);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 12.0, left: 16.0, right: 16.0, bottom: 16.0),
-                        child: Icon(
-                          Icons.delete_forever_outlined,
-                          color: MyTheme.dark_grey,
-                          size: 16,
-                        ),
+              SizedBox(height: 5,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 75,
+                    child: Text(
+                      AppLocalizations.of(context).address_screen_state,
+                      style: TextStyle(
+                        color: MyTheme.grey_153,
                       ),
                     ),
                   ),
-            OtherConfig.USE_GOOGLE_MAP
-                ? app_language_rtl.$
-                    ? Positioned(
-                        left: 0,
-                        top: 80.0,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return MapLocation(
-                                  address: _shippingAddressList[index]);
-                            })).then((value) {
-                              onPopped(value);
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 12.0,
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: 16.0),
-                            child: Icon(
-                              Icons.location_on,
-                              color: MyTheme.dark_grey,
-                              size: 16,
-                            ),
-                          ),
-                        ))
-                    : Positioned(
-                        right: 0,
-                        top: 80.0,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return MapLocation(
-                                  address: _shippingAddressList[index]);
-                            })).then((value) {
-                              onPopped(value);
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 12.0,
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: 16.0),
-                            child: Icon(
-                              Icons.location_on,
-                              color: MyTheme.dark_grey,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      )
-                : Container(),
-          ],
+                  Container(
+                    width: 200,
+                    child: Text(
+                      _shippingAddressList[index].state_name,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: MyTheme.dark_grey,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {
+                      onPressDelete(_shippingAddressList[index].id);
+                    },
+                    child: Icon(
+                      Icons.delete_forever_outlined,
+                      color: MyTheme.dark_grey,
+                      size: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 75,
+                    child: Text(
+                      AppLocalizations.of(context).address_screen_phone,
+                      style: TextStyle(
+                        color: MyTheme.grey_153,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 200,
+                    child: Text(
+                      _shippingAddressList[index].phone,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: MyTheme.dark_grey,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return MapLocation(
+                                address: _shippingAddressList[index]);
+                          })).then((value) {
+                        onPopped(value);
+                      });
+                    },
+                    child: Icon(
+                      Icons.location_on,
+                      color: MyTheme.dark_grey,
+                      size: 16,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

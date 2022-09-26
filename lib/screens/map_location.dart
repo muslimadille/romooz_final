@@ -65,7 +65,15 @@ class MapLocationState extends State<MapLocation>
     setState(() {});
   }
 
-  onTapPickHere(selectedPlace) async {
+  onTapPickHere(_selectedPlace) async {
+    selectedPlace = _selectedPlace;
+    print('111111111111111111111111111111111111111111111111111');
+    if (selectedPlace == null) {
+      ToastComponent.showDialog(
+          "قم بتحديد الموقع ثم اضغط علي - التقط هنا -", context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
     var addressUpdateLocationResponse = await AddressRepository()
         .getAddressUpdateLocationResponse(
             widget.address.id,
@@ -108,9 +116,9 @@ class MapLocationState extends State<MapLocation>
       //region: 'au',
       //selectInitialPosition: true,
       selectedPlaceWidgetBuilder:
-          (_, selectedPlace, state, isSearchBarFocused) {
+          (_, _selectedPlace, state, isSearchBarFocused) {
         print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-        print(selectedPlace.toString());
+        print(_selectedPlace.toString());
         print("-------------");
         /*
         if(!isSearchBarFocused && state != SearchingState.Searching){
@@ -151,7 +159,7 @@ class MapLocationState extends State<MapLocation>
                                     padding: const EdgeInsets.only(
                                         left: 2.0, right: 2.0),
                                     child: Text(
-                                      selectedPlace.formattedAddress,
+                                      _selectedPlace.formattedAddress,
                                       maxLines: 2,
                                       style:
                                           TextStyle(color: MyTheme.medium_grey),
@@ -183,8 +191,7 @@ class MapLocationState extends State<MapLocation>
                                   print(selectedPlace.formattedAddress);
                                   print(selectedPlace.geometry.location.lat);
                                   print(selectedPlace.geometry.location.lng);*/
-
-                                  onTapPickHere(selectedPlace);
+                                  onTapPickHere(_selectedPlace);
                                 },
                               ),
                             ),

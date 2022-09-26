@@ -282,7 +282,7 @@ class _PackagesListState extends State<PackagesList> {
                   mainAxisSpacing: 10,
                   childAspectRatio: 0.618),
               padding: EdgeInsets.all(8),
-              physics: NeverScrollableScrollPhysics(),
+              // physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 // 3

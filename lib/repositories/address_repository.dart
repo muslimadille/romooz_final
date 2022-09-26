@@ -110,8 +110,8 @@ class AddressRepository {
     @required double longitude,
   ) async {
     var post_body = jsonEncode({
-      "id": "${id}",
-      "user_id": "${user_id.$}",
+      "address_id": "${id}",
+      // "user_id": "${user_id.$}",
       "latitude": "$latitude",
       "longitude": "$longitude"
     });
@@ -126,6 +126,8 @@ class AddressRepository {
         },
         body: post_body);
 
+    print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwww');
+    print(response.body);
     return addressUpdateLocationResponseFromJson(response.body);
   }
 
