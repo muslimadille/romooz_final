@@ -2027,7 +2027,11 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                            AppLocalizations.of(context).address_screen_phone,
+                            AppLocalizations.of(context).address_screen_phone ==
+                                "التليفون"
+                                ? "الجوال"
+                                : AppLocalizations.of(context)
+                                .address_screen_phone,
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 12)),
                       ),
@@ -2039,8 +2043,10 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                             controller: _phoneControllerListForUpdate[index],
                             autofocus: false,
                             decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)
-                                    .address_screen_enter_phone,
+                                hintText: AppLocalizations.of(context).address_screen_enter_phone ==
+                                    "أدخل التليفون"
+                                    ? "أدخل الجوال"
+                                    : AppLocalizations.of(context).address_screen_enter_phone,
                                 hintStyle: TextStyle(
                                     fontSize: 12.0,
                                     color: MyTheme.textfield_grey),
@@ -2261,7 +2267,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 10,),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -2297,14 +2303,18 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 10,),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 75,
                     child: Text(
-                      AppLocalizations.of(context).address_screen_phone,
+                      AppLocalizations.of(context).address_screen_phone ==
+                          "التليفون"
+                          ? "الجوال"
+                          : AppLocalizations.of(context)
+                          .address_screen_phone,
                       style: TextStyle(
                         color: MyTheme.grey_153,
                       ),
