@@ -814,7 +814,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                 child: Center(
                                     child: Text(
                                         AppLocalizations.of(context)
-                                            .address_screen_loading_countries,
+                                            .address_screen_loading_cities,
                                         style: TextStyle(
                                             color: MyTheme.medium_grey))),
                               );
@@ -1685,7 +1685,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
-                            "${AppLocalizations.of(context).address_screen_state} *",
+                            "${AppLocalizations.of(context).shipping_info_screen_city} *",
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 12)),
                       ),
@@ -1719,7 +1719,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                 child: Center(
                                     child: Text(
                                         AppLocalizations.of(context)
-                                            .address_screen_loading_states,
+                                            .address_screen_loading_cities,
                                         style: TextStyle(
                                             color: MyTheme.medium_grey))),
                               );
@@ -1760,7 +1760,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                               },
                               decoration: InputDecoration(
                                   hintText: AppLocalizations.of(context)
-                                      .address_screen_loading_countries,
+                                      .address_screen_loading_cities,
                                   hintStyle: TextStyle(
                                       fontSize: 12.0,
                                       color: MyTheme.textfield_grey),
@@ -2274,7 +2274,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                   Container(
                     width: 75,
                     child: Text(
-                      AppLocalizations.of(context).address_screen_state,
+                      AppLocalizations.of(context).address_screen_city,
                       style: TextStyle(
                         color: MyTheme.grey_153,
                       ),

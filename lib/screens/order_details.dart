@@ -433,18 +433,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ])),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 75,
-                        ),
-                        buildBottomSection()
-                      ],
-                    ),
-                  )
+                      _orderDetails != null?
+                      buildBottomSection():
+                      ShimmerHelper().buildBasicShimmer(height: 100.0),
                 ])),
                 SliverList(
                     delegate:
@@ -458,144 +449,114 @@ class _OrderDetailsState extends State<OrderDetails> {
   }
 
   buildBottomSection() {
-    return Expanded(
-      child: _orderDetails != null
-          ? Column(
+    return Padding(
+        padding: const EdgeInsets.all(25),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .order_details_screen_sub_total,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: MyTheme.font_grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          _orderDetails.subtotal,
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    )),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .order_details_screen_tax,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: MyTheme.font_grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          _orderDetails.tax,
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    )),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .order_details_screen_shipping_cost,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: MyTheme.font_grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          _orderDetails.shipping_cost,
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    )),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .order_details_screen_discount,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: MyTheme.font_grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          _orderDetails.coupon_discount,
-                          style: TextStyle(
-                              color: MyTheme.font_grey,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    )),
-                Divider(),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .order_details_screen_grand_total,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: MyTheme.font_grey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          _orderDetails.grand_total,
-                          style: TextStyle(
-                              color: MyTheme.accent_color,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    )),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)
+                          .order_details_screen_sub_total,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)
+                          .order_details_screen_tax,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)
+                          .order_details_screen_shipping_cost,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)
+                          .order_details_screen_discount,
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      _orderDetails.subtotal,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      _orderDetails.tax,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      _orderDetails.shipping_cost,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      _orderDetails.coupon_discount,
+                      style: TextStyle(
+                          color: MyTheme.font_grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)
+                      .order_details_screen_grand_total,
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                      color: MyTheme.font_grey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                ),
+                Spacer(),
+                Text(
+                  _orderDetails.grand_total,
+                  style: TextStyle(
+                      color: MyTheme.accent_color,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                ),
               ],
             )
-          : ShimmerHelper().buildBasicShimmer(height: 100.0),
+          ],
+        ),
     );
   }
 
