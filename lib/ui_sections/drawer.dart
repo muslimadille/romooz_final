@@ -10,12 +10,14 @@ import 'package:active_ecommerce_flutter/screens/order_list.dart';
 import 'package:active_ecommerce_flutter/screens/wishlist.dart';
 
 import 'package:active_ecommerce_flutter/screens/login.dart';
-import 'package:active_ecommerce_flutter/screens/messenger_list.dart';
+import 'package:active_ecommerce_flutter/screens/contact_us.dart';
 import 'package:active_ecommerce_flutter/screens/wallet.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
 
 class MainDrawer extends StatefulWidget {
   const MainDrawer({
@@ -203,15 +205,14 @@ class _MainDrawerState extends State<MainDrawer> {
                                   height: 16,
                                   color: Color.fromRGBO(153, 153, 153, 1)),
                               title: Text(
-                                  AppLocalizations.of(context)
-                                      .main_drawer_messages,
+                                  app_language.$ == 'ar' ? 'تواصل معنا' : 'Contact Us',
                                   style: TextStyle(
                                       color: Color.fromRGBO(153, 153, 153, 1),
                                       fontSize: 14)),
                               onTap: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return MessengerList();
+                                  return ContactUsPage();
                                 }));
                               }),
                           wallet_system_status.$

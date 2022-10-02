@@ -20,7 +20,8 @@ class AppConfig {
 
   //configure this
   // static const DOMAIN_PATH = "192.168.1.112/ecommerce"; //localhost
-  static const DOMAIN_PATH = "adventuresofegypt.com"; //inside a folder
+  // static const DOMAIN_PATH = "adventuresofegypt.com"; //inside a folder
+  static const DOMAIN_PATH = "romooz.tech"; //inside a folder
   //static const DOMAIN_PATH = "mydomain.com"; // directly inside the public folder
 
   //do not configure these below

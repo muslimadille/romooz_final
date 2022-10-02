@@ -411,6 +411,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   addToCart({mode, context = null, snackbar = null}) async {
+    print('ccccccccccccccccccccccccccccccc');
     if (is_logged_in.$ == false) {
       // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
       //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);

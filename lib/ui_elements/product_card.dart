@@ -10,6 +10,7 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class ProductCard extends StatefulWidget {
   int id;
@@ -34,6 +35,12 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+
+  bool added = false;
+  int quantity = 0;
+  // int upperLimit;
+  // int lowerLimit;
+
   @override
   Widget build(BuildContext context) {
     // print((MediaQuery.of(context).size.width - 48) / );
@@ -127,7 +134,7 @@ class _ProductCardState extends State<ProductCard> {
                       ],
                     ),
                   ),
-                  // suffixIcon: Container(
+                  quantity==0?
                   Container(
                     width: 30,
                     height: 30,
@@ -156,56 +163,123 @@ class _ProductCardState extends State<ProductCard> {
                             return;
                           }
 
-                          // print(widget.id);
-                          // print(_variant);
-                          // print(user_id.$);
-                          // print(_quantity);
 
-                          var cartAddResponse = await CartRepository()
-                              .getCartAddResponse(
-                                  widget.id, "", user_id.$, "1");
 
-                          if (cartAddResponse.result == false) {
-                            ToastComponent.showDialog(
-                                cartAddResponse.message, context,
-                                gravity: Toast.CENTER,
-                                duration: Toast.LENGTH_LONG);
-                            return;
-                          } else {
-                            // ToastComponent.showDialog(cartAddResponse.message, context,
-                            //     gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                AppLocalizations.of(context)
-                                    .product_details_screen_snackbar_added_to_cart,
-                                style: TextStyle(color: MyTheme.font_grey),
-                              ),
-                              backgroundColor: MyTheme.soft_accent_color,
-                              duration: const Duration(seconds: 3),
-                              action: SnackBarAction(
-                                label: AppLocalizations.of(context)
-                                    .product_details_screen_snackbar_show_cart,
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return Cart(has_bottomnav: false);
-                                  }));
-                                },
-                                textColor: MyTheme.accent_color,
-                                disabledTextColor: Colors.grey,
-                              ),
-                            ));
-                            // ,
-                            //  if (snackbar != null && context != null) {
-                            //    Scaffold.of(context).showSnackBar(snackbar);
-                            //  }
-                          }
+                          await onPressIncrease();
+
+                          // var cartAddResponse = await CartRepository()
+                          //     .getCartAddResponse(
+                          //         widget.id, "", user_id.$, "1");
+                          //
+                          // if (cartAddResponse.result == false) {
+                          //   ToastComponent.showDialog(
+                          //       cartAddResponse.message, context,
+                          //       gravity: Toast.CENTER,
+                          //       duration: Toast.LENGTH_LONG);
+                          //   return;
+                          // }
+                          // else {
+                          //   Scaffold.of(context).showSnackBar(SnackBar(
+                          //     content: Text(
+                          //       AppLocalizations.of(context)
+                          //           .product_details_screen_snackbar_added_to_cart,
+                          //       style: TextStyle(color: MyTheme.font_grey),
+                          //     ),
+                          //     backgroundColor: MyTheme.soft_accent_color,
+                          //     duration: const Duration(seconds: 3),
+                          //     action: SnackBarAction(
+                          //       label: AppLocalizations.of(context)
+                          //           .product_details_screen_snackbar_show_cart,
+                          //       onPressed: () {
+                          //         Navigator.push(context,
+                          //             MaterialPageRoute(builder: (context) {
+                          //           return Cart(has_bottomnav: false);
+                          //         }));
+                          //       },
+                          //       textColor: MyTheme.accent_color,
+                          //       disabledTextColor: Colors.grey,
+                          //     ),
+                          //   ));
+                          // }
                         }),
-                  )
+                  ):
+                  Container(
+                    height: 30,
+                    width: 80,
+                    decoration: BoxDecoration(
+                        border:
+                        Border.all(color: Color.fromRGBO(222, 222, 222, 1), width: 1),
+                        borderRadius: BorderRadius.circular(36.0),
+                        color: Colors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisSize: MainAxisSize.max,
+                      children: [
+                        buildQuantityDownButton(),
+                        Text(
+                          quantity.toString(),
+                          style: TextStyle( color: MyTheme.dark_grey),
+                        ),
+                        buildQuantityUpButton()
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ]),
       ),
     );
+  }
+  buildQuantityUpButton() => SizedBox(
+    width: 12,
+    child: IconButton(
+        icon: Icon(FontAwesome.plus, size: 12, color: MyTheme.dark_grey),
+        onPressed: () async{
+          await onPressIncrease();
+        }),
+  );
+
+  buildQuantityDownButton() => SizedBox(
+      width: 12,
+      child: IconButton(
+          icon: Icon(FontAwesome.minus, size: 12, color: MyTheme.dark_grey),
+          onPressed: () async{
+            await onPressDecrease();
+          })
+    ,);
+
+  Future onPressIncrease() async{
+    var response = await CartRepository()
+        .productChangeQuantityInCart(
+        widget.id, 1);
+
+    setState(() {
+      quantity = response['quantity'];
+    });
+
+
+    if (!response['result']) {
+      ToastComponent.showDialog(
+          response['message'], context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    }
+  }
+  Future onPressDecrease() async{
+    var response = await CartRepository()
+        .productChangeQuantityInCart(
+        widget.id, -1);
+
+    setState(() {
+      quantity = response['quantity'];
+    });
+
+    if (!response['result']) {
+      ToastComponent.showDialog(
+          response['message'], context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    }
   }
 }

@@ -8,6 +8,7 @@ import 'package:active_ecommerce_flutter/screens/package_admin_list.dart';
 import 'package:active_ecommerce_flutter/screens/todays_deal_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
+import 'package:active_ecommerce_flutter/screens/notifications.dart';
 import 'package:active_ecommerce_flutter/screens/wishlist.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 import 'package:badges/badges.dart';
@@ -16,6 +17,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:active_ecommerce_flutter/repositories/sliders_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/category_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
+import 'package:active_ecommerce_flutter/repositories/notifications_repository.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shimmer/shimmer.dart';
@@ -68,6 +70,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   int _productPage = 1;
   bool _showProductLoadingContainer = false;
 
+  int numberOfNotifications = -1;
+
+
   @override
   void initState() {
     // print("app_mobile_language.en${app_mobile_language.$}");
@@ -96,20 +101,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         fetchFeaturedProducts();
       }
     });
+
+    getNotificationsCount();
   }
+
+
 
   fetchAll() {
     fetchCarouselImages();
     fetchFeaturedCategories();
     fetchFeaturedProducts();
     if (is_logged_in.$ == true) {
+      getNotificationsCount();
       fetchNotificationCount();
     }
 
     // AddonsHelper().setAddonsData();
     // BusinessSettingHelper().setBusinessSettingData();
   }
-
+  getNotificationsCount() async{
+    numberOfNotifications = await NotificationRepository.getNotificationCount();
+    setState(() {});
+  }
   fetchCarouselImages() async {
     var carouselResponse = await SlidersRepository().getSliders();
     carouselResponse.sliders.forEach((slider) {
@@ -165,7 +178,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _isCarouselInitial = true;
     _isCategoryInitial = true;
     _isNotificationInitial = true;
-
+    numberOfNotifications = -1;
     setState(() {});
 
     resetProductList();
@@ -214,6 +227,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     //print(MediaQuery.of(context).viewPadding.top);
 
+    var mainDrawer = MainDrawer();
     return WillPopScope(
       onWillPop: () async {
         CommonFunctions(context).appExitDialog();
@@ -228,7 +242,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             appBar: is_logged_in.$ == true
                 ? buildAppBarLogin(statusBarHeight, context)
                 : buildAppBar(statusBarHeight, context),
-            drawer: MainDrawer(),
+            drawer: mainDrawer,
             body: Stack(
               children: [
                 RefreshIndicator(
@@ -913,8 +927,25 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            IconHeader(FontAwesome.bell_o, 0, () {},
-                AppLocalizations.of(context).profile_screen_notification),
+        IconHeader(FontAwesome.bell_o, -1, () {
+          print('------------------------------------');
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
+                return NotificationPage();
+              }));
+          print('````````````````````````');
+        },
+            AppLocalizations.of(context).profile_screen_notification),
+
+            // InkWell(
+            //   child: IconHeader(FontAwesome.bell_o, -1, () {},
+            //       AppLocalizations.of(context).profile_screen_notification),
+            //     onTap: (){
+            //
+            //
+            //     },
+            // )
+
           ],
         ),
       ),
@@ -1038,8 +1069,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  IconHeader(FontAwesome.bell_o, 0, () {},
+                  IconHeader(FontAwesome.bell_o, numberOfNotifications, () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return NotificationPage();
+                        }));
+                  },
                       AppLocalizations.of(context).profile_screen_notification),
+
                 ],
               ),
             ),

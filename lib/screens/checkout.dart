@@ -23,6 +23,7 @@ import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/screens/offline_screen.dart';
 import 'package:active_ecommerce_flutter/screens/paytm_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Checkout extends StatefulWidget {
   int order_id; // only need when making manual payment from order details
@@ -463,12 +464,15 @@ class _CheckoutState extends State<Checkout> {
       return;
     }
 
+
+
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CheckoutView(
         order_id: orderCreateResponse.orders_id,
         order_type: "1",
       );
     }));
+
   }
 
   pay_by_manual_payment() async {
@@ -998,7 +1002,63 @@ class _CheckoutState extends State<Checkout> {
                     fontSize: 16,
                     fontWeight: FontWeight.w600),
               ),
-              onPressed: () {
+              onPressed: () async {
+                bool checkTerms = false;
+                await showDialog(
+                    // The user CANNOT close this dialog  by pressing outsite it
+                    // barrierDismissible: false,
+                    context: context,
+                    builder: (_) {
+                  return Dialog(
+                    // The background color
+                    backgroundColor: Colors.white,
+                    child: Padding(
+                      padding:EdgeInsets.symmetric(
+                          vertical: 20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+
+                          Text('يجب الموافقة علي سياسة الشروط والاحكام قبل عمل الطلبية', style: TextStyle(fontSize: 10)),
+                          SizedBox(height: 5,),
+                          InkWell(
+                              child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
+                              onTap: () => launch('https://adventuresofegypt.com/terms')
+                          ),
+                          SizedBox(height: 10,),
+                          RaisedButton(
+                            elevation: 5.0,
+                            color: Colors.green,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                            onPressed: () {
+                              checkTerms = true;
+                              Navigator.of(context, rootNavigator: true).pop();
+                            },
+                            child: Text(
+                              'نعم أوفق',
+                              style: TextStyle(fontSize: 15.0, color: Colors.white),
+                            ),
+                          ),
+                          // RaisedButton(
+                          //   elevation: 5.0,
+                          //   color: Colors.deepOrange,
+                          //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          //   onPressed: () {
+                          //     Navigator.of(context, rootNavigator: true).pop();
+                          //   },
+                          //   child: Text(
+                          //     'رجوع',
+                          //     style: TextStyle(fontSize: 15.0, color: Colors.white),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
+                if(!checkTerms){
+                return;
+                }
                 onPressPlaceOrderOrProceed();
               },
             )

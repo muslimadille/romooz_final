@@ -95,6 +95,31 @@ class CartRepository {
     return cartAddResponseFromJson(response.body);
   }
 
+
+  Future<Map<String,dynamic>> productChangeQuantityInCart(
+      @required int id,
+      @required int amount,) async {
+    var post_body = jsonEncode({
+      "id": "${id}",
+      "amount": "$amount",
+    });
+
+    print(post_body.toString());
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/cart-change-amount");
+    final response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$
+        },
+        body: post_body);
+    // print('555555555555555555555555555555555555555555555555555555555555555');
+    // print(response.body.toString());
+    return json.decode(response.body);
+  }
+
+
   Future<CartSummaryResponse> getCartSummaryResponse() async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/cart-summary");
     print(" cart summary");
