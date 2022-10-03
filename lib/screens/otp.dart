@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
+import 'package:active_ecommerce_flutter/repositories/notifications_repository.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:toast/toast.dart';
@@ -80,6 +81,7 @@ class _OtpState extends State<Otp> {
       ToastComponent.showDialog(confirmCodeResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
+      await NotificationRepository.sendNotificationToken();
       // print('222222222222222222222222222222222222222222');
       ToastComponent.showDialog(confirmCodeResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);

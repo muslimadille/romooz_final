@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationRepository {
   static Future<int> getNotificationCount() async {
@@ -17,9 +18,9 @@ class NotificationRepository {
         "App-Language": app_language.$,
       },
     );
-    print("response.body.toString()${response.body.toString()}");
-    print('1111111111111111133333333333333333');
-    print(response.body);
+    // print("response.body.toString()${response.body.toString()}");
+    // print('1111111111111111133333333333333333');
+    // print(response.body);
     return json.decode(response.body)['count'];
   }
 
@@ -41,8 +42,10 @@ class NotificationRepository {
 
 
   static Future<Map<String,dynamic>> markNotificationAsRead(int id) async {
+    print('111111111111111111111111111111111111111111111111');
+    print("${AppConfig.BASE_URL}/notifications/mark-read/"+id.toString());
     Uri url = Uri.parse("${AppConfig.BASE_URL}/notifications/mark-read/"+id.toString());
-    final response = await http.post(
+    final response = await http.get(
       url,
       headers: {
         "Content-Type": "application/json",
@@ -53,6 +56,29 @@ class NotificationRepository {
     print("response.body.toString()${response.body.toString()}");
     print('1111111111111111133333333333333333');
     print(response.body);
+    return json.decode(response.body);
+  }
+
+  static Future<Map<String,dynamic>> sendNotificationToken() async {
+    var fbm  = FirebaseMessaging.instance;
+    String phoneToken;
+    phoneToken = await fbm.getToken();
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/notifications/SetFcmToken");
+    final response = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${access_token.$}",
+        "App-Language": app_language.$,
+      },
+      body: jsonEncode({
+        "fcm_token": phoneToken,
+      })
+    );
+    // print("response.body.toString()${response.body.toString()}");
+    // print('1111111111111111133333333333333333');
+    // print(response.body);
     return json.decode(response.body);
   }
 

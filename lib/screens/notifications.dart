@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
+import 'package:active_ecommerce_flutter/repositories/notifications_repository.dart';
 
 
 
@@ -27,56 +28,43 @@ class _NotificationPageState extends State<NotificationPage> {
         // mainAxisAlignment: MainAxisAlignment.center,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: const Color(0xff764abc),
-              child: Icon(Icons.notifications_active),
-            ),
-            title: Text('الاشعار الاول'),
-            subtitle: Text('خصم علي اول فاتورة تطلبها من رموز بحد ادني 1000 ريال سعودي خصم علي اول فاتورة تطلبها من رموز بحد ادني 1000 ريال سعودي خصم علي اول فاتورة تطلبها من رموز بحد ادني 1000 ريال سعودي خصم علي اول فاتورة تطلبها من رموز بحد ادني 1000 ريال سعودي'.substring(0,45)),
-            // trailing: Icon(Icons.more_vert),
-            onTap: (){
+          Expanded(
+              child: FutureBuilder<Map<String,dynamic>>(
+                  future: NotificationRepository.getAllNotifications(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data['data'].length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (BuildContext context, int index) {
+                            return  ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: const Color(0xff764abc),
+                                child: snapshot.data['data'][index]['status']==0?
+                                Icon(Icons.notifications_active):
+                                Icon(Icons.notifications),
+                              ),
+                              title: Text(snapshot.data['data'][index]['title']),
+                              subtitle: Text(snapshot.data['data'][index]['description']),
+                              onTap: () async{
+                                 Map<String,dynamic> response = await
+                                 NotificationRepository.markNotificationAsRead(snapshot.data['data'][index]['id']);
+                                 if(response['result']){
+                                   setState(() {
 
-            },
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: const Color(0xff764abc),
-              child: Icon(Icons.notifications),
-            ),
-            title: Text('الاشعار الاول'),
-            subtitle: Text('خصم علي اول فاتورة تطلبها من رموز بحد ادني 1000 ريال سعودي خصم علي اول فاتورة تطلبها من رموز بحد ادني 1000 ريال سعودي'),
-            trailing: Icon(Icons.more_vert),
-          ),
-          // Text('lllllllllllll'),
-          // SizedBox(height: 100,),
-          // Expanded(
-          //     child: FutureBuilder<List<MyNotification>>(
-          //         future: NotificationController.getAllNotifications(),
-          //         builder: (context, snapshot) {
-          //           if (snapshot.hasError)
-          //             return new Text('Error: ${snapshot.error}');
-          //           if (snapshot.hasData) {
-          //             return ListView.builder(
-          //                 itemCount: snapshot.data.length,
-          //                 scrollDirection: Axis.vertical,
-          //                 itemBuilder: (BuildContext context, int index) {
-          //                   return Card(
-          //                     child: Container(
-          //                       height: mainHeight*.2,
-          //                       padding: EdgeInsets.all(25.0),
-          //                       child: Center(
-          //                         child: Text(snapshot.data[index].message,  style: TextStyle(color: Colors.black, fontSize: 15.0))
-          //                       ),
-          //                     ),
-          //                   );
-          //                 }
-          //             );
-          //           }
-          //           return Center(
-          //             child: CircularProgressIndicator(),
-          //           );
-          //         })),
+                                   });
+                                 }
+                              },
+                            );
+                          }
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  })),
         ],
       ),
     );

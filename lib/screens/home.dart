@@ -70,7 +70,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   int _productPage = 1;
   bool _showProductLoadingContainer = false;
 
-  int numberOfNotifications = -1;
+  int numberOfNotifications = 0;
 
 
   @override
@@ -178,7 +178,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _isCarouselInitial = true;
     _isCategoryInitial = true;
     _isNotificationInitial = true;
-    numberOfNotifications = -1;
+    numberOfNotifications = 0;
     setState(() {});
 
     resetProductList();
@@ -1069,6 +1069,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
+
                   IconHeader(FontAwesome.bell_o, numberOfNotifications, () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {

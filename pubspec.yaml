@@ -67,7 +67,8 @@ dependencies:
   flutter_facebook_auth: ^3.5.0
   google_sign_in: ^5.1.1
   google_maps_place_picker: ^2.1.0-nullsafety.3
-  # firebase_messaging:
+  firebase_core : ^0.5.0
+  firebase_messaging: ^10.0.0
   one_context: ^1.1.1
   social_share: ^2.2.1
   flutter_typeahead: ^3.2.1
@@ -85,6 +86,11 @@ dependencies:
   animated_text_kit:
   wave_image: ^0.0.6
  # hyperpay: ^0.0.9-alpha
+
+
+dependency_overrides:
+  firebase_messaging_platform_interface: 3.1.6
+
 
 dev_dependencies:
   flutter_test:
