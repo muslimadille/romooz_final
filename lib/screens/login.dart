@@ -272,8 +272,10 @@ class _LoginState extends State<Login> {
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: 20,),
                   Row(
                     children: [
+                      SizedBox(width: 20,),
                       IconButton(
                           icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
                           onPressed: () {

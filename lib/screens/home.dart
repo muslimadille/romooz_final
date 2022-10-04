@@ -927,7 +927,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
               ),
             ),
-        IconHeader(FontAwesome.bell_o, -1, () {
+        IconHeader(FontAwesome.bell_o, 0, () {
           print('------------------------------------');
           Navigator.push(context,
               MaterialPageRoute(builder: (context) {

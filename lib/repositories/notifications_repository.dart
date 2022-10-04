@@ -64,6 +64,9 @@ class NotificationRepository {
     String phoneToken;
     phoneToken = await fbm.getToken();
 
+    print('ddddddddddddddddddddddddddddddddddddddddddddddd');
+    print(phoneToken);
+
     Uri url = Uri.parse("${AppConfig.BASE_URL}/notifications/SetFcmToken");
     final response = await http.post(
       url,
@@ -77,8 +80,8 @@ class NotificationRepository {
       })
     );
     // print("response.body.toString()${response.body.toString()}");
-    // print('1111111111111111133333333333333333');
-    // print(response.body);
+    print('1111111111111111133333333333333333');
+    print(response.body);
     return json.decode(response.body);
   }
 

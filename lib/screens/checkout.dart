@@ -1013,17 +1013,16 @@ class _CheckoutState extends State<Checkout> {
                     // The background color
                     backgroundColor: Colors.white,
                     child: Padding(
-                      padding:EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                           vertical: 20),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
                           Text('يجب الموافقة علي سياسة الشروط والاحكام قبل عمل الطلبية', style: TextStyle(fontSize: 10)),
                           SizedBox(height: 5,),
                           InkWell(
                               child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
-                              onTap: () => launch('https://adventuresofegypt.com/terms')
+                              onTap: () => launch('${AppConfig.BASE_URL}/terms')
                           ),
                           SizedBox(height: 10,),
                           RaisedButton(

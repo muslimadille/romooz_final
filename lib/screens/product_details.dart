@@ -67,7 +67,12 @@ class _ProductDetailsState extends State<ProductDetails> {
   var _totalPrice;
   var _singlePrice;
   var _singlePriceString;
-  int _quantity = 1;
+
+  int quantityInCart;
+  int upper_limit;
+  int lower_limit;
+
+  int _quantity = 0;
   int _stock = 0;
   FocusNode _nodeText1 = FocusNode();
   List<dynamic> _relatedProducts = [];
@@ -139,6 +144,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         }
 
         setProductDetailValues();
+
+        // quantityInCart = await CartRepository.getQuantityInCartResponse(id: widget.id);
 
         setState(() {});
       }

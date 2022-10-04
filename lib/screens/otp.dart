@@ -81,13 +81,15 @@ class _OtpState extends State<Otp> {
       ToastComponent.showDialog(confirmCodeResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
     } else {
-      await NotificationRepository.sendNotificationToken();
+
       // print('222222222222222222222222222222222222222222');
       ToastComponent.showDialog(confirmCodeResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
       AuthHelper().setUserData(confirmCodeResponse);
       print("loginResponse ------ ${confirmCodeResponse}");
+
+      await NotificationRepository.sendNotificationToken();
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return Main();
       }));
@@ -118,8 +120,10 @@ class _OtpState extends State<Otp> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                    Row(
-                      children: [
+                      SizedBox(height: 20,),
+                      Row(
+                        children: [
+                          SizedBox(width: 20,),
                         IconButton(
                             icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
                             onPressed: () {

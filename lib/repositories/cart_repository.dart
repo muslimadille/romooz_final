@@ -95,6 +95,23 @@ class CartRepository {
     return cartAddResponseFromJson(response.body);
   }
 
+  Future<Map<String,dynamic>> getQuantityInCartResponse(
+      @required int id,
+    ) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/carts/product/"+id.toString());
+    final response = await http.get(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$
+        },);
+    // print('555555555555555555555555555555555555555555555555555555555555555');
+    // print(response.body.toString());
+    // Map<String,dynamic> _response = json.decode(response.body);
+    // if(!_response['result'])return 0;
+    return json.decode(response.body);
+  }
+
 
   Future<Map<String,dynamic>> productChangeQuantityInCart(
       @required int id,
