@@ -20,7 +20,7 @@ import 'package:active_ecommerce_flutter/repositories/cart_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/color_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
-
+import 'package:active_ecommerce_flutter/data_model/cart_add_response.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/repositories/chat_repository.dart';
 import 'package:active_ecommerce_flutter/screens/chat.dart';
@@ -68,9 +68,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   var _singlePrice;
   var _singlePriceString;
 
-  int quantityInCart;
-  int upper_limit;
-  int lower_limit;
+  CartAddResponse cartAddResponse;
 
   int _quantity = 0;
   int _stock = 0;
@@ -145,7 +143,8 @@ class _ProductDetailsState extends State<ProductDetails> {
 
         setProductDetailValues();
 
-        // quantityInCart = await CartRepository.getQuantityInCartResponse(id: widget.id);
+        cartAddResponse = await CartRepository().getCartAddResponse(
+            widget.id, _variant, user_id.$, _qtyController.text.toString());
 
         setState(() {});
       }
@@ -431,7 +430,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     // print(user_id.$);
     // print(_quantity);
 
-    var cartAddResponse = await CartRepository().getCartAddResponse(
+    cartAddResponse = await CartRepository().getCartAddResponse(
         widget.id, _variant, user_id.$, _qtyController.text.toString());
 
     if (cartAddResponse.result == false) {
@@ -2441,11 +2440,19 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: IconButton(
             icon: Icon(FontAwesome.plus, size: 16, color: MyTheme.dark_grey),
             onPressed: () {
-              if (_quantity < _stock) {
+              if (_quantity+cartAddResponse.quantity < cartAddResponse.upperLimit) {
                 _quantity++;
                 _qtyController.text = _quantity.toString();
                 setState(() {});
                 calculateTotalPrice();
+              }else{
+                ToastComponent.showDialog(
+                    (app_language.$ == 'ar' ?
+                    "الحد الاقصي للطلب ":
+                        "The maximum order amount is ")
+                    +cartAddResponse.upperLimit.toString()
+                    , context,
+                    gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
               }
             }),
       );

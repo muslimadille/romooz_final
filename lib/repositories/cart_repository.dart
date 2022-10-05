@@ -95,7 +95,7 @@ class CartRepository {
     return cartAddResponseFromJson(response.body);
   }
 
-  Future<Map<String,dynamic>> getQuantityInCartResponse(
+  static Future<Map<String,dynamic>> getQuantityInCartResponse(
       @required int id,
     ) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/carts/product/"+id.toString());
