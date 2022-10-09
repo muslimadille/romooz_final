@@ -12,6 +12,7 @@ class PaymentTypeResponse {
   PaymentTypeResponse({
     this.payment_type,
     this.payment_type_key,
+    this.payment_method_key,
     this.image,
     this.name,
     this.title,
@@ -21,6 +22,7 @@ class PaymentTypeResponse {
 
   String payment_type;
   String payment_type_key;
+  String payment_method_key;
   String image;
   String name;
   String title;
@@ -30,6 +32,7 @@ class PaymentTypeResponse {
   factory PaymentTypeResponse.fromJson(Map<String, dynamic> json) => PaymentTypeResponse(
     payment_type: json["payment_type"],
     payment_type_key: json["payment_type_key"],
+    payment_method_key: json["payment_method_key"],
     image: json["image"],
     name: json["name"],
     title: json["title"],

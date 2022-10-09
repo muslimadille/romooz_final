@@ -25,8 +25,8 @@ import 'package:active_ecommerce_flutter/screens/paytm_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Checkout extends StatefulWidget {
-  int order_id; // only need when making manual payment from order details
+class PackageCheckout extends StatefulWidget {
+  String order_id; // only need when making manual payment from order details
   DateTime shippingSelectedDate;
   bool
       manual_payment_from_order_details; // only need when making manual payment from order details
@@ -35,22 +35,23 @@ class Checkout extends StatefulWidget {
   final double rechargeAmount;
   final String title;
 
-  Checkout(
+  PackageCheckout(
       {Key key,
-      this.order_id = 0,
+      this.order_id,
       this.manual_payment_from_order_details = false,
       this.list = "both",
       this.isWalletRecharge = false,
       this.rechargeAmount = 0.0,
       this.shippingSelectedDate = null,
-      this.title})
+      this.title
+      })
       : super(key: key);
 
   @override
-  _CheckoutState createState() => _CheckoutState();
+  _PackageCheckoutState createState() => _PackageCheckoutState();
 }
 
-class _CheckoutState extends State<Checkout> {
+class _PackageCheckoutState extends State<PackageCheckout> {
   var _selected_payment_method_index = 0;
   // var _selected_payment_method = "";
   // var _selected_payment_method_key = "";
@@ -388,19 +389,19 @@ class _CheckoutState extends State<Checkout> {
       pay_by_manual_payment();
     } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "manual_payment" &&
         widget.manual_payment_from_order_details == true) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return OfflineScreen(
-          order_id: widget.order_id,
-          payment_type: "manual_payment",
-          details: _paymentTypeList[_selected_payment_method_index].details,
-          offline_payment_id: _paymentTypeList[_selected_payment_method_index]
-              .offline_payment_id,
-          isWalletRecharge: widget.isWalletRecharge,
-          rechargeAmount: widget.rechargeAmount,
-        );
-      })).then((value) {
-        onPopped(value);
-      });
+      // Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //   return OfflineScreen(
+      //     order_id: widget.order_id,
+      //     payment_type: "manual_payment",
+      //     details: _paymentTypeList[_selected_payment_method_index].details,
+      //     offline_payment_id: _paymentTypeList[_selected_payment_method_index]
+      //         .offline_payment_id,
+      //     isWalletRecharge: widget.isWalletRecharge,
+      //     rechargeAmount: widget.rechargeAmount,
+      //   );
+      // })).then((value) {
+      //   onPopped(value);
+      // });
     }
   }
 
@@ -439,28 +440,28 @@ class _CheckoutState extends State<Checkout> {
   }
 
   pay_by_cod_hyperpay() async {
-    loading();
+    // loading();
 
-    var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponseFromCod(
-        _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
-
-    print("orderCreateResponse =====${orderCreateResponse}");
-
-    Navigator.of(loadingcontext).pop();
-    if (orderCreateResponse.result == false) {
-      ToastComponent.showDialog(orderCreateResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      Navigator.of(context).pop();
-      return;
-    }
+    // var orderCreateResponse = await PaymentRepository()
+    //     .getOrderCreateResponseFromCod(
+    //     _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
+    //
+    // print("orderCreateResponse =====${orderCreateResponse}");
+    //
+    // Navigator.of(loadingcontext).pop();
+    // if (orderCreateResponse.result == false) {
+    //   ToastComponent.showDialog(orderCreateResponse.message, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //   Navigator.of(context).pop();
+    //   return;
+    // }
 
 
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CheckoutView(
-        order_id: orderCreateResponse.orders_id,
-        order_type: "1",
+        order_id: widget.order_id,
+        order_type: "2",
         payment_type: _paymentTypeList[_selected_payment_method_index].payment_method_key,
       );
     }));
@@ -714,14 +715,14 @@ class _CheckoutState extends State<Checkout> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              widget.manual_payment_from_order_details == false
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 16.0),
-                                      child: buildApplyCouponRow(context),
-                                    )
-                                  : Container(),
-                              grandTotalSection(),
+                              // widget.manual_payment_from_order_details == false
+                              //     ? Padding(
+                              //         padding:
+                              //             const EdgeInsets.only(bottom: 16.0),
+                              //         child: buildApplyCouponRow(context),
+                              //       )
+                              //     : Container(),
+                              // grandTotalSection(),
                             ],
                           ),
                         ),
@@ -830,7 +831,8 @@ class _CheckoutState extends State<Checkout> {
         ),
       ),
       title: Text(
-        widget.title,
+        app_language.$ == 'ar' ? 'اختر نوع الدفع' : 'Choose the type of payment',
+        // widget.title,
         style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
       ),
       elevation: 0.0,

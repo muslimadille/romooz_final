@@ -25,11 +25,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Payment Methods: VISA, MASTER, MADA ,APPLEPAY
 
 class CheckoutView extends StatefulWidget {
-  CheckoutView({Key key, this.order_id = "0", this.order_type})
+  CheckoutView({Key key, this.order_id = "0", this.order_type, this.payment_type})
       : super(key: key);
 
   final String order_id;
   final String order_type;
+  final String payment_type;
 
   @override
   _CheckoutViewState createState() => _CheckoutViewState();
@@ -69,6 +70,7 @@ class _CheckoutViewState extends State<CheckoutView> {
     CheckoutSettings _checkoutSettings = CheckoutSettings(
       brand: brandType,
       amount: amount,
+      paymentType: widget.payment_type,
       orderType: widget.order_type ?? "0",
       orderId: widget.order_id ?? "0",
       headers: {

@@ -4,6 +4,7 @@ import 'package:active_ecommerce_flutter/data_model/subscribed_package_show_resp
 import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:active_ecommerce_flutter/repositories/packages_repository.dart';
 import 'package:active_ecommerce_flutter/screens/shipping_info.dart';
+import 'package:active_ecommerce_flutter/screens/package_checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
@@ -317,34 +318,33 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   onPressSubscribeAdminPackages() async {
-
-    var replacingTime = selectedTime.replacing(
-        hour: selectedTime.hour, minute: selectedTime.minute);
-
-    String formattedTime =
-        replacingTime.hour.toString() + ":" + replacingTime.minute.toString();
-
-    print("_selectedDay${_selectedDay} ${formattedTime}");
-
-    print("selectedTime${formattedTime} ${widget.packageId}");
-    var subscribeProcessResponse = await PackagesRepository()
-        .subscribeAdminPackages(
-            widget.packageId, _selectedDayString, formattedTime);
-
-    if (subscribeProcessResponse.result == false) {
-      ToastComponent.showDialog(subscribeProcessResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-    } else {
-      ToastComponent.showDialog(subscribeProcessResponse.message, context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return CheckoutView(
-          order_id: subscribeProcessResponse.user_package_id.toString(),
-          order_type: "2",
-        );
-      }));
-    }
+    //
+    // var replacingTime = selectedTime.replacing(
+    //     hour: selectedTime.hour, minute: selectedTime.minute);
+    //
+    // String formattedTime =
+    //     replacingTime.hour.toString() + ":" + replacingTime.minute.toString();
+    //
+    // print("_selectedDay${_selectedDay} ${formattedTime}");
+    //
+    // print("selectedTime${formattedTime} ${widget.packageId}");
+    // var subscribeProcessResponse = await PackagesRepository()
+    //     .subscribeAdminPackages(
+    //         widget.packageId, _selectedDayString, formattedTime);
+    //
+    // if (subscribeProcessResponse.result == false) {
+    //   ToastComponent.showDialog(subscribeProcessResponse.message, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    // } else {
+    //   ToastComponent.showDialog(subscribeProcessResponse.message, context,
+    //       gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+    //
+    //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //     return PackageCheckout(
+    //       order_id: subscribeProcessResponse.user_package_id.toString(),
+    //     );
+    //   }));
+    // }
   }
 
   process({mode}) async {
@@ -701,11 +701,9 @@ class _PackageItemsState extends State<PackageItems> {
 
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return CheckoutView(
+                              return PackageCheckout(
                                 order_id: subscribeProcessResponse
-                                    .user_package_id
-                                    .toString(),
-                                order_type: "2",
+                                    .user_package_id.toString(),
                               );
                             }));
                           }
@@ -1054,19 +1052,23 @@ class _PackageItemsState extends State<PackageItems> {
                         image: "${_shopList[item_index].logo}",
                         fit: BoxFit.fitWidth,
                       ))),
-        Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text(
-            "${_shopList[item_index].name}",
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: TextStyle(
-                color: MyTheme.font_grey,
-                fontSize: 14,
-                height: 1.6,
-                fontWeight: FontWeight.w400),
+      Container(
+          width: 180,
+          child: Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(
+              "${_shopList[item_index].name}",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(
+                  color: MyTheme.font_grey,
+                  fontSize: 14,
+                  height: 1.6,
+                  fontWeight: FontWeight.w400),
+            ),
           ),
-        ),
+      ),
+
         Spacer(),
         Row(
           children: [

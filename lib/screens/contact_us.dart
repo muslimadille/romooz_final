@@ -5,6 +5,9 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
+
+import 'dart:io';
+
 class ContactUsPage extends StatefulWidget {
   static String id = 'ContactUsPage';
 
@@ -33,8 +36,24 @@ class _ContactUsPageState extends State<ContactUsPage> {
             // trailing: Icon(Icons.more_vert),
             onTap: () async{
                 String phone = '+966 55 069 6965';
-                var whatsappUrl ="whatsapp://send?phone=$phone";
-                launch(whatsappUrl);
+                // var whatsappUrl ="whatsapp://send?phone=$phone";
+                // launch(whatsappUrl);
+
+                /////////////////////
+                String url() {
+                  if (Platform.isAndroid) {
+                    // add the [https]
+                    // return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
+                    return "https://wa.me/$phone"; // new line
+                  } else {
+                    // add the [https]
+                    // return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
+                    return "https://api.whatsapp.com/send?phone=$phone"; // new line
+                  }
+                }
+                await launch(url());
+                ///////////////////////
+
             },
           ),
           ListTile(
