@@ -376,7 +376,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
     if (selectedPlace == null) {
       ToastComponent.showDialog(
-          "قم بتحديد الموقع ثم اضغط علي - التقط هنا -", context,
+          app_language.$ == 'ar'?
+          "قم بتحديد الموقع ثم اضغط علي - التقط هنا -":
+          "Select the location, then click - pick Here -", context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }
@@ -1373,6 +1375,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
       initialPosition: kInitialPosition,
       useCurrentLocation: false,
+      // useCurrentLocation: true,
       //selectInitialPosition: true,
       onMapCreated: _onMapCreated,
       //initialMapType: MapType.terrain,
@@ -1392,7 +1395,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
       selectedPlaceWidgetBuilder:
           (_, _selectedPlace, state, isSearchBarFocused) {
-        return isSearchBarFocused
+        return
+          isSearchBarFocused
             ? Container()
             // Use FloatingCard or just create your own Widget.
             : FloatingCard(
@@ -1402,9 +1406,11 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                 rightPosition: 0.0,
                 width: 500,
                 borderRadius: BorderRadius.circular(12.0),
-                child: state == SearchingState.Searching
+                child:
+                state == SearchingState.Searching
                     ? Center(child: CircularProgressIndicator())
-                    : RaisedButton(
+                    :
+                RaisedButton(
                         child: Text(AppLocalizations.of(context)
                             .map_location_screen_pick_here),
                         onPressed: () {

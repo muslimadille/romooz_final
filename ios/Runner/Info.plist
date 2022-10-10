@@ -45,7 +45,13 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>990731958289281</string>
+	<string>990731958289281</string
+	<key>io.flutter.embedded_views_preview</key>
+	<string>YES</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location when in the background.</string>
 	<key>FacebookDisplayName</key>
 	<string>3c4d3521285c97c6a8801b483775d11b</string>
 	<key>LSApplicationQueriesSchemes</key>

@@ -14,12 +14,13 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class AuthRepository {
   Future<LoginResponse> getLoginResponse(
-      @required String email, String password) async {
+      @required String email, String password,
+      String userType) async {
     print("email${email}");
     var post_body = jsonEncode({
       "phone": "${email}",
       // "password": "$password",
-      "user_type": "customer",
+      "user_type": "${userType}",
       "identity_matrix": AppConfig.purchase_code
     });
 

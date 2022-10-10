@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  onPressedLogin() async {
+  onPressedLogin(String userType) async {
     var email = _emailController.text.toString();
     var password = _passwordController.text.toString();
 
@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
     });
 
     var loginResponse = await AuthRepository()
-        .getLoginResponse(_login_by == 'email' ? email : _phone, password);
+        .getLoginResponse(_login_by == 'email' ? email : _phone, password, userType);
     if (loginResponse.result == false) {
       setState(() {
         showLoader = false;
@@ -503,7 +503,23 @@ class _LoginState extends State<Login> {
                               title: AppLocalizations.of(context)
                                   .login_screen_log_in,
                               onTap: () {
-                                onPressedLogin();
+                                onPressedLogin('retail');
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 5,),
+                        Visibility(
+                          visible: !showLoader,
+                          child: Container(
+                            height: 45,
+                            child: PrimaryButton(
+                              color: MyTheme.purpel,
+                              reduis: 0.4,
+                              title:
+                                app_language.$ == 'ar' ? 'تسجيل الدخول كتاجر جملة' : 'Login as Wholesale',
+                              onTap: () {
+                                onPressedLogin('wholesale');
                               },
                             ),
                           ),
