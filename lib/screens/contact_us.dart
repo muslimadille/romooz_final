@@ -4,8 +4,6 @@ import 'package:active_ecommerce_flutter/screens/messenger_list.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
-
 import 'dart:io';
 
 class ContactUsPage extends StatefulWidget {
@@ -16,7 +14,6 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
-
   @override
   Widget build(BuildContext context) {
     var mainHeight = MediaQuery.of(context).size.height;
@@ -29,45 +26,52 @@ class _ContactUsPageState extends State<ContactUsPage> {
         children: [
           ListTile(
             leading: CircleAvatar(
-              child: Image.asset("assets/whatsapp.png",
+              child: Image.asset(
+                "assets/whatsapp.png",
               ),
             ),
-            title: Text(app_language.$ == 'ar' ? 'الواتساب' : 'WhatsApp',),
+            title: Text(
+              app_language.$ == 'ar' ? 'الواتساب' : 'WhatsApp',
+            ),
             // trailing: Icon(Icons.more_vert),
-            onTap: () async{
-                String phone = '+966 55 069 6965';
-                // var whatsappUrl ="whatsapp://send?phone=$phone";
-                // launch(whatsappUrl);
+            onTap: () async {
+              String phone = '+966550696965';
+              // var whatsappUrl ="whatsapp://send?phone=$phone";
+              // launch(whatsappUrl);
 
-                /////////////////////
-                String url() {
-                  if (Platform.isAndroid) {
-                    // add the [https]
-                    // return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
-                    return "https://wa.me/$phone"; // new line
-                  } else {
-                    // add the [https]
-                    // return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
-                    return "https://api.whatsapp.com/send?phone=$phone"; // new line
-                  }
+              /////////////////////
+              String url() {
+                if (Platform.isAndroid) {
+                  // add the [https]
+                  // return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
+                  return "https://wa.me/$phone"; // new line
+                } else {
+                  // add the [https]
+                  // return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
+                  return "https://api.whatsapp.com/send?phone=$phone"; // new line
                 }
-                await launch(url());
-                ///////////////////////
+              }
 
+              // ignore: deprecated_member_use
+              await launch(url());
+              ///////////////////////
             },
           ),
           ListTile(
             leading: CircleAvatar(
-              child: Image.asset("assets/chat.png",
+              child: Image.asset(
+                "assets/chat.png",
               ),
             ),
-            title: Text(AppLocalizations.of(context).main_drawer_messages,),
-          onTap: (){
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-              return MessengerList();
-            }));
-          },)
+            title: Text(
+              AppLocalizations.of(context).main_drawer_messages,
+            ),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return MessengerList();
+              }));
+            },
+          )
         ],
       ),
     );
