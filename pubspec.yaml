@@ -86,6 +86,7 @@ dependencies:
   introduction_screen: ^3.0.2
   animated_text_kit:
   wave_image: ^0.0.6
+  flutter_launch:
  # hyperpay: ^0.0.9-alpha
 
 

@@ -14,6 +14,9 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
+  bool err = false;
+  String msgErr = '';
+
   @override
   Widget build(BuildContext context) {
     var mainHeight = MediaQuery.of(context).size.height;
@@ -48,7 +51,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 } else {
                   // add the [https]
                   // return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
-                  return "https://api.whatsapp.com/send?phone=$phone"; // new line
+                  // return "https://api.whatsapp.com/send?phone=$phone"; // new line
+
+                  return "https://wa.me/$phone"; // new line
+
                 }
               }
 
