@@ -449,6 +449,7 @@ class _CartState extends State<Cart> {
                               bottomRight: const Radius.circular(8.0),
                             )),
                       child: Text(
+                        app_language.$ == 'ar' ?"متابعة الشراء":
                         AppLocalizations.of(context)
                             .cart_screen_proceed_to_shipping,
                         style: TextStyle(

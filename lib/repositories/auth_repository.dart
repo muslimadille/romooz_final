@@ -20,7 +20,8 @@ class AuthRepository {
     var post_body = jsonEncode({
       "phone": "${email}",
       // "password": "$password",
-      "user_type": "${userType}",
+      "user_type": "customer",
+      // "user_type": "${userType}",
       "identity_matrix": AppConfig.purchase_code
     });
 

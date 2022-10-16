@@ -22,6 +22,29 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart' as intlTime;
 
 
+
+
+
+
+
+
+
+
+
+
+import 'package:active_ecommerce_flutter/style_classes.dart';
+
+
+
+
+
+
+
+
+
+
+
+
 class CustomPicker extends CommonPickerModel {
   String digits(int value, int length) {
     return '$value'.padLeft(length, "0");
@@ -401,171 +424,152 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                 : buildPickupPoint(),
                           ),
                           _shippingOptionIsAddress
-                              ? Container(
-                                  height: 40,
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
+                              ? Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                            child: PrimaryButton(
+                              color: MyTheme.accent_color,
+                              reduis: 0.4,
+                              title: AppLocalizations.of(context)
+                                  .shipping_info_screen_go_to_address,
+                              onTap: () async{
+                                Navigator.push(context,
+                                    MaterialPageRoute(
+                                        builder: (context) {
                                           return Address(
                                             from_shipping_info: true,
                                           );
                                         })).then((value) {
-                                          onPopped(value);
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          AppLocalizations.of(context)
-                                              .shipping_info_screen_go_to_address,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              color: MyTheme.accent_color),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                  onPopped(value);
+                                });
+                              },
+                            ),
+                          )
                               : Container(),
                           _shippingOptionIsAddress
-                              ? Container(
-                                  height: 40,
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: () async{
-                                        print(
-                                            "DateTime.now()${DateTime.now().year} ${app_language.$}");
+                              ? Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                                  child: PrimaryButton(
+                                    color: MyTheme.accent_color,
+                                    reduis: 0.4,
+                                    title:AppLocalizations.of(context)
+                                        .shipping_info_screen_go_to_address_delivey_time,
 
-                                        await DatePicker.showDatePicker(context,
-                                            showTitleActions: true,
-                                            theme: DatePickerTheme(
-                                                backgroundColor: MyTheme.white),
-                                            minTime: DateTime(
-                                                DateTime.now().year,
-                                                DateTime.now().month,
-                                                DateTime.now().day,
-                                                10,
-                                                00
-                                            ),
-                                            maxTime: DateTime(
-                                                DateTime.now().year,
-                                                (DateTime.now().month + 1) >= 12
-                                                    ? 12
-                                                    : (DateTime.now().month +
-                                                        1),
-                                                DateTime.now().day,
-                                                19,
-                                                59),
-                                            onChanged: (date) {
-                                          print(
-                                              'onChanged ${_shippingSelectedDate}');
-                                          var day_name = intl.DateFormat('EEEE')
-                                              .format(date)
-                                              .toString()
-                                              .toUpperCase()
-                                              .substring(0, 2);
+                                    onTap: () async{
+                                      print(
+                                          "DateTime.now()${DateTime.now().year} ${app_language.$}");
 
-                                          final index = _dayList.indexWhere(
-                                              (element) =>
-                                                  element.code == day_name);
-                                          if (index >= 0) {
+                                      await DatePicker.showDatePicker(context,
+                                          showTitleActions: true,
+                                          theme: DatePickerTheme(
+                                              backgroundColor: MyTheme.white),
+                                          minTime: DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day,
+                                              10,
+                                              00
+                                          ),
+                                          maxTime: DateTime(
+                                              DateTime.now().year,
+                                              (DateTime.now().month + 1) >= 12
+                                                  ? 12
+                                                  : (DateTime.now().month +
+                                                  1),
+                                              DateTime.now().day,
+                                              19,
+                                              59),
+                                          onChanged: (date) {
                                             print(
-                                                'Using indexWhere: ${_dayList[index]}');
-                                            setState(() {
-                                              _shippingSelectedDate = date;
-                                              _shippingSelectedValid = true;
-                                            });
-                                          } else {
-                                            ToastComponent.showDialog(
-                                                AppLocalizations.of(context)
-                                                    .shipping_info_screen_delivery_not_valid_warning,
-                                                context,
-                                                gravity: Toast.CENTER,
-                                                duration: Toast.LENGTH_LONG);
+                                                'onChanged ${_shippingSelectedDate}');
+                                            var day_name = intl.DateFormat('EEEE')
+                                                .format(date)
+                                                .toString()
+                                                .toUpperCase()
+                                                .substring(0, 2);
 
-                                            setState(() {
-                                              _shippingSelectedDate = null;
-                                              _shippingSelectedValid = false;
-                                            });
-                                          }
-                                        }, onConfirm: (date) {
-                                          print(
-                                              'confirm ${_shippingSelectedDate}');
-                                          var day_name = intl.DateFormat('EEEE')
-                                              .format(date)
-                                              .toString()
-                                              .toUpperCase()
-                                              .substring(0, 2);
-
-                                          final index = _dayList.indexWhere(
-                                              (element) =>
-                                                  element.code == day_name);
-                                          if (index >= 0) {
-                                            print(
-                                                'Using indexWhere: ${_dayList[index]}');
-                                            setState(() {
-                                              _shippingSelectedDate = date;
-                                              _shippingSelectedValid = true;
-                                            });
-                                          } else {
-                                            ToastComponent.showDialog(
-                                                AppLocalizations.of(context)
-                                                    .shipping_info_screen_delivery_not_valid_warning,
-                                                context,
-                                                gravity: Toast.CENTER,
-                                                duration: Toast.LENGTH_LONG);
-
-                                            setState(() {
-                                              _shippingSelectedDate = null;
-                                              _shippingSelectedValid = false;
-                                            });
-                                          }
-                                        },
-                                            locale: app_language.$ == 'ar'
-                                                ? LocaleType.ar
-                                                : LocaleType.en);
-                                        await DatePicker.showTime12hPicker(context, showTitleActions: true,
-                                            onChanged: (date) {
-                                              print('change $date in time zone ' +
-                                                  date.timeZoneOffset.inHours.toString());
-                                            },
-                                            onConfirm: (date) {
+                                            final index = _dayList.indexWhere(
+                                                    (element) =>
+                                                element.code == day_name);
+                                            if (index >= 0) {
+                                              print(
+                                                  'Using indexWhere: ${_dayList[index]}');
                                               setState(() {
-                                                _shippingSelectedDate = DateTime(
-                                                    _shippingSelectedDate.year,
-                                                    _shippingSelectedDate.month,
-                                                    _shippingSelectedDate.day,
-                                                    date.hour,
-                                                    date.minute
-                                                );
+                                                _shippingSelectedDate = date;
                                                 _shippingSelectedValid = true;
                                               });
-                                              print('confirm $date');
-                                            },
-                                            currentTime: DateTime.now(),
-                                            locale: app_language.$ == 'ar'
-                                                ? LocaleType.ar
-                                                : LocaleType.en
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          AppLocalizations.of(context)
-                                              .shipping_info_screen_go_to_address_delivey_time,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              color: MyTheme.accent_color),
-                                        ),
-                                      ),
-                                    ),
+                                            } else {
+                                              ToastComponent.showDialog(
+                                                  AppLocalizations.of(context)
+                                                      .shipping_info_screen_delivery_not_valid_warning,
+                                                  context,
+                                                  gravity: Toast.CENTER,
+                                                  duration: Toast.LENGTH_LONG);
+
+                                              setState(() {
+                                                _shippingSelectedDate = null;
+                                                _shippingSelectedValid = false;
+                                              });
+                                            }
+                                          }, onConfirm: (date) {
+                                            print(
+                                                'confirm ${_shippingSelectedDate}');
+                                            var day_name = intl.DateFormat('EEEE')
+                                                .format(date)
+                                                .toString()
+                                                .toUpperCase()
+                                                .substring(0, 2);
+
+                                            final index = _dayList.indexWhere(
+                                                    (element) =>
+                                                element.code == day_name);
+                                            if (index >= 0) {
+                                              print(
+                                                  'Using indexWhere: ${_dayList[index]}');
+                                              setState(() {
+                                                _shippingSelectedDate = date;
+                                                _shippingSelectedValid = true;
+                                              });
+                                            } else {
+                                              ToastComponent.showDialog(
+                                                  AppLocalizations.of(context)
+                                                      .shipping_info_screen_delivery_not_valid_warning,
+                                                  context,
+                                                  gravity: Toast.CENTER,
+                                                  duration: Toast.LENGTH_LONG);
+
+                                              setState(() {
+                                                _shippingSelectedDate = null;
+                                                _shippingSelectedValid = false;
+                                              });
+                                            }
+                                          },
+                                          locale: app_language.$ == 'ar'
+                                              ? LocaleType.ar
+                                              : LocaleType.en);
+                                      await DatePicker.showTime12hPicker(context, showTitleActions: true,
+                                          onChanged: (date) {
+                                            print('change $date in time zone ' +
+                                                date.timeZoneOffset.inHours.toString());
+                                          },
+                                          onConfirm: (date) {
+                                            setState(() {
+                                              _shippingSelectedDate = DateTime(
+                                                  _shippingSelectedDate.year,
+                                                  _shippingSelectedDate.month,
+                                                  _shippingSelectedDate.day,
+                                                  date.hour,
+                                                  date.minute
+                                              );
+                                              _shippingSelectedValid = true;
+                                            });
+                                            print('confirm $date');
+                                          },
+                                          currentTime: DateTime.now(),
+                                          locale: app_language.$ == 'ar'
+                                              ? LocaleType.ar
+                                              : LocaleType.en
+                                      );
+                                    },
                                   ),
                                 )
                               : Container(),

@@ -26,6 +26,8 @@ class PaymentRepository {
         "${AppConfig.BASE_URL}/payment-types?mode=${mode}&list=${list}");
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      "Accept0": "application/json",
+      "Authorization": "Bearer ${access_token.$}",
     });
 
     return paymentTypeResponseFromJson(response.body);

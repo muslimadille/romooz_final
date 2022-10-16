@@ -1011,7 +1011,7 @@ class _CheckoutState extends State<Checkout> {
                           SizedBox(height: 5,),
                           InkWell(
                               child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
-                              onTap: () => launch('${AppConfig.BASE_URL}/terms')
+                              onTap: () => launch('${AppConfig.RAW_BASE_URL}/terms')
                           ),
                           SizedBox(height: 10,),
                           RaisedButton(
