@@ -76,38 +76,38 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return CustomSplashScreen(
       //comment this
-      seconds: 4,
+      seconds: 8,
 
       //comment this
       navigateAfterSeconds: IntroductionSreen(),
 
       //navigateAfterFuture: loadFromFuture(), //uncomment this
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          DefaultTextStyle(
-            style: const TextStyle(
-              fontSize: 40.0,
-              fontFamily: 'Tajawal',
-            ),
-            child: AnimatedTextKit(
-              animatedTexts: [
-                TyperAnimatedText('We',
-                    textStyle: TextStyle(color: Colors.black)),
-                TyperAnimatedText('Make Groceries',
-                    textStyle: TextStyle(color: Colors.black)),
-                TyperAnimatedText('Better',
-                    textStyle: TextStyle(
-                        color: MyTheme.accent_color,
-                        fontWeight: FontWeight.bold)),
-              ],
-              onTap: () {
-                print("Tap Event");
-              },
-            ),
-          ),
-        ],
-      ),
+      // title: Row(
+      //   mainAxisSize: MainAxisSize.min,
+      //   children: <Widget>[
+      //     DefaultTextStyle(
+      //       style: const TextStyle(
+      //         fontSize: 40.0,
+      //         fontFamily: 'Tajawal',
+      //       ),
+      //       child: AnimatedTextKit(
+      //         animatedTexts: [
+      //           TyperAnimatedText('We',
+      //               textStyle: TextStyle(color: Colors.black)),
+      //           TyperAnimatedText('Make Groceries',
+      //               textStyle: TextStyle(color: Colors.black)),
+      //           TyperAnimatedText('Better',
+      //               textStyle: TextStyle(
+      //                   color: MyTheme.accent_color,
+      //                   fontWeight: FontWeight.bold)),
+      //         ],
+      //         onTap: () {
+      //           print("Tap Event");
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // ),
       useLoader: false,
       // loadingText: Text(
       //   AppConfig.copyright_text,
@@ -140,7 +140,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       //     );
       //   },
       // ),
-      image: Image.asset("assets/black-logo.png"),
+      // image: Image.asset("assets/black-logo.png"),
       // image: WaveImage(
       //   boarderColor: Colors.transparent,
       //   boarderWidth: 2,
@@ -152,7 +152,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       // ),
       photoSize: 100.0,
       imageBackground:
-          Image.asset("assets/splash_fr.png", fit: BoxFit.fitHeight),
+          Image.asset("assets/splash-screen.gif", fit: BoxFit.fitHeight),
       // backgroundColor: MyTheme.white,
       backgroundPhotoSize: 100.0,
     );

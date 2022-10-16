@@ -37,8 +37,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   PickResult selectedPlace;
   PickResult selectedPlace_update;
-  LatLng kInitialPosition =
-      LatLng(24.8132637, 46.331984); // London , arbitary value
+  LatLng kInitialPosition;
 
   GoogleMapController _controller;
 
@@ -57,7 +56,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   Future<Position> getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium);
+        desiredAccuracy: LocationAccuracy.high);
 
     return position;
   }
@@ -65,7 +64,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
   setDummyInitialLocation() {
     position = getLocation();
     position.then((value) => {
-          kInitialPosition = LatLng(value.latitude, value.longitude) //
+          kInitialPosition = LatLng(value.latitude, value.longitude), //
         });
 
     print("position===${position}");
@@ -234,14 +233,14 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     fetchAll();
   }
 
-  afterAddingAnAddressUpdateLocation(address_id) async {
+  afterAddingAnAddressUpdateLocation(addressId) async {
     fetchAll();
     var addressUpdateLocationResponse = await AddressRepository()
         .getAddressUpdateLocationResponse(
-            address_id,
+            addressId,
             selectedPlace_update.geometry.location.lat,
             selectedPlace_update.geometry.location.lng);
-
+    print("selectedPlace_update${selectedPlace_update}");
     if (addressUpdateLocationResponse.result == false) {
       ToastComponent.showDialog(addressUpdateLocationResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
@@ -254,8 +253,6 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
     Navigator.of(context, rootNavigator: true).pop();
     afterAddingAnAddress();
-
-    // Navigator.pop(context);
   }
 
   afterDeletingAnAddress() {
@@ -345,7 +342,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   onAddressAdd(context) async {
     var address = _addressController.text.toString();
-    var postal_code = "";
+    var postalCode = "";
     var phone = _phoneController.text.toString();
 
     if (address == "") {
@@ -376,10 +373,12 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
     if (selectedPlace == null) {
       ToastComponent.showDialog(
-          app_language.$ == 'ar'?
-          "قم بتحديد الموقع ثم اضغط علي - التقط هنا -":
-          "Select the location, then click - pick Here -", context,
-          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+          app_language.$ == 'ar'
+              ? "قم بتحديد الموقع ثم اضغط علي - التقط هنا -"
+              : "Select the location, then click - pick Here -",
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
       return;
     }
 
@@ -388,7 +387,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         // country_id: _selected_country.id,
         state_id: _selected_state.id,
         // city_id: _selected_city.id,
-        postal_code: postal_code,
+        postal_code: postalCode,
         phone: phone,
         latitude: selectedPlace.geometry.location.lat,
         longitude: selectedPlace.geometry.location.lng);
@@ -403,13 +402,14 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
         gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
 
     print("addressAddResponse.data.id${addressAddResponse.data.id}");
+    //Navigator.of(context).pop();
 
     afterAddingAnAddressUpdateLocation(addressAddResponse.data.id);
   }
 
   onAddressUpdate(context, index, id) async {
     var address = _addressControllerListForUpdate[index].text.toString();
-    var postal_code = _postalCodeControllerListForUpdate[index].text.toString();
+    var postalCode = _postalCodeControllerListForUpdate[index].text.toString();
     var phone = _phoneControllerListForUpdate[index].text.toString();
 
     if (address == "") {
@@ -447,7 +447,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
             // country_id: _selected_country_list_for_update[index].id,
             state_id: _selected_state_list_for_update[index].id,
             // city_id: _selected_city_list_for_update[index].id,
-            postal_code: postal_code,
+            postal_code: postalCode,
             phone: phone);
 
     if (addressUpdateResponse.result == false) {
@@ -1237,6 +1237,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   PlacePicker placePickerMethodUpdate(BuildContext context, int index) {
     return PlacePicker(
+      selectInitialPosition: true,
       hintText: AppLocalizations.of(context)
           .map_location_screen_your_delivery_location,
       apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
@@ -1341,6 +1342,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                     print(selectedPlace.geometry.location.lat);
                                     print(selectedPlace.geometry.location.lng);*/
                                       selectedPlace = _selectedPlace;
+                                      print(
+                                          "map_location_screen_pick_here${selectedPlace}");
                                       // onTapPickHere(selectedPlace);
                                     },
                                   ),
@@ -1370,6 +1373,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   PlacePicker placePickerMethod(BuildContext context) {
     return PlacePicker(
+      selectInitialPosition: true,
       hintText: AppLocalizations.of(context)
           .map_location_screen_your_delivery_location,
       apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
@@ -1395,8 +1399,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
       selectedPlaceWidgetBuilder:
           (_, _selectedPlace, state, isSearchBarFocused) {
-        return
-          isSearchBarFocused
+        return isSearchBarFocused
             ? Container()
             // Use FloatingCard or just create your own Widget.
             : FloatingCard(
@@ -1406,11 +1409,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                 rightPosition: 0.0,
                 width: 500,
                 borderRadius: BorderRadius.circular(12.0),
-                child:
-                state == SearchingState.Searching
+                child: state == SearchingState.Searching
                     ? Center(child: CircularProgressIndicator())
-                    :
-                RaisedButton(
+                    : RaisedButton(
                         child: Text(AppLocalizations.of(context)
                             .map_location_screen_pick_here),
                         onPressed: () {
@@ -1419,6 +1420,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                           // print(_selectedPlace.geometry.location.lng);
                           // print(_selectedPlace);
                           selectedPlace = _selectedPlace;
+                          print(
+                              "map_location_screen_pick_here${selectedPlace}");
                           // print("do something with [selectedPlace] data");
                         },
                       ),
@@ -2034,10 +2037,10 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
                             AppLocalizations.of(context).address_screen_phone ==
-                                "التليفون"
+                                    "التليفون"
                                 ? "الجوال"
                                 : AppLocalizations.of(context)
-                                .address_screen_phone,
+                                    .address_screen_phone,
                             style: TextStyle(
                                 color: MyTheme.font_grey, fontSize: 12)),
                       ),
@@ -2049,10 +2052,12 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                             controller: _phoneControllerListForUpdate[index],
                             autofocus: false,
                             decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context).address_screen_enter_phone ==
-                                    "أدخل التليفون"
+                                hintText: AppLocalizations.of(context)
+                                            .address_screen_enter_phone ==
+                                        "أدخل التليفون"
                                     ? "أدخل الجوال"
-                                    : AppLocalizations.of(context).address_screen_enter_phone,
+                                    : AppLocalizations.of(context)
+                                        .address_screen_enter_phone,
                                 hintStyle: TextStyle(
                                     fontSize: 12.0,
                                     color: MyTheme.textfield_grey),
@@ -2273,7 +2278,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -2309,7 +2316,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -2317,10 +2326,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                     width: 75,
                     child: Text(
                       AppLocalizations.of(context).address_screen_phone ==
-                          "التليفون"
+                              "التليفون"
                           ? "الجوال"
-                          : AppLocalizations.of(context)
-                          .address_screen_phone,
+                          : AppLocalizations.of(context).address_screen_phone,
                       style: TextStyle(
                         color: MyTheme.grey_153,
                       ),
@@ -2341,9 +2349,9 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return MapLocation(
-                                address: _shippingAddressList[index]);
-                          })).then((value) {
+                        return MapLocation(
+                            address: _shippingAddressList[index]);
+                      })).then((value) {
                         onPopped(value);
                       });
                     },

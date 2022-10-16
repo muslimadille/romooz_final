@@ -45,13 +45,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
-	<string>990731958289281</string
-	<key>io.flutter.embedded_views_preview</key>
-	<string>YES</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs access to location when open.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs access to location when in the background.</string>
+	<string>990731958289281</string>
 	<key>FacebookDisplayName</key>
 	<string>3c4d3521285c97c6a8801b483775d11b</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -61,8 +55,8 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 		<string>sms</string>
-        <string>tel</string>
-        <string>whatsapp</string>
+		<string>tel</string>
+		<string>whatsapp</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
