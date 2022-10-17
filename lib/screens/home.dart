@@ -595,41 +595,41 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Filter(
-                selected_filter: "brands",
-              );
-            }));
-          },
-          child: Container(
-            height: 100,
-            width: MediaQuery.of(context).size.width / 5 - 4,
-            child: Column(
-              children: [
-                Container(
-                    height: 57,
-                    width: 57,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border:
-                            Border.all(color: MyTheme.light_grey, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Image.asset("assets/brands.png"),
-                    )),
-                Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(AppLocalizations.of(context).home_screen_brands,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color.fromRGBO(132, 132, 132, 1),
-                            fontWeight: FontWeight.w300))),
-              ],
-            ),
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //       return Filter(
+        //         selected_filter: "brands",
+        //       );
+        //     }));
+        //   },
+        //   child: Container(
+        //     height: 100,
+        //     width: MediaQuery.of(context).size.width / 5 - 4,
+        //     child: Column(
+        //       children: [
+        //         Container(
+        //             height: 57,
+        //             width: 57,
+        //             decoration: BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 border:
+        //                     Border.all(color: MyTheme.light_grey, width: 1)),
+        //             child: Padding(
+        //               padding: const EdgeInsets.all(16.0),
+        //               child: Image.asset("assets/brands.png"),
+        //             )),
+        //         Padding(
+        //             padding: const EdgeInsets.only(top: 8),
+        //             child: Text(AppLocalizations.of(context).home_screen_brands,
+        //                 textAlign: TextAlign.center,
+        //                 style: TextStyle(
+        //                     color: Color.fromRGBO(132, 132, 132, 1),
+        //                     fontWeight: FontWeight.w300))),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         // GestureDetector(
         //   onTap: () {
         //     Navigator.push(context, MaterialPageRoute(builder: (context) {

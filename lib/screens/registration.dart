@@ -615,8 +615,22 @@ class _RegistrationState extends State<Registration> {
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: 20,),
+                  Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      IconButton(
+                          icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+                          onPressed: () {
+                            return Navigator.of(context).pop();
+                          }),
+                    ],
+                  ),
+                  widget.customer_type == "wholesale"?
+                  SizedBox(height: _screen_height*.02,):
+                  SizedBox(height: _screen_height*.15,),
                   Padding(
-                    padding: const EdgeInsets.only(top: 40.0, bottom: 15),
+                    padding: const EdgeInsets.only(bottom: 15),
                     child: Container(
                       width: 75,
                       height: 75,

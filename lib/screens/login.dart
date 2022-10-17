@@ -283,8 +283,9 @@ class _LoginState extends State<Login> {
                           }),
                     ],
                   ),
+                  SizedBox(height: _screen_height*.15,),
                   Padding(
-                    padding: const EdgeInsets.only(top: 40.0, bottom: 15),
+                    padding: const EdgeInsets.only(bottom: 15),
                     child: Container(
                       width: 75,
                       height: 75,
@@ -316,7 +317,8 @@ class _LoginState extends State<Login> {
                             _login_by == "email"
                                 ? AppLocalizations.of(context)
                                     .login_screen_email
-                                : AppLocalizations.of(context)
+                                :
+                            app_language.$ == 'ar' ? 'الجوال' : AppLocalizations.of(context)
                                     .login_screen_phone,
                             style: TextStyle(
                                 color: MyTheme.accent_color,
