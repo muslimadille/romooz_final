@@ -519,7 +519,7 @@ class _LoginState extends State<Login> {
                               color: MyTheme.purpel,
                               reduis: 0.4,
                               title:
-                                app_language.$ == 'ar' ? 'تسجيل الدخول كتاجر جملة' : 'Login as Wholesale',
+                                app_language.$ == 'ar' ? 'تسجيل الدخول جملة' : 'Login as Wholesale',
                               onTap: () {
                                 onPressedLogin('wholesale');
                               },
@@ -598,6 +598,7 @@ class _LoginState extends State<Login> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(12.0))),
                               child: Text(
+                                app_language.$ == 'ar' ? 'انشاء حساب جملة' :
                                 AppLocalizations.of(context)
                                     .login_screen_sign_up_wholesale,
                                 style: TextStyle(

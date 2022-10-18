@@ -530,6 +530,8 @@ class _RegistrationState extends State<Registration> {
     /////
     ///
 
+    print('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
+    print(_phone);
     var _data = {
       "name": name,
       "email_or_phone": _register_by == 'email' ? email : _phone,
