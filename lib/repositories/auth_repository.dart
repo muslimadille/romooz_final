@@ -21,7 +21,7 @@ class AuthRepository {
       "phone": "${email}",
       // "password": "$password",
       "user_type": "customer",
-      // "user_type": "${userType}",
+      "customer_type": "${userType}",
       "identity_matrix": AppConfig.purchase_code
     });
 

@@ -1399,6 +1399,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
       selectedPlaceWidgetBuilder:
           (_, _selectedPlace, state, isSearchBarFocused) {
+        print('llllllllllllllllllllllllllllllllllllllll');
+        print(isSearchBarFocused.toString());
         return isSearchBarFocused
             ? Container()
             // Use FloatingCard or just create your own Widget.
