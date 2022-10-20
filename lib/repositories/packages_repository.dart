@@ -21,7 +21,7 @@ class PackagesRepository {
     Uri url;
     if (is_logged_in.$ == false) {
       url = Uri.parse(
-          "${AppConfig.BASE_URL}/packages/get/all?customer_type=$customer_type");
+          "${AppConfig.BASE_URL}/packages/get/all");
     } else {
       url = Uri.parse("${AppConfig.BASE_URL}/packages/auth/get/all");
     }
