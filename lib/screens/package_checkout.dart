@@ -406,12 +406,32 @@ class _PackageCheckoutState extends State<PackageCheckout> {
   }
 
   pay_by_wallet() async {
-    var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponseFromWallet(
-        _paymentTypeList[_selected_payment_method_index].payment_type_key, _grandTotalValue);
 
+    loading();
+
+    var orderCreateResponse = await PaymentRepository()
+        .getOrderCreateResponseFromCod(
+        _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
+
+    print("orderCreateResponse =====${orderCreateResponse}");
+
+    Navigator.of(loadingcontext).pop();
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      Navigator.of(context).pop();
+      return;
+    }
+
+
+    var orderPeymntFromWalletResponse = await PaymentRepository()
+        .getOrderCreateResponseFromWallet(
+      // _paymentTypeList[_selected_payment_method_index].payment_type_key, _grandTotalValue,
+        orderCreateResponse.orders_id
+    );
+
+    if (orderPeymntFromWalletResponse.result == false) {
+      ToastComponent.showDialog(orderPeymntFromWalletResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }

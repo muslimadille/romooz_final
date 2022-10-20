@@ -97,7 +97,7 @@ class _CheckoutState extends State<Checkout> {
     if (is_logged_in.$ == true) {
       if (widget.isWalletRecharge || widget.manual_payment_from_order_details) {
         _grandTotalValue = widget.rechargeAmount;
-        payment_type = "wallet_payment";
+        payment_type = "wallet";
       } else {
         fetchSummary();
         //payment_type = payment_type;
@@ -405,12 +405,35 @@ class _CheckoutState extends State<Checkout> {
   }
 
   pay_by_wallet() async {
-    var orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponseFromWallet(
-        _paymentTypeList[_selected_payment_method_index].payment_type_key, _grandTotalValue);
+    print('------------------------------------------------------');
+    loading();
 
+    var orderCreateResponse = await PaymentRepository()
+        .getOrderCreateResponseFromCod(
+        _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
+
+    print("orderCreateResponse =====${orderCreateResponse}");
+
+    Navigator.of(loadingcontext).pop();
     if (orderCreateResponse.result == false) {
       ToastComponent.showDialog(orderCreateResponse.message, context,
+          gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      Navigator.of(context).pop();
+      return;
+    }
+
+
+
+
+
+    var orderPeymntFromWalletResponse = await PaymentRepository()
+        .getOrderCreateResponseFromWallet(
+        // _paymentTypeList[_selected_payment_method_index].payment_type_key, _grandTotalValue,
+      orderCreateResponse.orders_id
+    );
+
+    if (orderPeymntFromWalletResponse.result == false) {
+      ToastComponent.showDialog(orderPeymntFromWalletResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
       return;
     }

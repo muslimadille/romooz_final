@@ -78,13 +78,17 @@ class PaymentRepository {
   }
 
   Future<OrderCreateResponse> getOrderCreateResponseFromWallet(
-      @required payment_method, @required double amount) async {
+      // @required payment_method,
+      // @required double amount,
+      @required String order_id
+      ) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/payments/pay/wallet");
 
     var post_body = jsonEncode({
-      "user_id": "${user_id.$}",
-      "payment_type": "${payment_method}",
-      "amount": "${amount}"
+      // "user_id": "${user_id.$}",
+      // "payment_type": "${payment_method}",
+      // "amount": "${amount}"
+      "order_id": "${order_id}"
     });
 
     final response = await http.post(url,
