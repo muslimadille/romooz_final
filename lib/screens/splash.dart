@@ -14,6 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:wave_image/wave_image.dart';
 
+import 'package:is_first_run/is_first_run.dart';
+
 class Splash extends StatefulWidget {
   @override
   _SplashState createState() => _SplashState();
@@ -48,7 +50,15 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       });
     });
     _initPackageInfo();
+    _initFirstRun();
   }
+
+  bool firstRun = false;
+  Future<void> _initFirstRun() async {
+    firstRun = await IsFirstRun.isFirstRun();
+  }
+
+
 
   @override
   void dispose() {
@@ -79,7 +89,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       seconds: 8,
 
       //comment this
-      navigateAfterSeconds: IntroductionSreen(),
+      navigateAfterSeconds: firstRun?IntroductionSreen():Main(),
 
       //navigateAfterFuture: loadFromFuture(), //uncomment this
       // title: Row(

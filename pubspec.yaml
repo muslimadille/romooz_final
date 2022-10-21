@@ -87,6 +87,7 @@ dependencies:
   animated_text_kit:
   wave_image: ^0.0.6
   flutter_launch:
+  is_first_run: ^1.0.0
  # hyperpay: ^0.0.9-alpha
 
 
