@@ -685,8 +685,12 @@ class _RegistrationState extends State<Registration> {
                             _register_by == "email"
                                 ? AppLocalizations.of(context)
                                     .registration_screen_email
+                                :(AppLocalizations.of(context)
+                                .registration_screen_phone ==
+                                "التليفون"
+                                ? "الجوال"
                                 : AppLocalizations.of(context)
-                                    .registration_screen_phone,
+                                .registration_screen_phone) ,
                             style: TextStyle(
                                 color: MyTheme.accent_color,
                                 fontWeight: FontWeight.w600),
@@ -1152,7 +1156,7 @@ class _RegistrationState extends State<Registration> {
                                         child: Center(
                                             child: Text(
                                                 AppLocalizations.of(context)
-                                                    .address_screen_loading_states,
+                                                    .address_screen_loading_cities,
                                                 style: TextStyle(
                                                     color:
                                                         MyTheme.medium_grey))),
@@ -1175,7 +1179,7 @@ class _RegistrationState extends State<Registration> {
                                         child: Center(
                                             child: Text(
                                                 AppLocalizations.of(context)
-                                                    .address_screen_no_state_available,
+                                                    .address_screen_no_city_available,
                                                 style: TextStyle(
                                                     color:
                                                         MyTheme.medium_grey))),
@@ -1198,7 +1202,7 @@ class _RegistrationState extends State<Registration> {
                                       },
                                       decoration: InputDecoration(
                                           hintText: AppLocalizations.of(context)
-                                              .address_screen_enter_state,
+                                              .address_screen_enter_city,
                                           hintStyle: TextStyle(
                                               fontSize: 12.0,
                                               color: MyTheme.textfield_grey),

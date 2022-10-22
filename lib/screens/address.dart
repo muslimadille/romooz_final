@@ -1751,7 +1751,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                                 child: Center(
                                     child: Text(
                                         AppLocalizations.of(context)
-                                            .address_screen_no_state_available,
+                                            .address_screen_no_city_available,
                                         style: TextStyle(
                                             color: MyTheme.medium_grey))),
                               );
