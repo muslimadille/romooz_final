@@ -34,10 +34,11 @@ class PackageCheckout extends StatefulWidget {
   final bool isWalletRecharge;
   final double rechargeAmount;
   final String title;
-
+  final int realPackageID;
   PackageCheckout(
       {Key key,
       this.order_id,
+      this.realPackageID,
       this.manual_payment_from_order_details = false,
       this.list = "both",
       this.isWalletRecharge = false,
@@ -184,7 +185,7 @@ class _PackageCheckoutState extends State<PackageCheckout> {
     }
 
     var couponApplyResponse =
-        await CouponRepository().getCouponApplyResponse(coupon_code);
+        await CouponRepository().getPackageCouponApplyResponse(coupon_code,widget.realPackageID.toString());
     if (couponApplyResponse.result == false) {
       ToastComponent.showDialog(couponApplyResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
@@ -735,13 +736,13 @@ class _PackageCheckoutState extends State<PackageCheckout> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              // widget.manual_payment_from_order_details == false
-                              //     ? Padding(
-                              //         padding:
-                              //             const EdgeInsets.only(bottom: 16.0),
-                              //         child: buildApplyCouponRow(context),
-                              //       )
-                              //     : Container(),
+                              widget.manual_payment_from_order_details == false
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16.0),
+                                      child: buildApplyCouponRow(context),
+                                    )
+                                  : Container(),
                               // grandTotalSection(),
                             ],
                           ),

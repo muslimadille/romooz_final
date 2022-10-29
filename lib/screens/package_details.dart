@@ -704,6 +704,7 @@ class _PackageItemsState extends State<PackageItems> {
                               return PackageCheckout(
                                 order_id: subscribeProcessResponse
                                     .user_package_id.toString(),
+                                realPackageID: widget.packageId,
                               );
                             }));
                           }

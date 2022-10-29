@@ -25,6 +25,27 @@ class CouponRepository {
     return couponApplyResponseFromJson(response.body);
   }
 
+  Future<CouponApplyResponse> getPackageCouponApplyResponse(
+      @required String coupon_code, @required String package_id) async {
+
+    print('......................................................');
+    print(package_id);
+
+    var post_body =
+    jsonEncode({"user_id": "${user_id.$}", "coupon_code": "$coupon_code","package_id":"$package_id"});
+
+    Uri url = Uri.parse("${AppConfig.BASE_URL}/coupon-package-apply");
+    final response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${access_token.$}",
+          "App-Language": app_language.$
+        },
+        body: post_body);
+
+    return couponApplyResponseFromJson(response.body);
+  }
+
   Future<CouponRemoveResponse> getCouponRemoveResponse() async {
     var post_body = jsonEncode({"user_id": "${user_id.$}"});
 

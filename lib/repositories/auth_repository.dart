@@ -24,6 +24,8 @@ class AuthRepository {
       "customer_type": "${userType}",
       "identity_matrix": AppConfig.purchase_code
     });
+    print('11111111111111111111111111111111111111');
+    print(post_body);
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/auth/login");
     final response = await http.post(url,
