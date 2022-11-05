@@ -1,36 +1,3 @@
-import 'package:hyperpay/hyperpay.dart';
-
-class TestConfig implements HyperpayConfig {
-  @override
-  String creditcardEntityID = '8a8294174b7ecb28014b9699220015ca';
-  @override
-  String madaEntityID = '8a8294174b7ecb28014b9699220015ca';
-  @override
-  Uri checkoutEndpoint = _checkoutEndpoint;
-  @override
-  Uri statusEndpoint = _statusEndpoint;
-  @override
-  PaymentMode paymentMode = PaymentMode.test;
-
-  @override
-  String applePayEntityID;
-}
-
-class LiveConfig implements HyperpayConfig {
-  @override
-  String creditcardEntityID = '8acda4c8758dc6750175977e90726ef8';
-  @override
-  String madaEntityID = '8acda4c8758dc6750175977f0d676eff';
-  @override
-  Uri checkoutEndpoint = _checkoutEndpoint;
-  @override
-  Uri statusEndpoint = _statusEndpoint;
-  @override
-  PaymentMode paymentMode = PaymentMode.live;
-
-  @override
-  String applePayEntityID;
-}
 
 // Setup using your own endpoints.
 // https://wordpresshyperpay.docs.oppwa.com/tutorials/mobile-sdk/integration/server.
@@ -50,16 +17,54 @@ class LiveConfig implements HyperpayConfig {
 // Currency: SAR only
 // PaymentType: DB only
 // Payment Methods: VISA, MASTER, MADA ,APPLEPAY
-String _host = 'oppwa.com';
+//import 'package:hyperpay/hyperpay.dart';
+
+class TestConfig implements HyperpayConfig {
+  @override
+  String creditcardEntityID = '8a8294174b7ecb28014b9699220015ca';
+  @override
+  String madaEntityID = '8a8294174b7ecb28014b9699220015ca';
+  @override
+  Uri checkoutEndpoint = _checkoutEndpoint;
+  @override
+  Uri statusEndpoint = _statusEndpoint;
+  //@override
+  //PaymentMode paymentMode = PaymentMode.test;
+
+  @override
+  String applePayEntityID;
+}
+
+class LiveConfig implements HyperpayConfig {
+  @override
+  String creditcardEntityID = '8acda4c8758dc6750175977e90726ef8';
+  @override
+  String madaEntityID = '8acda4c8758dc6750175977f0d676eff';
+  @override
+  String applePayEntityID="8acda4ca7646bafb017661b532c3047b";
+  @override
+  Uri checkoutEndpoint = _checkoutEndpoint;
+  @override
+  Uri statusEndpoint = _statusEndpoint;
+  //@override
+  //PaymentMode paymentMode = PaymentMode.live;
+
+}
+
+class HyperpayConfig {
+}
+
+
+String _host = 'romooz.tech';
 
 Uri _checkoutEndpoint = Uri(
   scheme: 'https',
   host: _host,
-  path: '/v1/checkouts',
+  path: '/api/v2/hyperpay-get-checkoutId',
 );
 
 Uri _statusEndpoint = Uri(
   scheme: 'https',
   host: _host,
-  path: '/v1/checkouts',
+  path: '/api/v2/hyperpay-get-paymentStatus',
 );

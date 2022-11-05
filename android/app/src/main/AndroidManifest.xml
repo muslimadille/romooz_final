@@ -17,6 +17,16 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Romooz"
         android:icon="@mipmap/ic_launcher">
+        <service
+            android:name="com.oppwa.mobile.connect.service.ConnectService"
+            android:exported="false"/>
+        <activity
+            tools:replace="android:windowSoftInputMode"
+            android:name="com.oppwa.mobile.connect.checkout.dialog.CheckoutActivity"
+            android:theme="@style/Theme.Checkout.Light"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

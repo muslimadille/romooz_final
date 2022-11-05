@@ -749,13 +749,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  hyperpay:
-    dependency: "direct main"
-    description:
-      name: hyperpay
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.9-alpha"
   image:
     dependency: transitive
     description:

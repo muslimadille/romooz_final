@@ -49,7 +49,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.romooz.app.customer"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -96,11 +96,14 @@ dependencies {
     // For example, declare the dependencies for Firebase Authentication and Cloud Firestore
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    // hyperpay settings
+    implementation fileTree(dir: "libs", include: ["*.aar"])
+    implementation "androidx.appcompat:appcompat:1.4.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.browser:browser:1.4.0"
+    implementation "androidx.fragment:fragment:1.5.4"
     implementation 'com.google.android.material:material:1.5.0'
-   // implementation project(path:':oppwa.mobile', configuration: 'default')
-    implementation project(":oppwa.mobile")
-    // implementation "androidx.appcompat:appcompat:1.4.1"
-    // implementation "com.google.android.material:material:1.5.0"
+    implementation "com.google.android.gms:play-services-base:18.1.0"
+
 
 }

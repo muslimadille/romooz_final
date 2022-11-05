@@ -76,7 +76,6 @@ dependencies:
   photo_view: ^0.13.0
   intl: ^0.17.0
   twitter_login: ^4.0.1
-  hyperpay: ^0.0.9-alpha
   enum_to_string: ^2.0.1
   badges:
   multi_select_flutter:
