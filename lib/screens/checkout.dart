@@ -35,7 +35,7 @@ class Checkout extends StatefulWidget {
   int order_id; // only need when making manual payment from order details
   DateTime shippingSelectedDate;
   bool
-      manual_payment_from_order_details; // only need when making manual payment from order details
+  manual_payment_from_order_details; // only need when making manual payment from order details
   String list;
   final bool isWalletRecharge;
   final double rechargeAmount;
@@ -43,13 +43,13 @@ class Checkout extends StatefulWidget {
 
   Checkout(
       {Key key,
-      this.order_id = 0,
-      this.manual_payment_from_order_details = false,
-      this.list = "both",
-      this.isWalletRecharge = false,
-      this.rechargeAmount = 0.0,
-      this.shippingSelectedDate = null,
-      this.title})
+        this.order_id = 0,
+        this.manual_payment_from_order_details = false,
+        this.list = "both",
+        this.isWalletRecharge = false,
+        this.rechargeAmount = 0.0,
+        this.shippingSelectedDate = null,
+        this.title})
       : super(key: key);
 
   @override
@@ -113,7 +113,7 @@ class _CheckoutState extends State<Checkout> {
 
   fetchList() async {
     var paymentTypeResponseList =
-        await PaymentRepository().getPaymentResponseList(list: widget.list);
+    await PaymentRepository().getPaymentResponseList(list: widget.list);
     paymentTypeResponseList.forEach((element) {
     });
     _paymentTypeList.addAll(paymentTypeResponseList);
@@ -189,7 +189,7 @@ class _CheckoutState extends State<Checkout> {
     }
 
     var couponApplyResponse =
-        await CouponRepository().getCouponApplyResponse(coupon_code);
+    await CouponRepository().getCouponApplyResponse(coupon_code);
     if (couponApplyResponse.result == false) {
       ToastComponent.showDialog(couponApplyResponse.message, context,
           gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
@@ -202,7 +202,7 @@ class _CheckoutState extends State<Checkout> {
 
   onCouponRemove() async {
     var couponRemoveResponse =
-        await CouponRepository().getCouponRemoveResponse();
+    await CouponRepository().getCouponRemoveResponse();
 
     if (couponRemoveResponse.result == false) {
       ToastComponent.showDialog(couponRemoveResponse.message, context,
@@ -434,8 +434,8 @@ class _CheckoutState extends State<Checkout> {
 
     var orderPeymntFromWalletResponse = await PaymentRepository()
         .getOrderCreateResponseFromWallet(
-        // _paymentTypeList[_selected_payment_method_index].payment_type_key, _grandTotalValue,
-      orderCreateResponse.orders_id
+      // _paymentTypeList[_selected_payment_method_index].payment_type_key, _grandTotalValue,
+        orderCreateResponse.orders_id
     );
 
     if (orderPeymntFromWalletResponse.result == false) {
@@ -518,11 +518,11 @@ class _CheckoutState extends State<Checkout> {
   onPaymentMethodItemTap(index) {
     // if (_selected_payment_method_key !=
     //     _paymentTypeList[index].payment_type_key) {
-      setState(() {
-        _selected_payment_method_index = index;
-        // _selected_payment_method = _paymentTypeList[index].payment_type;
-        // _selected_payment_method_key = _paymentTypeList[index].payment_type_key;
-      });
+    setState(() {
+      _selected_payment_method_index = index;
+      // _selected_payment_method = _paymentTypeList[index].payment_type;
+      // _selected_payment_method_key = _paymentTypeList[index].payment_type_key;
+    });
     // }
 
     //print(_selected_payment_method);
@@ -534,7 +534,7 @@ class _CheckoutState extends State<Checkout> {
       context: context,
       builder: (_) => AlertDialog(
         contentPadding:
-            EdgeInsets.only(top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
+        EdgeInsets.only(top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
         content: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 16.0),
           child: Container(
@@ -731,32 +731,32 @@ class _CheckoutState extends State<Checkout> {
                 child: widget.isWalletRecharge
                     ? Container()
                     : Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
 
-                          /*border: Border(
+                    /*border: Border(
                       top: BorderSide(color: MyTheme.light_grey,width: 1.0),
                     )*/
-                        ),
-                        height:
-                            widget.manual_payment_from_order_details ? 80 : 140,
-                        //color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              widget.manual_payment_from_order_details == false
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 16.0),
-                                      child: buildApplyCouponRow(context),
-                                    )
-                                  : Container(),
-                              grandTotalSection(),
-                            ],
-                          ),
-                        ),
-                      ),
+                  ),
+                  height:
+                  widget.manual_payment_from_order_details ? 80 : 140,
+                  //color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        widget.manual_payment_from_order_details == false
+                            ? Padding(
+                          padding:
+                          const EdgeInsets.only(bottom: 16.0),
+                          child: buildApplyCouponRow(context),
+                        )
+                            : Container(),
+                        grandTotalSection(),
+                      ],
+                    ),
+                  ),
+                ),
               )
             ],
           )),
@@ -777,10 +777,10 @@ class _CheckoutState extends State<Checkout> {
                 hintText: AppLocalizations.of(context)
                     .checkout_screen_enter_coupon_code,
                 hintStyle:
-                    TextStyle(fontSize: 14.0, color: MyTheme.textfield_grey),
+                TextStyle(fontSize: 14.0, color: MyTheme.textfield_grey),
                 enabledBorder: OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: MyTheme.textfield_grey, width: 0.5),
+                  BorderSide(color: MyTheme.textfield_grey, width: 0.5),
                   borderRadius: const BorderRadius.only(
                     topLeft: const Radius.circular(8.0),
                     bottomLeft: const Radius.circular(8.0),
@@ -788,7 +788,7 @@ class _CheckoutState extends State<Checkout> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: MyTheme.medium_grey, width: 0.5),
+                  BorderSide(color: MyTheme.medium_grey, width: 0.5),
                   borderRadius: const BorderRadius.only(
                     topLeft: const Radius.circular(8.0),
                     bottomLeft: const Radius.circular(8.0),
@@ -799,53 +799,53 @@ class _CheckoutState extends State<Checkout> {
         ),
         !_coupon_applied
             ? Container(
-                width: (MediaQuery.of(context).size.width - 32) * (1 / 3),
-                height: 42,
-                child: FlatButton(
-                  minWidth: MediaQuery.of(context).size.width,
-                  //height: 50,
-                  color: MyTheme.accent_color,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.only(
-                    topRight: const Radius.circular(8.0),
-                    bottomRight: const Radius.circular(8.0),
-                  )),
-                  child: Text(
-                    AppLocalizations.of(context).checkout_screen_apply_coupon,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onPressed: () {
-                    onCouponApply();
-                  },
-                ),
-              )
+          width: (MediaQuery.of(context).size.width - 32) * (1 / 3),
+          height: 42,
+          child: FlatButton(
+            minWidth: MediaQuery.of(context).size.width,
+            //height: 50,
+            color: MyTheme.accent_color,
+            shape: RoundedRectangleBorder(
+                borderRadius: const BorderRadius.only(
+                  topRight: const Radius.circular(8.0),
+                  bottomRight: const Radius.circular(8.0),
+                )),
+            child: Text(
+              AppLocalizations.of(context).checkout_screen_apply_coupon,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            ),
+            onPressed: () {
+              onCouponApply();
+            },
+          ),
+        )
             : Container(
-                width: (MediaQuery.of(context).size.width - 32) * (1 / 3),
-                height: 42,
-                child: FlatButton(
-                  minWidth: MediaQuery.of(context).size.width,
-                  //height: 50,
-                  color: MyTheme.accent_color,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.only(
-                    topRight: const Radius.circular(8.0),
-                    bottomRight: const Radius.circular(8.0),
-                  )),
-                  child: Text(
-                    AppLocalizations.of(context).checkout_screen_remove,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onPressed: () {
-                    onCouponRemove();
-                  },
-                ),
-              )
+          width: (MediaQuery.of(context).size.width - 32) * (1 / 3),
+          height: 42,
+          child: FlatButton(
+            minWidth: MediaQuery.of(context).size.width,
+            //height: 50,
+            color: MyTheme.accent_color,
+            shape: RoundedRectangleBorder(
+                borderRadius: const BorderRadius.only(
+                  topRight: const Radius.circular(8.0),
+                  bottomRight: const Radius.circular(8.0),
+                )),
+            child: Text(
+              AppLocalizations.of(context).checkout_screen_remove,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            ),
+            onPressed: () {
+              onCouponRemove();
+            },
+          ),
+        )
       ],
     );
   }
@@ -894,87 +894,87 @@ class _CheckoutState extends State<Checkout> {
           height: 100,
           child: Center(
               child: Text(
-            AppLocalizations.of(context).common_no_payment_method_added,
-            style: TextStyle(color: MyTheme.font_grey),
-          )));
+                AppLocalizations.of(context).common_no_payment_method_added,
+                style: TextStyle(color: MyTheme.font_grey),
+              )));
     }
   }
 
   GestureDetector buildPaymentMethodItemCard(index) {
     return widget.isWalletRecharge &&
-            (_paymentTypeList[index].payment_type == "wallet_system" ||
-                _paymentTypeList[index].payment_type == "cash_payment")
+        (_paymentTypeList[index].payment_type == "wallet_system" ||
+            _paymentTypeList[index].payment_type == "cash_payment")
         ? GestureDetector(
-            child: Container(),
-            onDoubleTap: () {},
-          )
+      child: Container(),
+      onDoubleTap: () {},
+    )
         : GestureDetector(
-            onTap: () {
-              onPaymentMethodItemTap(index);
-            },
-            child: Stack(
-              children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    side: _selected_payment_method_index == index
-                        ? BorderSide(color: MyTheme.accent_color, width: 2.0)
-                        : BorderSide(color: MyTheme.light_grey, width: 1.0),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  elevation: 0.0,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            width: 100,
-                            height: 100,
-                            child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child:
-                        //             Image.asset(
-                        //   _paymentTypeList[index].image,
-                        //   fit: BoxFit.fitWidth,
-                        // ),
-                                    FadeInImage.assetNetwork(
-                                  placeholder: 'assets/placeholder.png',
-                                  image:  _paymentTypeList[index].image,
-                                  fit: BoxFit.fitWidth,
-                                )
+      onTap: () {
+        onPaymentMethodItemTap(index);
+      },
+      child: Stack(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(
+              side: _selected_payment_method_index == index
+                  ? BorderSide(color: MyTheme.accent_color, width: 2.0)
+                  : BorderSide(color: MyTheme.light_grey, width: 1.0),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            elevation: 0.0,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      width: 100,
+                      height: 100,
+                      child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child:
+                          //             Image.asset(
+                          //   _paymentTypeList[index].image,
+                          //   fit: BoxFit.fitWidth,
+                          // ),
+                          FadeInImage.assetNetwork(
+                            placeholder: 'assets/placeholder.png',
+                            image:  _paymentTypeList[index].image,
+                            fit: BoxFit.fitWidth,
+                          )
 
-                            )),
-                        Container(
-                          width: 150,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  _paymentTypeList[index].title,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: MyTheme.font_grey,
-                                      fontSize: 14,
-                                      height: 1.6,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
+                      )),
+                  Container(
+                    width: 150,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            _paymentTypeList[index].title,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                color: MyTheme.font_grey,
+                                fontSize: 14,
+                                height: 1.6,
+                                fontWeight: FontWeight.w400),
                           ),
                         ),
-                      ]),
-                ),
-                Positioned(
-                  right: 16,
-                  top: 16,
-                  child: buildPaymentMethodCheckContainer(
-                      _selected_payment_method_index == index),
-                )
-              ],
-            ),
-          );
+                      ],
+                    ),
+                  ),
+                ]),
+          ),
+          Positioned(
+            right: 16,
+            top: 16,
+            child: buildPaymentMethodCheckContainer(
+                _selected_payment_method_index == index),
+          )
+        ],
+      ),
+    );
   }
 
   Widget buildPaymentMethodCheckContainer(bool check) {
@@ -1011,12 +1011,12 @@ class _CheckoutState extends State<Checkout> {
               child: Text(
                 widget.isWalletRecharge
                     ? AppLocalizations.of(context)
-                        .recharge_wallet_screen_recharge_wallet
+                    .recharge_wallet_screen_recharge_wallet
                     : widget.manual_payment_from_order_details
-                        ? AppLocalizations.of(context)
-                            .common_proceed_in_all_caps
-                        : AppLocalizations.of(context)
-                            .checkout_screen_place_my_order,
+                    ? AppLocalizations.of(context)
+                    .common_proceed_in_all_caps
+                    : AppLocalizations.of(context)
+                    .checkout_screen_place_my_order,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -1025,58 +1025,58 @@ class _CheckoutState extends State<Checkout> {
               onPressed: () async {
                 bool checkTerms = false;
                 await showDialog(
-                    // The user CANNOT close this dialog  by pressing outsite it
-                    // barrierDismissible: false,
+                  // The user CANNOT close this dialog  by pressing outsite it
+                  // barrierDismissible: false,
                     context: context,
                     builder: (_) {
-                  return Dialog(
-                    // The background color
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('يجب الموافقة علي سياسة الشروط والاحكام قبل عمل الطلبية', style: TextStyle(fontSize: 10)),
-                          SizedBox(height: 5,),
-                          InkWell(
-                              child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
-                              onTap: () => launch('${AppConfig.RAW_BASE_URL}/terms')
+                      return Dialog(
+                        // The background color
+                        backgroundColor: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('يجب الموافقة علي سياسة الشروط والاحكام قبل عمل الطلبية', style: TextStyle(fontSize: 10)),
+                              SizedBox(height: 5,),
+                              InkWell(
+                                  child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
+                                  onTap: () => launch('${AppConfig.RAW_BASE_URL}/terms')
+                              ),
+                              SizedBox(height: 10,),
+                              RaisedButton(
+                                elevation: 5.0,
+                                color: Colors.green,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                onPressed: () {
+                                  checkTerms = true;
+                                  Navigator.of(context, rootNavigator: true).pop();
+                                },
+                                child: Text(
+                                  'نعم أوفق',
+                                  style: TextStyle(fontSize: 15.0, color: Colors.white),
+                                ),
+                              ),
+                              // RaisedButton(
+                              //   elevation: 5.0,
+                              //   color: Colors.deepOrange,
+                              //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                              //   onPressed: () {
+                              //     Navigator.of(context, rootNavigator: true).pop();
+                              //   },
+                              //   child: Text(
+                              //     'رجوع',
+                              //     style: TextStyle(fontSize: 15.0, color: Colors.white),
+                              //   ),
+                              // ),
+                            ],
                           ),
-                          SizedBox(height: 10,),
-                          RaisedButton(
-                            elevation: 5.0,
-                            color: Colors.green,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                            onPressed: () {
-                              checkTerms = true;
-                              Navigator.of(context, rootNavigator: true).pop();
-                            },
-                            child: Text(
-                              'نعم أوفق',
-                              style: TextStyle(fontSize: 15.0, color: Colors.white),
-                            ),
-                          ),
-                          // RaisedButton(
-                          //   elevation: 5.0,
-                          //   color: Colors.deepOrange,
-                          //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                          //   onPressed: () {
-                          //     Navigator.of(context, rootNavigator: true).pop();
-                          //   },
-                          //   child: Text(
-                          //     'رجوع',
-                          //     style: TextStyle(fontSize: 15.0, color: Colors.white),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                  );
-                });
+                        ),
+                      );
+                    });
                 if(!checkTerms){
-                return;
+                  return;
                 }
                 onPressPlaceOrderOrProceed();
               },
@@ -1149,14 +1149,14 @@ class _CheckoutState extends State<Checkout> {
           loadingcontext = context;
           return AlertDialog(
               content: Row(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(
-                width: 10,
-              ),
-              Text("${AppLocalizations.of(context).loading_text}"),
-            ],
-          ));
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text("${AppLocalizations.of(context).loading_text}"),
+                ],
+              ));
         });
   }
   /// ======================== HYPER PAY METHODS==============================

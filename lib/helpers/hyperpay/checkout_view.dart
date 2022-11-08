@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
@@ -10,16 +7,9 @@ import 'package:active_ecommerce_flutter/screens/order_list.dart';
 import 'package:active_ecommerce_flutter/screens/subscribed_packages_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hyperpay/hyperpay.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:http/http.dart' as http;
-import 'package:toast/toast.dart';
-
-
-import '../../app_config.dart';
-import 'new_checkout_view.dart';
-
-/// this screen replaced with integrated hyperpay sdk view which handled in checkout.dart screen
 
 // Kindly find the Live credentials as requested for "Romooz":
 
@@ -37,6 +27,7 @@ import 'new_checkout_view.dart';
 class CheckoutView extends StatefulWidget {
   CheckoutView({Key key, this.order_id = "0", this.order_type, this.payment_type})
       : super(key: key);
+
   final String order_id;
   final String order_type;
   final String payment_type;
@@ -46,30 +37,283 @@ class CheckoutView extends StatefulWidget {
 }
 
 class _CheckoutViewState extends State<CheckoutView> {
-
-  /// PAYMENT NATIVE CHANNEL
-  static const platform = MethodChannel('hyperPayChannel');
-
   TextEditingController holderNameController = TextEditingController();
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController expiryController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
+
+  BrandType brandType = BrandType.none;
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   bool isLoading = false;
-  CardParams _cardParams=CardParams();
-  String _checkoutId="";
+  String sessionCheckoutID = '';
+
+  HyperpayPlugin hyperpay;
 
   @override
   void initState() {
     super.initState();
-    _getPaymentResponse();
+    print("orderCreateResponse${widget.order_type}${widget.order_id} ");
+    setup();
+  }
+
+  setup() async {
+    // hyperpay = await HyperpayPlugin.setup(config: TestConfig());
+    hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
+    print("hyperpay ==${hyperpay}");
+  }
+
+  /// Initialize HyperPay session
+  Future<void> initPaymentSession(
+    BrandType brandType,
+    double amount,
+  ) async {
+    CheckoutSettings _checkoutSettings = CheckoutSettings(
+      brand: brandType,
+      amount: amount,
+      //paymentType: widget.payment_type,
+      //orderType: widget.order_type ?? "0",
+      //orderId: widget.order_id ?? "0",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer ${access_token.$}"
+      },
+      additionalParams: {
+        'merchantTransactionId': '#123456',
+      },
+    );
+   /* print(
+        "initPaymentSession ---$brandType --- ${_checkoutSettings.orderId} ===${widget.order_type}");
+*/
+    hyperpay.initSession(checkoutSetting: _checkoutSettings);
+    print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
+
+    sessionCheckoutID = await hyperpay.getCheckoutID;
+    print("sessionCheckoutID ---$sessionCheckoutID ");
+  }
+
+  Future<void> onPay(context) async {
+    final bool valid = Form.of(context)?.validate() ?? false;
+
+    if (valid) {
+      setState(() {
+        isLoading = true;
+      });
+
+      // Make a CardInfo from the controllers
+      CardInfo card = CardInfo(
+        holder: holderNameController.text,
+        cardNumber: cardNumberController.text.replaceAll(' ', ''),
+        cvv: cvvController.text,
+        expiryMonth: expiryController.text.split('/')[0],
+        expiryYear: '20' + expiryController.text.split('/')[1],
+      );
+      print("card ==== ${cardNumberController.text.replaceAll(' ', '')}");
+
+      try {
+        // Start transaction
+        if (sessionCheckoutID.isEmpty) {
+          print("sessionCheckoutID ==== empty");
+          // Only get a new checkoutID if there is no previous session pending now
+          await initPaymentSession(brandType, 1);
+        }
+
+        final result = await hyperpay.pay(card);
+        print("result${result}");
+
+        switch (result) {
+          case PaymentStatus.init:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Payment session is still in progress'),
+                backgroundColor: Colors.amber,
+              ),
+            );
+            break;
+          // For the sake of the example, the 2 cases are shown explicitly
+          // but in real world it's better to merge pending with successful
+          // and delegate the job from there to the server, using webhooks
+          // to get notified about the final status and do some action.
+          case PaymentStatus.pending:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Payment pending ⏳'),
+                backgroundColor: Colors.amber,
+              ),
+            );
+            break;
+          case PaymentStatus.successful:
+            sessionCheckoutID = '';
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Payment approved 🎉'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            if (widget.order_type == "1") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return OrderList(from_checkout: true);
+              }));
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SubscribedPackages();
+              }));
+              // final PageRouteBuilder _homeRoute = new PageRouteBuilder(
+              //   pageBuilder: (BuildContext context, _, __) {
+              //     return Main();
+              //   },
+              // );
+              // Navigator.pushAndRemoveUntil(
+              //     context, _homeRoute, (Route<dynamic> r) => false);
+            }
+
+            /////// pushing
+            break;
+
+          default:
+        }
+      } on HyperpayException catch (exception) {
+        sessionCheckoutID = '';
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(exception.details ?? exception.message),
+            backgroundColor: Colors.red,
+          ),
+        );
+
+        final PageRouteBuilder _homeRoute = new PageRouteBuilder(
+          pageBuilder: (BuildContext context, _, __) {
+            return Main();
+          },
+        );
+        Navigator.pushAndRemoveUntil(
+            context, _homeRoute, (Route<dynamic> r) => false);
+      } catch (exception) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$exception'),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: checkoutFormUi(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            autovalidateMode: autovalidateMode,
+            child: Builder(
+              builder: (context) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    // Holder
+                    TextFormField(
+                      controller: holderNameController,
+                      decoration: _inputDecoration(
+                        label: AppLocalizations.of(context).card_holder,
+                        hint: "Jane Jones",
+                        icon: Icons.account_circle_rounded,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // Text(
+                    //     "value .....${EnumToString.convertToString(brandType)}"),
+                    // Number
+                    TextFormField(
+                      controller: cardNumberController,
+                      decoration: _inputDecoration(
+                        label: AppLocalizations.of(context).card_number,
+                        hint: "0000 0000 0000 0000",
+                        icon: brandType == BrandType.none
+                            ? Icons.credit_card
+                            : "assets/${EnumToString.convertToString(brandType)}.png",
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          brandType = value.detectBrand;
+                        });
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(brandType.maxLength),
+                        CardNumberInputFormatter()
+                      ],
+                      validator: (String number) =>
+                          brandType.validateNumber(number ?? ""),
+                    ),
+                    const SizedBox(height: 10),
+                    // Expiry date
+                    TextFormField(
+                      controller: expiryController,
+                      decoration: _inputDecoration(
+                        label: AppLocalizations.of(context).expiry_date,
+                        hint: "MM/YY",
+                        icon: Icons.date_range_rounded,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(4),
+                        CardMonthInputFormatter(),
+                      ],
+                      validator: (String date) =>
+                          CardInfo.validateDate(date ?? ""),
+                    ),
+                    const SizedBox(height: 10),
+                    // CVV
+                    TextFormField(
+                      controller: cvvController,
+                      decoration: _inputDecoration(
+                        label: AppLocalizations.of(context).cvv,
+                        hint: "000",
+                        icon: Icons.confirmation_number_rounded,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(4),
+                      ],
+                      validator: (String cvv) =>
+                          CardInfo.validateCVV(cvv ?? ""),
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: MyTheme.accent_color,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 20),
+                            textStyle: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        onPressed: isLoading ? null : () => onPay(context),
+                        child: Text(
+                          isLoading
+                              ? AppLocalizations.of(context).payment_procccing
+                              : AppLocalizations.of(context).pay,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -103,212 +347,6 @@ class _CheckoutViewState extends State<CheckoutView> {
             ),
     );
   }
-  void setBrandType(){
-    switch(widget.payment_type){
-      case "mada":{}
-        break;
-      case "visa":{}
-      break;
-      case "appl":{}
-      break;
-
-    }
-  }
-
-  ///============= PAYMENT METHODS ================================
-
-
-  Future<void> _getPaymentResponse() async {
-    /// get checkoutId from your server
-    try {
-      _checkoutId=await getCheckoutIdServer;
-      /// send checkoutId to native method which get payment response
-      var result=await platform.invokeMethod("getPaymentMethod",<String,dynamic>{
-        "checkoutId":_checkoutId
-      });
-      print("${result.toString()}");//TODO REMOVE PRINT
-      ToastComponent.showDialog(
-          ' payment response  ${"${result.toString()}"}',
-          context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
-    } on PlatformException catch (e) {
-      ToastComponent.showDialog(
-          'Failed to get payment response  ${e.message}',
-          context,
-          gravity: Toast.CENTER,
-          duration: Toast.LENGTH_LONG);
-    }
-
-  }
-  void _onPayClicked() async{
-    // 1-get checkoutId
-    setCheckoutId();
-    // 2- set cardParams
-    setCardParams();
-    //3- innit payment channel
-
-  }
-  Future<void> initPaymentData()async {
-
-  }
-  Future<String> get getCheckoutIdServer async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/hyperpay-get-checkoutId");
-    final response = await http.post(
-        url,
-        headers: {
-          "Accept":"application/json",
-          "Authorization": "Bearer ${access_token.$}",
-        },
-        body: {
-          "payment_method_key":"mada" //TODO make method dynamic
-        }
-    );
-    final Map _resBody = json.decode(response.body);
-    return _resBody['checkout_id'];
-  }
-  Widget checkoutFormUi(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          autovalidateMode: autovalidateMode,
-          child: Builder(
-            builder: (context) {
-              return Column(
-                children: [
-                  const SizedBox(height: 10),
-                  // Holder
-                  TextFormField(
-                    controller: holderNameController,
-                    decoration: _inputDecoration(
-                      label: AppLocalizations.of(context).card_holder,
-                      hint: "Jane Jones",
-                      icon: Icons.account_circle_rounded,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Text(
-                  //     "value .....${EnumToString.convertToString(brandType)}"),
-                  // Number
-                  TextFormField(
-                    controller: cardNumberController,
-                    decoration: _inputDecoration(
-                      label: AppLocalizations.of(context).card_number,
-                      hint: "0000 0000 0000 0000",
-                      icon: Icons.credit_card/*brandType == BrandType.none
-                            ? Icons.credit_card
-                            : "assets/${EnumToString.convertToString(brandType)}.png"*/,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        //brandType = value.detectBrand;
-                      });
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      //LengthLimitingTextInputFormatter(brandType.maxLength),
-                      CardNumberInputFormatter()
-                    ],
-                    validator: (String number) {},
-                    //brandType.validateNumber(number ?? ""),
-                  ),
-                  const SizedBox(height: 10),
-                  // Expiry date
-                  TextFormField(
-                      controller: expiryController,
-                      decoration: _inputDecoration(
-                        label: AppLocalizations.of(context).expiry_date,
-                        hint: "MM/YY",
-                        icon: Icons.date_range_rounded,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(4),
-                        CardMonthInputFormatter(),
-                      ],
-                      validator: (String date){}
-                    //CardInfo.validateDate(date ?? ""),
-                  ),
-                  const SizedBox(height: 10),
-                  // CVV
-                  TextFormField(
-                      controller: cvvController,
-                      decoration: _inputDecoration(
-                        label: AppLocalizations.of(context).cvv,
-                        hint: "000",
-                        icon: Icons.confirmation_number_rounded,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(4),
-                      ],
-                      validator: (String cvv) {}
-                    //CardInfo.validateCVV(cvv ?? ""),
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: MyTheme.accent_color,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 20),
-                          textStyle: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
-                      onPressed: isLoading ? null : /*() => onPay(context)*/(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return NewCheckoutScreen();
-                        }));
-                      },
-                      child: Text(
-                        isLoading
-                            ? AppLocalizations.of(context).payment_procccing
-                            : AppLocalizations.of(context).pay,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-  void setCardParams(){
-    _cardParams.holder=holderNameController.text??"";
-    _cardParams.brand=widget.payment_type;
-    _cardParams.number=cardNumberController.text??"";
-    _cardParams.cvv=cvvController.text??"";
-    _cardParams.expiryMonth=(expiryController.text??"").split("/")[0];
-    _cardParams.expiryYear=(expiryController.text??"").split("/")[1];
-    _cardParams.checkoutId=_checkoutId;
-  }
-  void setCheckoutId()async{
-    if(_checkoutId.isEmpty){
-      _checkoutId=await getCheckoutIdServer;
-    }
-  }
-
-}
-class CardParams{
-  String checkoutId;
-  String brand;
-  String number;
-  String holder;
-  String expiryMonth;
-  String expiryYear;
-  String cvv;
-  CardParams({
-    this.checkoutId,
-    this.number,
-    this.cvv,
-    this.holder,
-    this.brand,
-    this.expiryYear,
-    this.expiryMonth
-  });
 }
 
 AppBar buildAppBar(BuildContext context) {
