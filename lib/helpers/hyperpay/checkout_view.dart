@@ -70,9 +70,9 @@ class _CheckoutViewState extends State<CheckoutView> {
     CheckoutSettings _checkoutSettings = CheckoutSettings(
       brand: brandType,
       amount: amount,
-      paymentType: widget.payment_type,
-      orderType: widget.order_type ?? "0",
-      orderId: widget.order_id ?? "0",
+      //paymentType: widget.payment_type,
+      //orderType: widget.order_type ?? "0",
+      //orderId: widget.order_id ?? "0",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -82,9 +82,9 @@ class _CheckoutViewState extends State<CheckoutView> {
         'merchantTransactionId': '#123456',
       },
     );
-    print(
+   /* print(
         "initPaymentSession ---$brandType --- ${_checkoutSettings.orderId} ===${widget.order_type}");
-
+*/
     hyperpay.initSession(checkoutSetting: _checkoutSettings);
     print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
 
