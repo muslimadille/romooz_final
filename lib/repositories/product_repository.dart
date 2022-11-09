@@ -125,16 +125,25 @@ class ProductRepository {
       categories = "",
       min = "",
       max = ""}) async {
-    Uri url ;
+
+    Map<String,dynamic>body={
+      "categories":"$categories",
+      "brands":"$brands",
+      "sort_key":"$sort_key",
+      "name":"$name",
+      "min":"$min",
+      "max":"$max"
+    };
+    String url="" ;
     if (is_logged_in.$ == false) {
-      url   = Uri.parse("${AppConfig.BASE_URL}/products/search" +
-          "?page=${page}&name=${name}&sort_key=${sort_key}&brands=${brands}&categories=${categories}&min=${min}&max=${max}");
+      url   = "${AppConfig.BASE_URL}/products/search";
     }else {
-      url   = Uri.parse("${AppConfig.BASE_URL}/products/auth/search" +
-          "?page=${page}&name=${name}&sort_key=${sort_key}&brands=${brands}&categories=${categories}&min=${min}&max=${max}");
+      url="${AppConfig.BASE_URL}/products/auth/search";
     }
 
-    final response = await http.get(url, headers: {
+    final response = await http.post(Uri.parse(url),
+        body: body,
+        headers: {
       "App-Language": app_language.$,
       "Authorization": "Bearer ${access_token.$}",
     });

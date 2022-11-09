@@ -269,7 +269,7 @@ class _AddTicketPageState extends State<AddTicketPage> {
 
                         Padding(
                           padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Row(
+                          /*child: Row(
                             children: [
                               Text(
                                 AppLocalizations.of(context)
@@ -299,7 +299,7 @@ class _AddTicketPageState extends State<AddTicketPage> {
                               )
                                   : Container(),
                             ],
-                          ),
+                          ),*/
                         ),
 
                         SizedBox(

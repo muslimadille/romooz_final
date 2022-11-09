@@ -1555,14 +1555,14 @@ class _ProductDetailsState extends State<ProductDetails> {
             ],
           ),
         ),
-        Padding(
+        /*Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             "(${_stock} ${AppLocalizations.of(context).product_details_screen_available})",
             style: TextStyle(
                 color: Color.fromRGBO(152, 152, 153, 1), fontSize: 14),
           ),
-        ),
+        ),*/
       ],
     );
   }
@@ -1902,6 +1902,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         fontWeight: FontWeight.w600)),
               )
             : Container(),
+        _productDetails.has_discount? SizedBox(width:20):Container(),
         Text(
           _singlePriceString,
           style: TextStyle(

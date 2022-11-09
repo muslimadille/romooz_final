@@ -7,7 +7,7 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <uses-permission android:name="android.permission.INTERNET"/>
-<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:node="remove"/>
@@ -17,16 +17,6 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Romooz"
         android:icon="@mipmap/ic_launcher">
-        <service
-            android:name="com.oppwa.mobile.connect.service.ConnectService"
-            android:exported="false"/>
-        <activity
-            tools:replace="android:windowSoftInputMode"
-            android:name="com.oppwa.mobile.connect.checkout.dialog.CheckoutActivity"
-            android:theme="@style/Theme.Checkout.Light"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false"
-            android:launchMode="singleTop"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,18 +30,18 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"
+                />
             <!-- Displays an Android View that continues showing the launch screen
                  Drawable until Flutter paints its first frame, then this splash
                  screen fades out. A splash screen is useful to avoid any visual
                  gap between the end of Android's launch screen and the painting of
                  Flutter's first frame. -->
             <meta-data
-              android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/launch_background"
-              />
+                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+                android:resource="@drawable/launch_background"
+                />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -80,9 +70,9 @@
 
         <!-- Facebook Login configuration -->
 
-    <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-   <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
-            
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
@@ -116,8 +106,8 @@
 
     </application>
 
-     <queries>
+    <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
-    
+
 </manifest>

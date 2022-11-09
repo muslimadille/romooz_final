@@ -66,8 +66,8 @@ class _ProductCardState extends State<ProductCard> {
                 },
                 child: Container(
                   width: double.infinity,
-                  //height: 158,
-                  height: ((MediaQuery.of(context).size.width - 28) / 2) + 2,
+                  height: 158,
+                  //height: ((MediaQuery.of(context).size.width - 28) / 2) + 2,
                   child: ClipRRect(
                     clipBehavior: Clip.hardEdge,
                     borderRadius: BorderRadius.vertical(
@@ -83,14 +83,14 @@ class _ProductCardState extends State<ProductCard> {
                 )
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: EdgeInsets.fromLTRB(16, 8, 16, 2),
               child: Text(
                 widget.name,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
                     color: MyTheme.font_grey,
-                    fontSize: 14,
+                    fontSize: 12,
                     height: 1.2,
                     fontWeight: FontWeight.w400),
               ),
@@ -104,7 +104,7 @@ class _ProductCardState extends State<ProductCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16, 4, 16, 0),
+                        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                         child: Text(
                           widget.main_price,
                           textAlign: TextAlign.left,
@@ -112,13 +112,13 @@ class _ProductCardState extends State<ProductCard> {
                           maxLines: 1,
                           style: TextStyle(
                               color: MyTheme.accent_color,
-                              fontSize: 14,
+                              fontSize: 10,
                               fontWeight: FontWeight.w600),
                         ),
                       ),
                       widget.has_discount
                           ? Padding(
-                        padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
                         child: Text(
                           widget.stroked_price,
                           textAlign: TextAlign.left,
@@ -127,7 +127,7 @@ class _ProductCardState extends State<ProductCard> {
                           style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               color: MyTheme.medium_grey,
-                              fontSize: 11,
+                              fontSize: 10,
                               fontWeight: FontWeight.w600),
                         ),
                       )

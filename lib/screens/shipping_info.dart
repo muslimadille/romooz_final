@@ -466,18 +466,15 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                               DateTime.now().year,
                                               DateTime.now().month,
                                               DateTime.now().day,
-                                              10,
+                                              int.parse(_dayList[0].startTime.split(":")[0]),
                                               00
                                           ),
                                           maxTime: DateTime(
                                               DateTime.now().year,
-                                              (DateTime.now().month + 1) >= 12
-                                                  ? 12
-                                                  : (DateTime.now().month +
-                                                  1),
-                                              DateTime.now().day,
-                                              19,
-                                              59),
+                                              (DateTime.now().month),
+                                              DateTime.now().day+_dayList.length-1,
+                                              int.parse(_dayList[0].endTime.split(":")[0]),
+                                              00),
                                           onChanged: (date) {
                                             print(
                                                 'onChanged ${_shippingSelectedDate}');
@@ -510,7 +507,8 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                                 _shippingSelectedValid = false;
                                               });
                                             }
-                                          }, onConfirm: (date) {
+                                          },
+                                          onConfirm: (date) {
                                             print(
                                                 'confirm ${_shippingSelectedDate}');
                                             var day_name = intl.DateFormat('EEEE')
@@ -546,21 +544,73 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                           locale: app_language.$ == 'ar'
                                               ? LocaleType.ar
                                               : LocaleType.en);
-                                      await DatePicker.showTime12hPicker(context, showTitleActions: true,
+                                      await DatePicker.showTimePicker(context, showTitleActions: true,
                                           onChanged: (date) {
-                                            print('change $date in time zone ' +
-                                                date.timeZoneOffset.inHours.toString());
-                                          },
+
+                                              if(!DateTime(date.year,
+                                                  date.month,
+                                                  date.day,
+                                                  int.parse(_dayList[0].startTime.split(":")[0]),
+                                                  00).compareTo(date).isNegative){
+                                                ToastComponent.showDialog(
+                                                    AppLocalizations.of(context)
+                                                        .shipping_info_screen_delivery_not_valid_warning,
+                                                    context,
+                                                    gravity: Toast.CENTER,
+                                                    duration: Toast.LENGTH_LONG);
+                                              }else if(
+                                              DateTime(date.year,
+                                                  date.month,
+                                                  date.day,
+                                                  int.parse(_dayList[0].endTime.split(":")[0]),
+                                                  00).compareTo(date).isNegative
+                                              ){
+                                                ToastComponent.showDialog(
+                                                    AppLocalizations.of(context)
+                                                        .shipping_info_screen_delivery_not_valid_warning,
+                                                    context,
+                                                    gravity: Toast.CENTER,
+                                                    duration: Toast.LENGTH_LONG);
+                                              }
+                                            }
+                                          ,
                                           onConfirm: (date) {
                                             setState(() {
+                                              if(!DateTime(date.year,
+                                                  date.month,
+                                                  date.day,
+                                                  int.parse(_dayList[0].startTime.split(":")[0]),
+                                                  00).compareTo(date).isNegative){
+                                                ToastComponent.showDialog(
+                                                    AppLocalizations.of(context)
+                                                        .shipping_info_screen_delivery_not_valid_warning,
+                                                    context,
+                                                    gravity: Toast.CENTER,
+                                                    duration: Toast.LENGTH_LONG);
+                                              }else if(
+                                              DateTime(date.year,
+                                                  date.month,
+                                                  date.day,
+                                                  int.parse(_dayList[0].endTime.split(":")[0]),
+                                                  00).compareTo(date).isNegative
+                                              ){
+                                                ToastComponent.showDialog(
+                                                    AppLocalizations.of(context)
+                                                        .shipping_info_screen_delivery_not_valid_warning,
+                                                    context,
+                                                    gravity: Toast.CENTER,
+                                                    duration: Toast.LENGTH_LONG);
+                                              }else{
                                               _shippingSelectedDate = DateTime(
-                                                  _shippingSelectedDate.year,
-                                                  _shippingSelectedDate.month,
-                                                  _shippingSelectedDate.day,
-                                                  date.hour,
-                                                  date.minute
+                                              _shippingSelectedDate.year,
+                                              _shippingSelectedDate.month,
+                                              _shippingSelectedDate.day,
+                                              date.hour,
+                                              date.minute
                                               );
                                               _shippingSelectedValid = true;
+                                              }
+
                                             });
                                             print('confirm $date');
                                           },

@@ -605,23 +605,6 @@ class _FilterState extends State<Filter> {
                                   ),
                                   RadioListTile(
                                     dense: true,
-                                    value: "popularity",
-                                    groupValue: _selectedSort,
-                                    activeColor: MyTheme.font_grey,
-                                    controlAffinity:
-                                        ListTileControlAffinity.leading,
-                                    title: Text(AppLocalizations.of(context)
-                                        .filter_screen_popularity),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedSort = value;
-                                      });
-                                      _onSortChange();
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RadioListTile(
-                                    dense: true,
                                     value: "top_rated",
                                     groupValue: _selectedSort,
                                     activeColor: MyTheme.font_grey,

@@ -19,6 +19,8 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:intl/intl.dart' as intllll;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
+import 'login.dart';
+
 class PackageItems extends StatefulWidget {
   PackageItems(
       {Key key,
@@ -115,12 +117,15 @@ class _PackageItemsState extends State<PackageItems> {
     checkedDays = [];
     hoursList = [];
     minutesList = [];
-    for (int i = 0; i < visitsList.length; i++) {
-      checkedDays.add(visitsList[i].isSelected);
-      numberOfSelectedDays+= visitsList[i].isSelected?1:0;
-      hoursList.add(int.parse(visitsList[i].startTime.substring(0,2)));
-      minutesList.add(int.parse(visitsList[i].startTime.substring(3,5)));
-    }
+    if(is_logged_in.$){
+      for (int i = 0; i < visitsList.length; i++) {
+        checkedDays.add(visitsList[i].isSelected);
+        numberOfSelectedDays+= visitsList[i].isSelected?1:0;
+        hoursList.add(int.parse(visitsList[i].startTime.substring(0,2)));
+        minutesList.add(int.parse(visitsList[i].startTime.substring(3,5)));
+      }
+    }else{}
+
     _isInitial = false;
     _cartTotal = 0.00;
     // getSetCartTotal();
@@ -252,7 +257,7 @@ class _PackageItemsState extends State<PackageItems> {
           duration: Toast.LENGTH_LONG);
     }
   }
-
+/// not used
   onPressDelete(cart_id) {
     showDialog(
         context: context,
@@ -292,7 +297,7 @@ class _PackageItemsState extends State<PackageItems> {
               ],
             ));
   }
-
+/// not used
   confirmDelete(cart_id) async {
     var cartDeleteResponse =
         await CartRepository().getCartDeleteResponse(cart_id);
@@ -616,7 +621,11 @@ class _PackageItemsState extends State<PackageItems> {
                       ),
                       onPressed: () async {
                         //onPressUpdate();
-                        await selectVisits();
+                        if(is_logged_in.$){
+                          await selectVisits();
+                        }else{
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                        }
                         // _showMultiSelect(context);
                       },
                     ),
@@ -677,6 +686,8 @@ class _PackageItemsState extends State<PackageItems> {
                             fontWeight: FontWeight.w600),
                       ),
                       onPressed: () async {
+                        if(is_logged_in.$)
+                        {
                         if (validChoices()) {
                           var subscribeProcessResponse =
                               await PackagesRepository().subscribeAdminPackages(
@@ -715,7 +726,10 @@ class _PackageItemsState extends State<PackageItems> {
                                   ' من الايام للزيارة',
                               context,
                               gravity: Toast.CENTER,
-                              duration: Toast.LENGTH_LONG);
+                              duration: Toast.LENGTH_LONG);}
+                        else{
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                        }
                       },
                       // onPressed: subscribed_package_show_response.id != null
                       //     ? () {
@@ -984,7 +998,7 @@ class _PackageItemsState extends State<PackageItems> {
       ),
       title: Text(
         "${AppLocalizations.of(context).home_screen_packges_item} ${widget.packageName ?? ""}",
-        style: TextStyle(fontSize: 16, color: MyTheme.accent_color),
+        style: TextStyle(fontSize: 13, color: MyTheme.accent_color),
       ),
       elevation: 0.0,
       titleSpacing: 0,
@@ -992,15 +1006,7 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   buildCartSellerList() {
-    if (is_logged_in.$ == false) {
-      return Container(
-          height: 100,
-          child: Center(
-              child: Text(
-            AppLocalizations.of(context).package_screen_please_log_in,
-            style: TextStyle(color: MyTheme.font_grey),
-          )));
-    } else if (_isInitial && _shopList.length == 0) {
+     if (_isInitial && _shopList.length == 0) {
       return SingleChildScrollView(
           child: ShimmerHelper()
               .buildListShimmer(item_count: 5, item_height: 100.0));
@@ -1031,8 +1037,6 @@ class _PackageItemsState extends State<PackageItems> {
   }
 
   buildCartSellerItemCard(item_index) {
-    print('1111111111111111111111111111111111111111111111');
-    print(_shopList[item_index].logo);
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(color: MyTheme.light_grey, width: 1.0),
@@ -1041,7 +1045,7 @@ class _PackageItemsState extends State<PackageItems> {
       elevation: 0.0,
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
-            width: 100,
+            width: 90,
             height: 100,
             child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -1054,7 +1058,7 @@ class _PackageItemsState extends State<PackageItems> {
                         fit: BoxFit.fitWidth,
                       ))),
       Container(
-          width: 180,
+          width: 150,
           child: Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
@@ -1071,11 +1075,12 @@ class _PackageItemsState extends State<PackageItems> {
       ),
 
         Spacer(),
+        Padding(padding: EdgeInsets.all(10),child:
         Row(
           children: [
             Text(
               _shopList[item_index].qty.toString(),
-              style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
+              style: TextStyle(color: MyTheme.accent_color, fontSize: 14),
             ),
             SizedBox(
               width: 10,
@@ -1085,7 +1090,7 @@ class _PackageItemsState extends State<PackageItems> {
               style: TextStyle(color: MyTheme.accent_color, fontSize: 16),
             ),
           ],
-        ),
+        ),),
       ]),
     );
   }

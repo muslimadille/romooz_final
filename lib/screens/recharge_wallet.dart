@@ -18,6 +18,8 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:io' show Platform;
+
 
 
 class RechargeWallet extends StatefulWidget {
@@ -65,6 +67,12 @@ class _RechargeWalletState extends State<RechargeWallet> {
     var paymentTypeResponseList =
         await PaymentRepository().getPaymentResponseList(mode: "wallet");
     _paymentTypeList.addAll(paymentTypeResponseList);
+
+    if (Platform.isAndroid) {
+
+    } else if (Platform.isIOS) {
+      // iOS-specific code
+    }
     if (_paymentTypeList.length > 0) {
       _selected_payment_method = _paymentTypeList[0].payment_type;
       _selected_payment_method_key = _paymentTypeList[0].payment_type_key;

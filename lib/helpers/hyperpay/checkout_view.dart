@@ -1,16 +1,17 @@
-import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
-import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
-import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
-import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:active_ecommerce_flutter/screens/main.dart';
-import 'package:active_ecommerce_flutter/screens/order_list.dart';
-import 'package:active_ecommerce_flutter/screens/subscribed_packages_list.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hyperpay/hyperpay.dart';
-import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+//import 'package:active_ecommerce_flutter/helpers/hyperpay/constants.dart';
+//import 'package:active_ecommerce_flutter/helpers/hyperpay/formatters.dart';
+//import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
+//import 'package:active_ecommerce_flutter/my_theme.dart';
+//import 'package:active_ecommerce_flutter/screens/main.dart';
+//import 'package:active_ecommerce_flutter/screens/order_list.dart';
+//import 'package:active_ecommerce_flutter/screens/subscribed_packages_list.dart';
+//import 'package:flutter/material.dart';
+//import 'package:flutter/services.dart';
+//import 'package:hyperpay/hyperpay.dart';
+//import 'package:enum_to_string/enum_to_string.dart';
+//import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+/*
 // Kindly find the Live credentials as requested for "Romooz":
 
 // Links used in the integration in the code:  https://oppwa.com/
@@ -42,12 +43,12 @@ class _CheckoutViewState extends State<CheckoutView> {
   TextEditingController expiryController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
 
-  BrandType brandType = BrandType.none;
+  //BrandType brandType = BrandType.none;
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   bool isLoading = false;
   String sessionCheckoutID = '';
 
-  HyperpayPlugin hyperpay;
+ // HyperpayPlugin hyperpay;
 
   @override
   void initState() {
@@ -58,8 +59,8 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   setup() async {
     // hyperpay = await HyperpayPlugin.setup(config: TestConfig());
-    hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
-    print("hyperpay ==${hyperpay}");
+    //hyperpay = await HyperpayPlugin.setup(config: LiveConfig());
+    //print("hyperpay ==${hyperpay}");
   }
 
   /// Initialize HyperPay session
@@ -82,13 +83,14 @@ class _CheckoutViewState extends State<CheckoutView> {
         'merchantTransactionId': '#123456',
       },
     );
-   /* print(
+ print(
         "initPaymentSession ---$brandType --- ${_checkoutSettings.orderId} ===${widget.order_type}");
-*/
-    hyperpay.initSession(checkoutSetting: _checkoutSettings);
+
+
+   // hyperpay.initSession(checkoutSetting: _checkoutSettings);
     print("sessionCheckoutID --- ==${_checkoutSettings.amount} ");
 
-    sessionCheckoutID = await hyperpay.getCheckoutID;
+   // sessionCheckoutID = await hyperpay.getCheckoutID;
     print("sessionCheckoutID ---$sessionCheckoutID ");
   }
 
@@ -118,10 +120,10 @@ class _CheckoutViewState extends State<CheckoutView> {
           await initPaymentSession(brandType, 1);
         }
 
-        final result = await hyperpay.pay(card);
-        print("result${result}");
+       // final result = await hyperpay.pay(card);
+       // print("result${result}");
 
-        switch (result) {
+   switch (result) {
           case PaymentStatus.init:
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -172,6 +174,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
           default:
         }
+
       } on HyperpayException catch (exception) {
         sessionCheckoutID = '';
 
@@ -371,3 +374,4 @@ AppBar buildAppBar(BuildContext context) {
     titleSpacing: 0,
   );
 }
+*/

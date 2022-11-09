@@ -478,14 +478,14 @@ class _PackageCheckoutState extends State<PackageCheckout> {
     // }
 
 
-
+/*
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return CheckoutView(
         order_id: widget.order_id,
         order_type: "2",
         payment_type: _paymentTypeList[_selected_payment_method_index].payment_method_key,
       );
-    }));
+    }));*/
 
   }
 

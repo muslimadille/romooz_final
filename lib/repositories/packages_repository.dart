@@ -43,8 +43,9 @@ class PackagesRepository {
 
   Future<PackageDetailsResponse> getAdminPackagesDetails(int package_id) async {
     // Uri url = Uri.parse("${AppConfig.BASE_URL}/get-admin-package/$package_id");
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/packages/auth/get/$package_id");
+    Uri url =Uri.parse(is_logged_in.$?"${AppConfig.BASE_URL}/packages/auth/get/${package_id.toString()}".split("%")[0]:"${AppConfig.BASE_URL}/packages/get/${package_id.toString()}");
 
+    print('${url}');
     final response = await http.get(
       url,
       headers: {
