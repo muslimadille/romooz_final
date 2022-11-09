@@ -603,7 +603,7 @@ class _FilterState extends State<Filter> {
                                       Navigator.pop(context);
                                     },
                                   ),
-                                  RadioListTile(
+                                 /* RadioListTile(
                                     dense: true,
                                     value: "popularity",
                                     groupValue: _selectedSort,
@@ -619,7 +619,7 @@ class _FilterState extends State<Filter> {
                                       _onSortChange();
                                       Navigator.pop(context);
                                     },
-                                  ),
+                                  ),*/
                                   RadioListTile(
                                     dense: true,
                                     value: "top_rated",
