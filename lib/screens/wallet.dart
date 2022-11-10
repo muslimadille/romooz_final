@@ -245,7 +245,7 @@ class _WalletState extends State<Wallet> {
     } else if (_rechargeList.length > 0) {
       return SingleChildScrollView(
         child: ListView.builder(
-          itemCount: _rechargeList.length,
+          itemCount: 1,
           scrollDirection: Axis.vertical,
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
