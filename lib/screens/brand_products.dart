@@ -200,8 +200,8 @@ class _BrandProductsState extends State<BrandProducts> {
                   id: _productList[index].id,
                   image: _productList[index].thumbnail_image,
                   name: _productList[index].name,
-                  main_price: _productList[index].main_price,
-                  stroked_price: _productList[index].stroked_price,
+                  main_price: _productList[index].stroked_price,
+                  stroked_price: _productList[index].main_price,
                   has_discount: _productList[index].has_discount);
             },
           ),

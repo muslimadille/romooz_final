@@ -22,12 +22,15 @@ import 'package:active_ecommerce_flutter/repositories/coupon_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:pay/pay.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/screens/offline_screen.dart';
 import 'package:active_ecommerce_flutter/screens/paytm_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io' show Platform;
+
 
 
 class PackageCheckout extends StatefulWidget {
@@ -854,7 +857,7 @@ class _PackageCheckoutState extends State<PackageCheckout> {
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            return Padding(
+            return _paymentTypeList[index].payment_method_key=="cash_on_delivery"?Container():Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: buildPaymentMethodItemCard(index),
             );
@@ -973,7 +976,7 @@ class _PackageCheckoutState extends State<PackageCheckout> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FlatButton(
+            isAppleDevice()&&(_paymentTypeList[_selected_payment_method_index].payment_method_key == "apple")?Expanded(child:_applePayBtn()):FlatButton(
               minWidth: MediaQuery.of(context).size.width,
               height: 50,
               color: MyTheme.accent_color,
@@ -983,12 +986,12 @@ class _PackageCheckoutState extends State<PackageCheckout> {
               child: Text(
                 widget.isWalletRecharge
                     ? AppLocalizations.of(context)
-                        .recharge_wallet_screen_recharge_wallet
+                    .recharge_wallet_screen_recharge_wallet
                     : widget.manual_payment_from_order_details
-                        ? AppLocalizations.of(context)
-                            .common_proceed_in_all_caps
-                        : AppLocalizations.of(context)
-                            .checkout_screen_place_my_order,
+                    ? AppLocalizations.of(context)
+                    .common_proceed_in_all_caps
+                    : AppLocalizations.of(context)
+                    .checkout_screen_place_my_order,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -997,58 +1000,58 @@ class _PackageCheckoutState extends State<PackageCheckout> {
               onPressed: () async {
                 bool checkTerms = false;
                 await showDialog(
-                    // The user CANNOT close this dialog  by pressing outsite it
-                    // barrierDismissible: false,
+                  // The user CANNOT close this dialog  by pressing outsite it
+                  // barrierDismissible: false,
                     context: context,
                     builder: (_) {
-                  return Dialog(
-                    // The background color
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('يجب الموافقة علي سياسة الشروط والاحكام قبل عمل الطلبية', style: TextStyle(fontSize: 10)),
-                          SizedBox(height: 5,),
-                          InkWell(
-                              child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
-                              onTap: () => launch('${AppConfig.RAW_BASE_URL}/terms')
+                      return Dialog(
+                        // The background color
+                        backgroundColor: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('يجب الموافقة علي سياسة الشروط والاحكام قبل عمل الطلبية', style: TextStyle(fontSize: 10)),
+                              SizedBox(height: 5,),
+                              InkWell(
+                                  child: Text('اضغط هنا للاطلاع', style: TextStyle(color: Colors.blue, fontSize: 10),),
+                                  onTap: () => launch('${AppConfig.RAW_BASE_URL}/terms')
+                              ),
+                              SizedBox(height: 10,),
+                              RaisedButton(
+                                elevation: 5.0,
+                                color: Colors.green,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                onPressed: () {
+                                  checkTerms = true;
+                                  Navigator.of(context, rootNavigator: true).pop();
+                                },
+                                child: Text(
+                                  'نعم أوفق',
+                                  style: TextStyle(fontSize: 15.0, color: Colors.white),
+                                ),
+                              ),
+                              // RaisedButton(
+                              //   elevation: 5.0,
+                              //   color: Colors.deepOrange,
+                              //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                              //   onPressed: () {
+                              //     Navigator.of(context, rootNavigator: true).pop();
+                              //   },
+                              //   child: Text(
+                              //     'رجوع',
+                              //     style: TextStyle(fontSize: 15.0, color: Colors.white),
+                              //   ),
+                              // ),
+                            ],
                           ),
-                          SizedBox(height: 10,),
-                          RaisedButton(
-                            elevation: 5.0,
-                            color: Colors.green,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                            onPressed: () {
-                              checkTerms = true;
-                              Navigator.of(context, rootNavigator: true).pop();
-                            },
-                            child: Text(
-                              'نعم أوفق',
-                              style: TextStyle(fontSize: 15.0, color: Colors.white),
-                            ),
-                          ),
-                          // RaisedButton(
-                          //   elevation: 5.0,
-                          //   color: Colors.deepOrange,
-                          //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                          //   onPressed: () {
-                          //     Navigator.of(context, rootNavigator: true).pop();
-                          //   },
-                          //   child: Text(
-                          //     'رجوع',
-                          //     style: TextStyle(fontSize: 15.0, color: Colors.white),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                  );
-                });
+                        ),
+                      );
+                    });
                 if(!checkTerms){
-                return;
+                  return;
                 }
                 onPressPlaceOrderOrProceed();
               },
@@ -1133,6 +1136,8 @@ class _PackageCheckoutState extends State<PackageCheckout> {
   }
   /// ======================== HYPER PAY METHODS==============================
   /// PAYMENT NATIVE CHANNEL
+  /// ======================== HYPER PAY METHODS==============================
+  /// PAYMENT NATIVE CHANNEL
   static const platform = MethodChannel('hyperPayChannel');
   String _checkoutId="";
   Future<void> _getPaymentResponse() async {
@@ -1197,4 +1202,40 @@ class _PackageCheckoutState extends State<PackageCheckout> {
       return OrderList();
     }));
   }
+  ///============== APPLEPAY==================================
+  List<PaymentItem> _paymentItems = [];
+  void initApplePay(){
+    _paymentItems.clear();
+    _paymentItems.add(
+        PaymentItem(
+          label: 'Total',
+          amount: '${_totalString}',
+          status: PaymentItemStatus.final_price,
+        )
+    );
+  }
+  void onApplePayResult(paymentResult) {
+    setPaymentStatusToServer();
+    debugPrint(paymentResult.toString());
+  }
+  bool isAppleDevice(){
+    return Platform.isIOS;
+  }
+  Widget _applePayBtn(){
+    initApplePay();
+    return SizedBox(child: ApplePayButton(
+      paymentConfigurationAsset: 'default_payment_profile_apple_pay.json',
+      paymentItems: _paymentItems,
+
+      style: ApplePayButtonStyle.black,
+      type: ApplePayButtonType.inStore,
+      margin: const EdgeInsets.all(10),
+      onPaymentResult: onApplePayResult,
+      loadingIndicator: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),);
+  }
+
+
 }

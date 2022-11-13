@@ -439,8 +439,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               id: _featuredProductList[index].id,
               image: _featuredProductList[index].thumbnail_image,
               name: _featuredProductList[index].name,
-              main_price: _featuredProductList[index].main_price,
-              stroked_price: _featuredProductList[index].stroked_price,
+              main_price: _featuredProductList[index].stroked_price,
+              stroked_price: _featuredProductList[index].main_price,
               has_discount: _featuredProductList[index].has_discount);
         },
       );

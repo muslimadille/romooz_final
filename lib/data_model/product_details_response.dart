@@ -156,7 +156,7 @@ class DetailedProduct {
             json["choice_options"].map((x) => ChoiceOption.fromJson(x))),
         colors: List<String>.from(json["colors"].map((x) => x)),
         has_discount: json["has_discount"],
-        stroked_price: json["stroked_price"],
+        stroked_price: json["discounted_price"],
         main_price: json["main_price"],
         calculable_price: json["calculable_price"],
         currency_symbol: json["currency_symbol"],

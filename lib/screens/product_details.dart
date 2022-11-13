@@ -1894,7 +1894,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         _productDetails.has_discount
             ? Padding(
                 padding: EdgeInsets.only(right: 8.0),
-                child: Text(_productDetails.stroked_price,
+                child: Text(_singlePriceString,
                     style: TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Color.fromRGBO(224, 224, 225, 1),
@@ -1904,7 +1904,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             : Container(),
         _productDetails.has_discount? SizedBox(width:20):Container(),
         Text(
-          _singlePriceString,
+          _productDetails.has_discount? _productDetails.stroked_price:_singlePriceString,
           style: TextStyle(
               color: MyTheme.accent_color,
               fontSize: 18.0,
@@ -2358,8 +2358,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                   id: _topProducts[index].id,
                   image: _topProducts[index].thumbnail_image,
                   name: _topProducts[index].name,
-                  main_price: _topProducts[index].main_price,
-                  stroked_price: _topProducts[index].stroked_price,
+                  main_price: _topProducts[index].stroked_price,
+                  stroked_price: _topProducts[index].main_price,
                   has_discount: _topProducts[index].has_discount),
             );
           },
@@ -2416,8 +2416,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     id: _relatedProducts[index].id,
                     image: _relatedProducts[index].thumbnail_image,
                     name: _relatedProducts[index].name,
-                    main_price: _relatedProducts[index].main_price,
-                    stroked_price: _relatedProducts[index].stroked_price,
+                    main_price: _relatedProducts[index].stroked_price,
+                    stroked_price: _relatedProducts[index].main_price,
                     has_discount: _relatedProducts[index].has_discount),
               );
             },

@@ -77,9 +77,9 @@ class _TodaysDealProductsState extends State<TodaysDealProducts> {
                     id: productResponse.products[index].id,
                     image: productResponse.products[index].thumbnail_image,
                     name: productResponse.products[index].name,
-                    main_price: productResponse.products[index].main_price,
+                    main_price: productResponse.products[index].stroked_price,
                     stroked_price:
-                        productResponse.products[index].stroked_price,
+                        productResponse.products[index].main_price,
                     has_discount: productResponse.products[index].has_discount,
                   );
                 },

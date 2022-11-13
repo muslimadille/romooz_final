@@ -14,9 +14,10 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		A6FB48202919C5A300378B8B /* OPPWAMobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60576FE2919BC1F003E7BF3 /* OPPWAMobile.xcframework */; };
-		A6FB48222919C86600378B8B /* ipworks3ds_sdk_deploy.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60577022919BE69003E7BF3 /* ipworks3ds_sdk_deploy.xcframework */; };
-		A6FB48232919C86600378B8B /* ipworks3ds_sdk_deploy.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A60577022919BE69003E7BF3 /* ipworks3ds_sdk_deploy.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A69D47E1291D3350005F883C /* OPPWAMobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60576FE2919BC1F003E7BF3 /* OPPWAMobile.xcframework */; settings = {ATTRIBUTES = (Required, ); }; };
+		A69D47E2291D3350005F883C /* OPPWAMobile.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A60576FE2919BC1F003E7BF3 /* OPPWAMobile.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A69D47E3291D3400005F883C /* ipworks3ds_sdk_deploy.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A60577022919BE69003E7BF3 /* ipworks3ds_sdk_deploy.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A6FB48222919C86600378B8B /* ipworks3ds_sdk_deploy.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60577022919BE69003E7BF3 /* ipworks3ds_sdk_deploy.xcframework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		FE7CD6A028B4BE8B0026C46D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE7CD69F28B4BE8B0026C46D /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -27,7 +28,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A6FB48232919C86600378B8B /* ipworks3ds_sdk_deploy.xcframework in Embed Frameworks */,
+				A69D47E3291D3400005F883C /* ipworks3ds_sdk_deploy.xcframework in Embed Frameworks */,
+				A69D47E2291D3350005F883C /* OPPWAMobile.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,6 +54,8 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A60576FE2919BC1F003E7BF3 /* OPPWAMobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OPPWAMobile.xcframework; sourceTree = "<group>"; };
 		A60577022919BE69003E7BF3 /* ipworks3ds_sdk_deploy.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ipworks3ds_sdk_deploy.xcframework; sourceTree = "<group>"; };
+		A6AD2815291EC81D009100D4 /* RunnerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerDebug.entitlements; sourceTree = "<group>"; };
+		A6AD2816291EC85E009100D4 /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
 		E4B60767E69EBF601831C6F6 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		EBBA2D67D8CF23D0183AF093 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE3024B4285B5520006E95BB /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
@@ -63,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6FB48202919C5A300378B8B /* OPPWAMobile.xcframework in Frameworks */,
+				A69D47E1291D3350005F883C /* OPPWAMobile.xcframework in Frameworks */,
 				05D5EC630824312459BBB09F /* Pods_Runner.framework in Frameworks */,
 				A6FB48222919C86600378B8B /* ipworks3ds_sdk_deploy.xcframework in Frameworks */,
 			);
@@ -115,6 +119,8 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				A6AD2816291EC85E009100D4 /* RunnerRelease.entitlements */,
+				A6AD2815291EC81D009100D4 /* RunnerDebug.entitlements */,
 				FE3024B4285B5520006E95BB /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -389,7 +395,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = ZS933RBS8K;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -406,7 +412,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.0.55;
+				MARKETING_VERSION = 1.0.57;
 				PRODUCT_BUNDLE_IDENTIFIER = com.romooz.app.shoppingapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -529,8 +535,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 55;
+				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = ZS933RBS8K;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -547,7 +553,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.0.55;
+				MARKETING_VERSION = 1.0.57;
 				PRODUCT_BUNDLE_IDENTIFIER = com.romooz.app.shoppingapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -564,8 +570,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 55;
+				CODE_SIGN_ENTITLEMENTS = Runner/RunnerRelease.entitlements;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = ZS933RBS8K;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -582,7 +588,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.0.55;
+				MARKETING_VERSION = 1.0.57;
 				PRODUCT_BUNDLE_IDENTIFIER = com.romooz.app.shoppingapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

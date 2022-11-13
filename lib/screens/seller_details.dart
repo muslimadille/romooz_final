@@ -254,8 +254,8 @@ class _SellerDetailsState extends State<SellerDetails> {
               id: _featuredProducts[index].id,
               image: _featuredProducts[index].thumbnail_image,
               name: _featuredProducts[index].name,
-              main_price: _featuredProducts[index].main_price,
-              stroked_price: _featuredProducts[index].stroked_price,
+              main_price: _featuredProducts[index].stroked_price,
+              stroked_price: _featuredProducts[index].main_price,
               has_discount: _featuredProducts[index].has_discount);
         },
       );
@@ -418,8 +418,8 @@ class _SellerDetailsState extends State<SellerDetails> {
                   id: _topProducts[index].id,
                   image: _topProducts[index].thumbnail_image,
                   name: _topProducts[index].name,
-                  main_price: _topProducts[index].main_price,
-                  stroked_price: _topProducts[index].stroked_price,
+                  main_price: _topProducts[index].stroked_price,
+                  stroked_price: _topProducts[index].main_price,
                   has_discount: _topProducts[index].has_discount),
             );
           },
@@ -472,8 +472,8 @@ class _SellerDetailsState extends State<SellerDetails> {
                   id: _newArrivalProducts[index].id,
                   image: _newArrivalProducts[index].thumbnail_image,
                   name: _newArrivalProducts[index].name,
-                  main_price: _newArrivalProducts[index].main_price,
-                  stroked_price: _newArrivalProducts[index].stroked_price,
+                  main_price: _newArrivalProducts[index].stroked_price,
+                  stroked_price: _newArrivalProducts[index].main_price,
                   has_discount: _newArrivalProducts[index].has_discount,
                 ),
               );

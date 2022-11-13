@@ -6,11 +6,12 @@ import OPPWAMobile
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
+    
+    //flutter channel handeler
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-     // applePayButton.isEnabled = OPPPaymentProvider.deviceSupportsApplePay()
       let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
       let paymentChannel = FlutterMethodChannel(name: "hyperPayChannel",
       binaryMessenger: controller.binaryMessenger)
@@ -30,9 +31,8 @@ import OPPWAMobile
   }
     private func getPaymentMethod(result:@escaping FlutterResult , call:FlutterMethodCall){
         let provider = OPPPaymentProvider (mode: OPPProviderMode.live)
+
         let checkoutsettings=OPPCheckoutSettings()
-
-
         checkoutsettings.language="ar"
         // General colors of the checkout UI
         func getColorFromHex(rgbValue:UInt32)->UIColor{
@@ -65,8 +65,7 @@ import OPPWAMobile
         checkoutsettings.theme.errorFont = UIFont.systemFont(ofSize: 12.0)
 
         // set available payment brands for your shop
-        checkoutsettings.paymentBrands = ["VISA", "MADA",
-        "MASTER","APPLE_PAY"]
+        checkoutsettings.paymentBrands = ["VISA", "MADA","MASTER"]
         // Set shopper result URL
         checkoutsettings.shopperResultURL =
         "com.romooz.app.shoppingapp.payments://result"
@@ -93,6 +92,42 @@ import OPPWAMobile
         result("100")
         })
     }
+    ///==================apple pay=======================
+    
+    private func getApplePayMethod(result:@escaping FlutterResult , call:FlutterMethodCall){
+        let provider = OPPPaymentProvider (mode: OPPProviderMode.live)
+        let checkoutSettings = OPPCheckoutSettings()
+        let paymentRequest = OPPPaymentProvider.paymentRequest(withMerchantIdentifier: "merchant.com.romoozfruits.hyperpay.live", countryCode: "SA 966")
+        let args=call.arguments as? Dictionary<String,Any>
+        let checkoutId=(args?["checkoutId"] as? String)!
+        paymentRequest.supportedNetworks =  [PKPaymentNetwork.visa,PKPaymentNetwork.masterCard]
+        checkoutSettings.applePayPaymentRequest = paymentRequest
+        let checkoutProvider = OPPCheckoutProvider(paymentProvider: provider, checkoutID: checkoutId, settings: checkoutSettings)
+        
+        checkoutProvider?.presentCheckout(withPaymentBrand: "APPLEPAY",
+           loadingHandler: { (inProgress) in
+            //result("loading")
+        }, completionHandler: { (transaction, error) in
+            if error != nil {
+                result("error")
+            } else {
+                if transaction?.redirectURL != nil {
+                    result("redirect")
+                    // Shopper was redirected to the issuer web page.
+                    // Request payment status when shopper returns to the app using transaction.resourcePath or just checkout id.
+                } else {
+                    result("success")
+                    // Request payment status for the synchronous transaction from your server using transactionPath.resourcePath or just checkout id.
+                }
+            }
+        }, cancelHandler: {
+            result("cancele")
+            // Executed if the shopper closes the payment page prematurely.
+        })
+        
+    }
+    
+    
 }
 
 

@@ -240,7 +240,7 @@ class Product {
             json["thumbnail_image"] == null ? null : json["thumbnail_image"],
         hasDiscount: json["has_discount"] == null ? null : json["has_discount"],
         strokedPrice:
-            json["stroked_price"] == null ? null : json["stroked_price"],
+            json["stroked_price"] == null ? null : json["discounted_price"],
         mainPrice: json["main_price"] == null ? null : json["main_price"],
         rating: json["rating"] == null ? null : json["rating"],
         sales: json["sales"] == null ? null : json["sales"],

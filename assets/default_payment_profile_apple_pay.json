@@ -1,0 +1,14 @@
+{
+  "provider": "apple_pay",
+  "data": {
+    "merchantIdentifier": "merchant.com.romoozfruits.hyperpay.live",
+    "displayName": "Romooz",
+    "merchantCapabilities": ["3DS", "debit", "credit"],
+    "supportedNetworks": ["amex", "visa", "discover", "masterCard","mada"],
+    "countryCode": "SA",
+    "currencyCode": "SAR",
+    "requiredBillingContactFields": ["emailAddress", "name", "phoneNumber", "postalAddress"],
+    "requiredShippingContactFields": [],
+    "shippingMethods": []
+  }
+}

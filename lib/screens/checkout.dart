@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:active_ecommerce_flutter/helpers/hyperpay/apple_pay_screen.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
@@ -22,12 +23,14 @@ import 'package:active_ecommerce_flutter/repositories/coupon_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:pay/pay.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/screens/offline_screen.dart';
 import 'package:active_ecommerce_flutter/screens/paytm_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import 'dart:io' show Platform;
 
 
 class Checkout extends StatefulWidget {
@@ -223,15 +226,9 @@ class _CheckoutState extends State<Checkout> {
     // }
 
     if (_paymentTypeList[_selected_payment_method_index].payment_type == "hyperpay_payment") {
-
-
       pay_by_cod_hyperpay();
-      // Navigator.push(context, MaterialPageRoute(builder: (context) {
-      //   return CheckoutView();
-      // })).then((value) {
-      //   onPopped(value);
-      // });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "paypal_payment") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "paypal_payment") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -249,7 +246,13 @@ class _CheckoutState extends State<Checkout> {
         onPopped(value);
       });
       ;
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "razorpay") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "apple") {
+      setState(() {
+
+      });
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "razorpay") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -266,7 +269,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "paystack") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "paystack") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -283,7 +287,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "iyzico") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "iyzico") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -300,7 +305,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "bkash") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "bkash") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -317,7 +323,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "nagad") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "nagad") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -334,7 +341,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "sslcommerz_payment") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "sslcommerz_payment") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -351,7 +359,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "flutterwave") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "flutterwave") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -368,7 +377,8 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "paytm") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "paytm") {
       if (_grandTotalValue == 0.00) {
         ToastComponent.showDialog(
             AppLocalizations.of(context).common_nothing_to_pay, context,
@@ -385,14 +395,18 @@ class _CheckoutState extends State<Checkout> {
       })).then((value) {
         onPopped(value);
       });
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "wallet_system") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "wallet_system") {
       pay_by_wallet();
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "cash_payment") {
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "cash_payment") {
       pay_by_cod();
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "manual_payment" &&
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "manual_payment" &&
         widget.manual_payment_from_order_details == false) {
       pay_by_manual_payment();
-    } else if (_paymentTypeList[_selected_payment_method_index].payment_type == "manual_payment" &&
+    }
+    else if (_paymentTypeList[_selected_payment_method_index].payment_type == "manual_payment" &&
         widget.manual_payment_from_order_details == true) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return OfflineScreen(
@@ -448,7 +462,6 @@ class _CheckoutState extends State<Checkout> {
       return OrderList(from_checkout: true);
     }));
   }
-
   pay_by_cod() async {
     loading();
     var orderCreateResponse = await PaymentRepository()
@@ -516,17 +529,10 @@ class _CheckoutState extends State<Checkout> {
   }
 
   onPaymentMethodItemTap(index) {
-    // if (_selected_payment_method_key !=
-    //     _paymentTypeList[index].payment_type_key) {
     setState(() {
       _selected_payment_method_index = index;
-      // _selected_payment_method = _paymentTypeList[index].payment_type;
-      // _selected_payment_method_key = _paymentTypeList[index].payment_type_key;
     });
-    // }
 
-    //print(_selected_payment_method);
-    //print(_selected_payment_method_key);
   }
 
   onPressDetails() {
@@ -1001,7 +1007,7 @@ class _CheckoutState extends State<Checkout> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FlatButton(
+            isAppleDevice()&&(_paymentTypeList[_selected_payment_method_index].payment_method_key == "apple")?Expanded(child:_applePayBtn()):FlatButton(
               minWidth: MediaQuery.of(context).size.width,
               height: 50,
               color: MyTheme.accent_color,
@@ -1225,6 +1231,40 @@ class _CheckoutState extends State<Checkout> {
       return OrderList();
     }));
   }
+  ///============== APPLEPAY==================================
+  List<PaymentItem> _paymentItems = [];
+  void initApplePay(){
+    _paymentItems.clear();
+    _paymentItems.add(
+        PaymentItem(
+          label: 'Total',
+          amount: '${_totalString}',
+          status: PaymentItemStatus.final_price,
+        )
+    );
+  }
+  void onApplePayResult(paymentResult) {
+    setPaymentStatusToServer();
+    debugPrint(paymentResult.toString());
+  }
+  bool isAppleDevice(){
+    return Platform.isIOS;
+  }
+Widget _applePayBtn(){
+  initApplePay();
+    return SizedBox(child: ApplePayButton(
+      paymentConfigurationAsset: 'default_payment_profile_apple_pay.json',
+      paymentItems: _paymentItems,
+      
+      style: ApplePayButtonStyle.black,
+      type: ApplePayButtonType.inStore,
+      margin: const EdgeInsets.all(10),
+      onPaymentResult: onApplePayResult,
+      loadingIndicator: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),);
+}
 
 
 }

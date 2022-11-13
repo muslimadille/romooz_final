@@ -98,7 +98,7 @@ class Product {
         name: json["name"],
         thumbnail_image: json["thumbnail_image"],
         main_price: json["main_price"],
-        stroked_price: json["stroked_price"],
+        stroked_price: json["discounted_price"],
         has_discount: json["has_discount"],
         rating: json["rating"] == null ? null : json["rating"],
         sales: json["sales"],

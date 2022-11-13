@@ -544,7 +544,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                           locale: app_language.$ == 'ar'
                                               ? LocaleType.ar
                                               : LocaleType.en);
-                                      await DatePicker.showTimePicker(context, showTitleActions: true,
+                                      await DatePicker.showTime12hPicker(context, showTitleActions: true,
                                           onChanged: (date) {
 
                                               if(!DateTime(date.year,
