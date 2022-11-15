@@ -62,7 +62,6 @@ dependencies:
   timeline_tile: ^2.0.0
   shared_value: ^2.1.0
   rename: ^1.3.0
-  pay: ^1.0.6
   permission_handler: ^6.1.3
   image_picker: ^0.8.4+2
   flutter_facebook_auth: ^3.5.0
@@ -89,7 +88,7 @@ dependencies:
   flutter_launch:
   is_first_run: ^1.0.0
  # hyperpay: ^0.0.9-alpha
-
+  pay: ^1.0.6
 
 dependency_overrides:
   firebase_messaging_platform_interface: 3.1.6

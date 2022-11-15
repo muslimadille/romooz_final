@@ -2,6 +2,7 @@ import 'package:active_ecommerce_flutter/helpers/addons_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/business_setting_helper.dart';
 import 'package:active_ecommerce_flutter/other_config.dart';
+import 'package:active_ecommerce_flutter/services/push_notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,7 +81,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     if (OtherConfig.USE_PUSH_NOTIFICATION) {
       Future.delayed(Duration(milliseconds: 100), () async {
-        //  PushNotificationService().initialise();
+        notificationService.initialise();
       });
     }
   }
