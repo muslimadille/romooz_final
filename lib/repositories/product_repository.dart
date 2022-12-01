@@ -83,7 +83,7 @@ class ProductRepository {
     //     "?page=${page}&name=${name}");
 
 
-
+print("${url}");
 
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
