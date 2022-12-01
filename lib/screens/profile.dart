@@ -1,3 +1,4 @@
+import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
@@ -12,6 +13,7 @@ import 'package:active_ecommerce_flutter/screens/club_point.dart';
 import 'package:active_ecommerce_flutter/screens/refund_request.dart';
 import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:one_context/one_context.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -599,27 +601,34 @@ class _ProfileState extends State<Profile> {
   buildTopSection() {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
-          child: Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              border: Border.all(
-                  color: Color.fromRGBO(112, 112, 112, .3), width: 2),
-              //shape: BoxShape.rectangle,
+        Stack(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                border: Border.all(
+                    color: Color.fromRGBO(112, 112, 112, .3), width: 2),
+                //shape: BoxShape.rectangle,
+              ),
+              child: ClipRRect(
+                  clipBehavior: Clip.hardEdge,
+                  borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/placeholder.png',
+                    image:  "${avatar_original.$}",
+                    fit: BoxFit.fill,
+                  )),
             ),
-            child: ClipRRect(
-                clipBehavior: Clip.hardEdge,
-                borderRadius: BorderRadius.all(Radius.circular(100.0)),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/placeholder.png',
-                  image:  "${avatar_original.$}",
-                  fit: BoxFit.fill,
-                )),
           ),
-        ),
+          Positioned(child: Container(child: InkWell(onTap: (){
+            _showMessage();
+          },
+            child: Center(child: Icon(Icons.delete_forever,color: Colors.red,),),
+          ),),bottom: 0,)
+        ],),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
@@ -717,4 +726,34 @@ backgroundColor: Colors.white,
       titleSpacing: 0,
     );
   }
+  void _showMessage() {
+    //print("onMessage: $message");
+
+    OneContext()..showDialog(
+      // barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text("حذف بيانات الحساب"),
+          subtitle: Text("هل انت متأكد انك تريد حذف بيانات الحساب الخاص بك"),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('close'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () {
+              //print(message);
+              Navigator.pop(context);
+                OneContext().push(MaterialPageRoute(builder: (_) {
+                  return Login();
+                }));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 }

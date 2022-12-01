@@ -10,6 +10,7 @@ import 'package:active_ecommerce_flutter/screens/category_products.dart';
 import 'package:active_ecommerce_flutter/screens/category_list.dart';
 import 'package:active_ecommerce_flutter/screens/notifications.dart';
 import 'package:active_ecommerce_flutter/screens/wishlist.dart';
+import 'package:active_ecommerce_flutter/services/push_notification_service.dart';
 import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
@@ -75,13 +76,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   void initState() {
+
     // print("app_mobile_language.en${app_mobile_language.$}");
     // print("app_language.${app_language.$}");
     print("is_logged_in  --- ${is_logged_in.$}");
-
+    notificationService.initialise();
     // TODO: implement initState
     super.initState();
     // In initState()
+
     if (AppConfig.purchase_code == "") {
       initPiratedAnimation();
     }
@@ -114,6 +117,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     if (is_logged_in.$ == true) {
       getNotificationsCount();
       fetchNotificationCount();
+
     }
 
     // AddonsHelper().setAddonsData();
@@ -226,6 +230,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     //print(MediaQuery.of(context).viewPadding.top);
+
 
     var mainDrawer = MainDrawer();
     return WillPopScope(

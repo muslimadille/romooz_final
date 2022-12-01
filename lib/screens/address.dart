@@ -235,6 +235,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
 
   afterAddingAnAddressUpdateLocation(addressId) async {
     fetchAll();
+    Navigator.of(context, rootNavigator: true).pop();
     var addressUpdateLocationResponse = await AddressRepository()
         .getAddressUpdateLocationResponse(
             addressId,
@@ -359,7 +360,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
       return;
     }
 
-    if (phone == "") {
+    /*if (phone == "") {
       ToastComponent.showDialog(
           AppLocalizations.of(context).address_screen_enter_phone ==
                   "أدخل التليفون"
@@ -369,7 +370,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return;
-    }
+    }*/
 
     if (selectedPlace == null) {
       ToastComponent.showDialog(
@@ -404,7 +405,8 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     print("addressAddResponse.data.id${addressAddResponse.data.id}");
     //Navigator.of(context).pop();
 
-    afterAddingAnAddressUpdateLocation(addressAddResponse.data.id);
+    await afterAddingAnAddressUpdateLocation(addressAddResponse.data.id);
+
   }
 
   onAddressUpdate(context, index, id) async {
@@ -1222,7 +1224,6 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         ),
                         onPressed: () async {
                           await onAddressAdd(context);
-                          // Navigator.of(context, rootNavigator: true).pop();
                           // Navigator.of(context).pop();
                         },
                       ),

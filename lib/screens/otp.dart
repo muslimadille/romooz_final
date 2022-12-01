@@ -9,6 +9,7 @@ import 'package:active_ecommerce_flutter/repositories/auth_repository.dart';
 import 'package:active_ecommerce_flutter/repositories/notifications_repository.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,11 +28,27 @@ class _OtpState extends State<Otp> {
   TextEditingController _verificationCodeController = TextEditingController();
   bool showLoader = false;
 
+
   @override
-  void initState() {
+  Future<void> initState()   {
     //on Splash Screen hide statusbar
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     super.initState();
+    var appSignatureID =  SmsAutoFill().getAppSignature.then((value) {
+      ToastComponent.showDialog(
+          value.toString(),
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    });
+
+    SmsAutoFill().listenForCode().then((value) {
+      SmsAutoFill().code.listen((event) {
+        setState(() {
+          _verificationCodeController.text=event;
+        });
+      });
+    });
   }
 
   @override
@@ -39,6 +56,7 @@ class _OtpState extends State<Otp> {
     //before going to other screen show statusbar
     SystemChrome.setEnabledSystemUIOverlays(
         [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    SmsAutoFill().unregisterListener();
     super.dispose();
   }
 
@@ -89,7 +107,6 @@ class _OtpState extends State<Otp> {
       AuthHelper().setUserData(confirmCodeResponse);
       print("loginResponse ------ ${confirmCodeResponse}");
 
-      await NotificationRepository.sendNotificationToken();
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return Main();
       }));
@@ -124,13 +141,13 @@ class _OtpState extends State<Otp> {
                       Row(
                         children: [
                           SizedBox(width: 20,),
-                        IconButton(
-                            icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
-                            onPressed: () {
-                              return Navigator.of(context).pop();
-                            }),
-                      ],
-                    ),
+                          IconButton(
+                              icon: Icon(Icons.arrow_back, color: MyTheme.dark_grey),
+                              onPressed: () {
+                                return Navigator.of(context).pop();
+                              }),
+                        ],
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 40.0, bottom: 15),
                         child: Container(

@@ -89,6 +89,7 @@ class _CheckoutState extends State<Checkout> {
     print(access_token.value);
     print(user_id.$);
     print(user_name.$);*/
+
     print("_shippingSelectedDate${widget.shippingSelectedDate}");
 
     fetchAll();
@@ -127,6 +128,70 @@ class _CheckoutState extends State<Checkout> {
     _isInitial = false;
     setState(() {});
   }
+  fetchCartItems() async {
+    var cartResponseList =
+    await CartRepository().getCartResponseList(user_id.$);
+    var _shopList=[];
+    if (cartResponseList != null && cartResponseList.length > 0) {
+      _shopList = cartResponseList;
+      if (_shopList.length > 0) {
+        _shopList.forEach((shop) {
+          /*if (shop.cart_items.length > 0) {
+            shop.cart_items.forEach((cart_item) {
+              double partialTotal = (cart_item.price) * cart_item.quantity;
+              _paymentItems.add(
+                PaymentItem(
+                  label: '${cart_item.product_name}',
+                  amount: '${partialTotal.toStringAsFixed(2)}',
+                  status: PaymentItemStatus.unknown,
+                ),);
+
+            });
+          }*/
+
+        });
+        _paymentItems.add(
+          PaymentItem(
+            label: 'المجموع الفرعي',
+            amount: '${_subTotalString}',
+            status: PaymentItemStatus.unknown,
+          ),
+        );
+        _paymentItems.add(
+          PaymentItem(
+            label: 'الضرائب',
+            amount: '${_taxString}',
+            status: PaymentItemStatus.unknown,
+          ),
+        );
+        _paymentItems.add(
+          PaymentItem(
+            label: 'تكلفة الشحن',
+            amount: '${_shippingCostString}',
+            status: PaymentItemStatus.unknown,
+          ),
+        );
+        _paymentItems.add(
+          PaymentItem(
+            label: 'الخصم',
+            amount: '${_discountString}',
+            status: PaymentItemStatus.unknown,
+          ),
+        );
+
+        _paymentItems.add(
+          PaymentItem(
+            label: 'Tasla Co',
+            amount: '${_totalString}',
+            status: PaymentItemStatus.unknown,
+          ),
+        );
+      }
+    }
+    _isInitial = false;
+    setState(() {});
+  }
+
 
   fetchSummary() async {
     var cartSummaryResponse = await CartRepository().getCartSummaryResponse();
@@ -141,6 +206,7 @@ class _CheckoutState extends State<Checkout> {
       _used_coupon_code = cartSummaryResponse.coupon_code;
       _couponController.text = _used_coupon_code;
       _coupon_applied = cartSummaryResponse.coupon_applied;
+      fetchCartItems();
       setState(() {});
     }
   }
@@ -1233,16 +1299,6 @@ class _CheckoutState extends State<Checkout> {
   }
   ///============== APPLEPAY==================================
   List<PaymentItem> _paymentItems = [];
-  void initApplePay(){
-    _paymentItems.clear();
-    _paymentItems.add(
-        PaymentItem(
-          label: 'Total',
-          amount: '${_totalString}',
-          status: PaymentItemStatus.final_price,
-        )
-    );
-  }
   void onApplePayResult(paymentResult) {
     setPaymentStatusToServer();
     debugPrint(paymentResult.toString());
@@ -1251,7 +1307,6 @@ class _CheckoutState extends State<Checkout> {
     return Platform.isIOS;
   }
 Widget _applePayBtn(){
-  initApplePay();
     return SizedBox(child: ApplePayButton(
       paymentConfigurationAsset: 'default_payment_profile_apple_pay.json',
       paymentItems: _paymentItems,

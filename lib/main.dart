@@ -2,8 +2,11 @@ import 'package:active_ecommerce_flutter/helpers/addons_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/auth_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/business_setting_helper.dart';
 import 'package:active_ecommerce_flutter/other_config.dart';
+import 'package:active_ecommerce_flutter/services/push_notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/splash.dart';
@@ -31,13 +34,31 @@ import 'package:firebase_core/firebase_core.dart';
 //           (X509Certificate cert, String host, int port) => true;
 //   }
 // }
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 main() async {
   // HttpOverrides.global = MyHttpOverrides();
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      IOSFlutterLocalNotificationsPlugin>();
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -80,7 +101,28 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     if (OtherConfig.USE_PUSH_NOTIFICATION) {
       Future.delayed(Duration(milliseconds: 100), () async {
-        //  PushNotificationService().initialise();
+        notificationService.initialise();
+        var initializationSettingsAndroid =
+        new AndroidInitializationSettings('ic_launcher');
+        var initialzationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+        var initializationSettings =
+        InitializationSettings(android: initialzationSettingsAndroid);
+        flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          RemoteNotification notification = message.notification;
+          AndroidNotification android = message.notification?.android;
+          if (notification != null && android != null) {
+            flutterLocalNotificationsPlugin.show(
+                notification.hashCode,
+                notification.title,
+                notification.body,
+                NotificationDetails(
+                    iOS: IOSNotificationDetails(subtitle:notification.body)
+                ));
+          }
+        });
       });
     }
   }

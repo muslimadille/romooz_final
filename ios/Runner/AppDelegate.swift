@@ -2,7 +2,8 @@ import UIKit
 import Flutter
 import GoogleMaps
 import OPPWAMobile
-
+import FirebaseCore
+import FirebaseMessaging
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -25,10 +26,18 @@ import OPPWAMobile
           self.getPaymentMethod(result: result , call: call)
       })
       GeneratedPluginRegistrant.register(with: self)
-
+      if #available(iOS 10.0, *) {
+        UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+      }
     GMSServices.provideAPIKey("AIzaSyApCEdqLS8_AlhwBaZIQ_wr0-h5QVKh9bg")
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    ////============firebase notifications=============================
+    override func application(_ application: UIApplication,didRegisterForRemoteNotificationsWithDeviceToken deviceToken:Data){
+        Messaging.messaging().apnsToken = deviceToken
+        super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+    }
+    
     private func getPaymentMethod(result:@escaping FlutterResult , call:FlutterMethodCall){
         let provider = OPPPaymentProvider (mode: OPPProviderMode.live)
 
@@ -92,6 +101,7 @@ import OPPWAMobile
         result("100")
         })
     }
+    
     ///==================apple pay=======================
     
     private func getApplePayMethod(result:@escaping FlutterResult , call:FlutterMethodCall){

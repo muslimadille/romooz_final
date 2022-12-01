@@ -53,19 +53,15 @@ class NotificationRepository {
         "App-Language": app_language.$,
       },
     );
-    print("response.body.toString()${response.body.toString()}");
-    print('1111111111111111133333333333333333');
     print(response.body);
     return json.decode(response.body);
   }
 
-  static Future<Map<String,dynamic>> sendNotificationToken() async {
-    var fbm  = FirebaseMessaging.instance;
-    String phoneToken;
-    phoneToken = await fbm.getToken();
+  static Future<Map<String,dynamic>> sendNotificationToken(String token) async {
+
 
     print('ddddddddddddddddddddddddddddddddddddddddddddddd');
-    print(phoneToken);
+    print(token);
 
     Uri url = Uri.parse("${AppConfig.BASE_URL}/notifications/SetFcmToken");
     final response = await http.post(
@@ -76,7 +72,7 @@ class NotificationRepository {
         "App-Language": app_language.$,
       },
       body: jsonEncode({
-        "fcm_token": phoneToken,
+        "fcm_token": token,
       })
     );
     // print("response.body.toString()${response.body.toString()}");

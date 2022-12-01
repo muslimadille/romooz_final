@@ -617,7 +617,7 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        Visibility(
+                        /*Visibility(
                           visible: true,
                           // visible:
                           //     allow_google_login.$ || allow_facebook_login.$,
@@ -631,8 +631,8 @@ class _LoginState extends State<Login> {
                                   color: MyTheme.medium_grey, fontSize: 14),
                             )),
                           ),
-                        ),
-                        Padding(
+                        ),*/
+                        /*Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: Center(
                             child: Container(
@@ -686,7 +686,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   )
