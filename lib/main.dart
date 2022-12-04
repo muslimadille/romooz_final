@@ -103,11 +103,9 @@ class _MyAppState extends State<MyApp> {
       Future.delayed(Duration(milliseconds: 100), () async {
         notificationService.initialise();
         var initializationSettingsAndroid =
-        new AndroidInitializationSettings('ic_launcher');
-        var initialzationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        new IOSInitializationSettings();
         var initializationSettings =
-        InitializationSettings(android: initialzationSettingsAndroid);
+        InitializationSettings(iOS: initializationSettingsAndroid);
         flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
