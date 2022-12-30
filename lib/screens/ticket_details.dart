@@ -156,6 +156,7 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
               ),
             ],
           ),
+          SizedBox(height: 25,)
 
         ],
       ),

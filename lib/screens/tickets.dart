@@ -13,6 +13,8 @@ class TicketsPage extends StatefulWidget {
 }
 
 class _TicketsPageState extends State<TicketsPage> {
+  Map<dynamic,String>data={};
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,33 +34,39 @@ class _TicketsPageState extends State<TicketsPage> {
                     if (snapshot.hasError)
                       return new Text('Error: ${snapshot.error}');
                     if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: snapshot.data['data'].length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            return  ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: const Color(0xff764abc),
-                                child: snapshot.data['data'][index]['status']=="solved"?
-                                Icon(Icons.mark_email_read):
-                                Icon(Icons.mail),
-                              ),
-                              title: Text(snapshot.data['data'][index]['subject']),
-                              // subtitle: Text(snapshot.data['data'][index]['description']),
-                              trailing: snapshot.data['data'][index]['viewed']==1?
-                              Icon(Icons.check_circle,color: Colors.green,):
-                              Icon(Icons.check_circle_outline,color: Colors.grey,),
-                              onTap: () async{
-                                await Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return TicketDetailsPage(ticketID: snapshot.data['data'][index]['id'].toString());
-                                }));
-                                setState(() {
+                      if(snapshot.data['data'].length>0){
+                        return ListView.builder(
+                            itemCount: snapshot.data['data'].length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              return  ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: const Color(0xff764abc),
+                                  child: snapshot.data['data'][index]['status']=="solved"?
+                                  Icon(Icons.mark_email_read):
+                                  Icon(Icons.mail),
+                                ),
+                                title: Text(snapshot.data['data'][index]['subject']),
+                                // subtitle: Text(snapshot.data['data'][index]['description']),
+                                trailing: snapshot.data['data'][index]['viewed']==1?
+                                Icon(Icons.check_circle,color: Colors.green,):
+                                Icon(Icons.check_circle_outline,color: Colors.grey,),
+                                onTap: () async{
+                                  await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                    return TicketDetailsPage(ticketID: snapshot.data['data'][index]['id'].toString());
+                                  }));
+                                  setState(() {
 
-                                });
-                              },
-                            );
-                          }
-                      );
+                                  });
+                                },
+                              );
+                            }
+                        );
+                      }
+                      else{
+                        return Center(child: Text(app_language.$ == 'ar' ?"لم تقم بإضافة اي تذكرة":"there is no tickets found"),);
+                      }
+
                     }
                     return Center(
                       child: CircularProgressIndicator(),
@@ -67,6 +75,7 @@ class _TicketsPageState extends State<TicketsPage> {
           Container(
             height: 50,
             padding: EdgeInsets.all(5),
+            margin:EdgeInsets.only(bottom: 25) ,
             child:  RaisedButton(
               // elevation: 5.0,
               color: Colors.blueGrey,

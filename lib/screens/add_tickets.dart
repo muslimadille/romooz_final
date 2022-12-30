@@ -137,14 +137,14 @@ class _AddTicketPageState extends State<AddTicketPage> {
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return {};
-    }  else if (attachments_registry == null) {
+    }  /*else if (attachments_registry == null) {
       ToastComponent.showDialog(
           app_language.$ == 'ar' ?"من فضلك اضف  صورة للمشكلة":"Please add image for the problem",
           context,
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return {};
-    }
+    }*/
 
 
     var _data = {
