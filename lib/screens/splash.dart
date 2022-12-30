@@ -89,7 +89,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       seconds: 8,
 
       //comment this
-      navigateAfterSeconds: firstRun?IntroductionSreen():Main(),
+      navigateAfterSeconds: Main(),//firstRun?IntroductionSreen():
 
       //navigateAfterFuture: loadFromFuture(), //uncomment this
       // title: Row(

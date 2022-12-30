@@ -391,7 +391,7 @@ class _FilterState extends State<Filter> {
         endDrawer: buildFilterDrawer(),
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        body: Stack(overflow: Overflow.visible, children: [
+        body: Stack(clipBehavior:Clip.none , children: [
           _selectedFilter.option_key == 'product'
               ? buildProductList()
               : (_selectedFilter.option_key == 'brands'
