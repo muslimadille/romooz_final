@@ -1067,7 +1067,7 @@ class _CheckoutState extends State<Checkout> {
 
   BottomAppBar buildBottomAppBar(BuildContext context) {
     return BottomAppBar(
-      child: Container(
+      child: _paymentTypeList.isNotEmpty?Container(
         color: Colors.transparent,
         height: 50,
         child: Row(
@@ -1155,7 +1155,7 @@ class _CheckoutState extends State<Checkout> {
             )
           ],
         ),
-      ),
+      ):Container(),
     );
   }
 
