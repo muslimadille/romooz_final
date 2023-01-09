@@ -1245,11 +1245,11 @@ class _CheckoutState extends State<Checkout> {
       });
       print("${result.toString()}");//TODO REMOVE PRINT
 
-      if(result.toString()!="100"){
+      if(result.toString()=="success"){
         setPaymentStatusToServer();
       }
       ToastComponent.showDialog(
-          ' payment response  ${"${result.toString()}"}',
+          ' payment response  ${"${result.toString()=="البطاقة المستخدمة غير مدعمة"?"":result.toString()}"}',
           context,
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);

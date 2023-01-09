@@ -1,8 +1,10 @@
+import 'dart:io' show File;
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:one_context/one_context.dart';
 import 'package:toast/toast.dart';
 import 'package:active_ecommerce_flutter/custom/input_decorations.dart';
 import 'package:active_ecommerce_flutter/repositories/profile_repository.dart';
@@ -11,6 +13,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:active_ecommerce_flutter/helpers/file_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'login.dart';
 
 class ProfileEdit extends StatefulWidget {
   @override
@@ -59,11 +63,17 @@ class _ProfileEditState extends State<ProfileEdit> {
           duration: Toast.LENGTH_LONG);
     } else if (status.isGranted) {
       //file = await ImagePicker.pickImage(source: ImageSource.camera);
-      _file = await _picker.pickImage(source: ImageSource.gallery);
+      await ImagePicker().pickImage(source: ImageSource.gallery).then((value){
+        _file=value;
+        setState(() {
+
+        });
+      });
 
       if (_file == null) {
         ToastComponent.showDialog(AppLocalizations.of(context).common_no_file_chosen, context,
             gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+
         return;
       }
 
@@ -235,7 +245,10 @@ backgroundColor: Colors.white,
                 child: ClipRRect(
                     clipBehavior: Clip.hardEdge,
                     borderRadius: BorderRadius.all(Radius.circular(100.0)),
-                    child: FadeInImage.assetNetwork(
+                    child: _file!=null?Image.file(
+                      File(_file.path),
+                      fit: BoxFit.fill,
+                    ):FadeInImage.assetNetwork(
                       placeholder: 'assets/placeholder.png',
                       image:  "${avatar_original.$}",
                       fit: BoxFit.fill,
@@ -368,25 +381,25 @@ backgroundColor: Colors.white,
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Spacer(),
-                Padding(
+                Expanded(child: Container(
                   padding: const EdgeInsets.only(top: 16.0),
+                  margin: const EdgeInsets.only(top: 16.0),
                   child: Container(
-                    width: 120,
                     height: 36,
                     decoration: BoxDecoration(
                         border:
-                            Border.all(color: MyTheme.textfield_grey, width: 1),
+                        Border.all(color: MyTheme.textfield_grey, width: 1),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0))),
+                        const BorderRadius.all(Radius.circular(8.0))),
                     child: FlatButton(
                       minWidth: MediaQuery.of(context).size.width,
                       //height: 50,
                       color: MyTheme.accent_color,
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0))),
+                          const BorderRadius.all(Radius.circular(8.0))),
                       child: Text(
                         AppLocalizations.of(context).profile_edit_screen_btn_update_profile,
                         style: TextStyle(
@@ -399,7 +412,38 @@ backgroundColor: Colors.white,
                       },
                     ),
                   ),
-                ),
+                ),),
+                SizedBox(width: 20,),
+                Expanded(child: Container(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  margin: const EdgeInsets.only(top: 16.0),
+                  child: Container(
+                    height: 36,
+                    decoration: BoxDecoration(
+                        border:
+                        Border.all(color: MyTheme.textfield_grey, width: 1),
+                        borderRadius:
+                        const BorderRadius.all(Radius.circular(8.0))),
+                    child: FlatButton(
+                      minWidth: MediaQuery.of(context).size.width,
+                      //height: 50,
+                      color: MyTheme.accent_color,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0))),
+                      child: Text(
+                      AppLocalizations.of(context).localeName=="ar"? "حذف الحساب":"Delete Account",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () {
+                        _showMessage();
+                      },
+                    ),
+                  ),
+                ),),
               ],
             ),
           ],
@@ -407,4 +451,32 @@ backgroundColor: Colors.white,
       ),
     );
   }
+  void _showMessage() {
+    OneContext()..showDialog(
+      // barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text(AppLocalizations.of(context).localeName=="ar"?"حذف بيانات الحساب":"delete account data"),
+          subtitle: Text(AppLocalizations.of(context).localeName=="ar"?"هل انت متأكد انك تريد حذف بيانات الحساب الخاص بك":"Are you sure you want to delete your account data?"),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(AppLocalizations.of(context).localeName=="ar"?"إلغاء":'close'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          FlatButton(
+            child: Text(AppLocalizations.of(context).localeName=="ar"?"حذف":'OK'),
+            onPressed: () {
+              //print(message);
+              Navigator.pop(context);
+              OneContext().push(MaterialPageRoute(builder: (_) {
+                return Login();
+              }));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 }

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>310543301172-f8io81ucdc0smdfcmd2abm23k94mc04h.apps.googleusercontent.com</string>
+	<string>310543301172-ele5654877aqu1iapvh2hc2alr09ql9h.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.310543301172-f8io81ucdc0smdfcmd2abm23k94mc04h</string>
+	<string>com.googleusercontent.apps.310543301172-ele5654877aqu1iapvh2hc2alr09ql9h</string>
 	<key>API_KEY</key>
 	<string>AIzaSyA_mgj4H6jlPvi9D-q0IWCWdkugjdx0gW8</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.romooz.app.shoppingapp</string>
+	<string>com.romooz.romoozfruitsapp</string>
 	<key>PROJECT_ID</key>
 	<string>romooz-7b8c2</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:310543301172:ios:1342ebc48010440084e861</string>
+	<string>1:310543301172:ios:12141f08287b591e84e861</string>
 </dict>
 </plist>

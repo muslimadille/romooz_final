@@ -363,7 +363,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
     /*if (phone == "") {
       ToastComponent.showDialog(
           AppLocalizations.of(context).address_screen_enter_phone ==
-                  "أدخل التليفون"
+                  "أدخل الهاتف"
               ? "أدخل الجوال"
               : AppLocalizations.of(context).address_screen_enter_phone,
           context,
@@ -1123,7 +1123,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
                             AppLocalizations.of(context).address_screen_phone ==
-                                    "التليفون"
+                                    "الهاتف"
                                 ? "الجوال"
                                 : AppLocalizations.of(context)
                                     .address_screen_phone,
@@ -1140,7 +1140,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                             decoration: InputDecoration(
                                 hintText: AppLocalizations.of(context)
                                             .address_screen_enter_phone ==
-                                        "أدخل التليفون"
+                                        "أدخل الهاتف"
                                     ? "أدخل الجوال"
                                     : AppLocalizations.of(context)
                                         .address_screen_enter_phone,
@@ -2040,7 +2040,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Text(
                             AppLocalizations.of(context).address_screen_phone ==
-                                    "التليفون"
+                                    "الهاتف"
                                 ? "الجوال"
                                 : AppLocalizations.of(context)
                                     .address_screen_phone,
@@ -2057,7 +2057,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                             decoration: InputDecoration(
                                 hintText: AppLocalizations.of(context)
                                             .address_screen_enter_phone ==
-                                        "أدخل التليفون"
+                                        "أدخل الهاتف"
                                     ? "أدخل الجوال"
                                     : AppLocalizations.of(context)
                                         .address_screen_enter_phone,
@@ -2329,7 +2329,7 @@ class _AddressState extends State<Address> with SingleTickerProviderStateMixin {
                     width: 75,
                     child: Text(
                       AppLocalizations.of(context).address_screen_phone ==
-                              "التليفون"
+                              "الهاتف"
                           ? "الجوال"
                           : AppLocalizations.of(context).address_screen_phone,
                       style: TextStyle(

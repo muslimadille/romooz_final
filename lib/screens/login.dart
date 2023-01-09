@@ -298,8 +298,7 @@ class _LoginState extends State<Login> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                      "${AppLocalizations.of(context).login_screen_login_to} " +
-                          AppConfig.app_name,
+                      "${AppLocalizations.of(context).login_screen_login_to} ",
                       style: TextStyle(
                           color: MyTheme.accent_color,
                           fontSize: 18,

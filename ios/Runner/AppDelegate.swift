@@ -74,10 +74,10 @@ import FirebaseMessaging
         checkoutsettings.theme.errorFont = UIFont.systemFont(ofSize: 12.0)
 
         // set available payment brands for your shop
-        checkoutsettings.paymentBrands = ["VISA", "MADA","MASTER"]
+        checkoutsettings.paymentBrands = ["MADA"]
         // Set shopper result URL
         checkoutsettings.shopperResultURL =
-        "com.romooz.app.shoppingapp.payments://result"
+        "com.romooz.romoozfruitsapp.payments://result"
         let args=call.arguments as? Dictionary<String,Any>
         let checkoutId=(args?["checkoutId"] as? String)!
         let checkoutProvider = OPPCheckoutProvider(paymentProvider: provider, checkoutID: checkoutId , settings: checkoutsettings)
@@ -85,20 +85,21 @@ import FirebaseMessaging
         checkoutProvider?.presentCheckout(forSubmittingTransactionCompletionHandler: { (transaction, error) in
         guard let transaction = transaction else {
         // Handle invalid transaction, check error
-        result("100")
+        result("Handle invalid transaction, check error")
         return
         }
         if transaction.type == .synchronous {
-        result("100")
+        result("waiting")
         } else if transaction.type == .asynchronous {
         result(transaction.redirectURL?.absoluteString)
+        return
         } else {
         // Executed in case of failure of the transaction for any reason
-        result("100")
+        result("Executed in case of failure of the transaction for any reason")
         }
         }, cancelHandler: {
         // Executed if the shopper closes the payment page prematurely
-        result("100")
+        result("Executed if the shopper closes the payment page prematurely")
         })
     }
     
@@ -107,7 +108,7 @@ import FirebaseMessaging
     private func getApplePayMethod(result:@escaping FlutterResult , call:FlutterMethodCall){
         let provider = OPPPaymentProvider (mode: OPPProviderMode.live)
         let checkoutSettings = OPPCheckoutSettings()
-        let paymentRequest = OPPPaymentProvider.paymentRequest(withMerchantIdentifier: "merchant.com.romoozfruits.hyperpay.live", countryCode: "SA 966")
+        let paymentRequest = OPPPaymentProvider.paymentRequest(withMerchantIdentifier: "merchant.com.romooz.romoozfruitsapp.live", countryCode: "SA 966")
         let args=call.arguments as? Dictionary<String,Any>
         let checkoutId=(args?["checkoutId"] as? String)!
         paymentRequest.supportedNetworks =  [PKPaymentNetwork.visa,PKPaymentNetwork.masterCard]

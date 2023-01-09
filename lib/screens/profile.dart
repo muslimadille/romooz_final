@@ -280,7 +280,7 @@ class _ProfileState extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  AppLocalizations.of(context).profile_screen_profile,
+                  AppLocalizations.of(context).profile_edit_screen_btn_update_profile,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: MyTheme.font_grey, fontWeight: FontWeight.w300),
@@ -623,11 +623,6 @@ class _ProfileState extends State<Profile> {
                   )),
             ),
           ),
-          Positioned(child: Container(child: InkWell(onTap: (){
-            _showMessage();
-          },
-            child: Center(child: Icon(Icons.delete_forever,color: Colors.red,),),
-          ),),bottom: 0,)
         ],),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -724,35 +719,6 @@ backgroundColor: Colors.white,
       ),
       elevation: 0.0,
       titleSpacing: 0,
-    );
-  }
-  void _showMessage() {
-    //print("onMessage: $message");
-
-    OneContext()..showDialog(
-      // barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        content: ListTile(
-          title: Text("حذف بيانات الحساب"),
-          subtitle: Text("هل انت متأكد انك تريد حذف بيانات الحساب الخاص بك"),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('close'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          FlatButton(
-            child: Text('OK'),
-            onPressed: () {
-              //print(message);
-              Navigator.pop(context);
-                OneContext().push(MaterialPageRoute(builder: (_) {
-                  return Login();
-                }));
-            },
-          ),
-        ],
-      ),
     );
   }
 

@@ -459,7 +459,7 @@ class _WalletState extends State<Wallet> {
             ),
           ),
         ),
-        Padding(
+        /*Padding(
           padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
           child: Text(
             AppLocalizations.of(context).wallet_screen_wallet_recharge_history,
@@ -468,7 +468,7 @@ class _WalletState extends State<Wallet> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600),
           ),
-        ),
+        ),*/
       ],
     );
   }

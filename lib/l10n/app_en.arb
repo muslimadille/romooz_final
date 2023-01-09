@@ -303,7 +303,7 @@
   "login_screen_email_warning": "Enter email",
   "login_screen_phone_warning": "Enter phone number",
   "login_screen_password_warning": "Enter password",
-  "login_screen_login_to": "Login to",
+  "login_screen_login_to": "Login",
   "login_screen_or_login_with_phone": "or, Login with a phone number",
   "login_screen_or_login_with_email": "or, Login with an email",
   "login_screen_email": "Email",

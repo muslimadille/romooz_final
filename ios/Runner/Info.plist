@@ -38,7 +38,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.romooz.app.shoppingapp.payments</string>
+				<string>com.romooz.romoozfruitsapp.payments</string>
 			</array>
 		</dict>
 	</array>

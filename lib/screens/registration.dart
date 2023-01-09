@@ -423,7 +423,7 @@ class _RegistrationState extends State<Registration> {
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return;
-    } else if (_register_by == 'phone' && _phone == "") {
+    } else if (_register_by == 'phone' && (_phone == ""||_phone.length<9)) {
       ToastComponent.showDialog(
           AppLocalizations.of(context).registration_screen_phone_warning,
           context,
@@ -642,8 +642,7 @@ class _RegistrationState extends State<Registration> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                      "${AppLocalizations.of(context).registration_screen_join} " +
-                          AppConfig.app_name,
+                      "${AppLocalizations.of(context).registration_screen_join}",
                       style: TextStyle(
                           color: MyTheme.accent_color,
                           fontSize: 18,
@@ -687,7 +686,7 @@ class _RegistrationState extends State<Registration> {
                                     .registration_screen_email
                                 :(AppLocalizations.of(context)
                                 .registration_screen_phone ==
-                                "التليفون"
+                                "الهاتف"
                                 ? "الجوال"
                                 : AppLocalizations.of(context)
                                 .registration_screen_phone) ,
@@ -764,7 +763,7 @@ class _RegistrationState extends State<Registration> {
                                     formatInput: true,
                                     keyboardType:
                                         TextInputType.numberWithOptions(
-                                            signed: true, decimal: true),
+                                            signed: false, decimal: true),
                                     inputDecoration: InputDecorations
                                         .buildInputDecoration_phone(
                                             hint_text: "01710 333 558"),
