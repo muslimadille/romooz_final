@@ -1,0 +1,37 @@
+
+In reference to the previously sent email regarding the SDK update, you will find in the below link the guidelines on how to upload the new SDK,
+
+https://hyperpay.docs.oppwa.com/tutorials/mobile-sdk/first-integration
+
+You will also find the latest SDK v4.5.0 for iOS and Android in the below link
+http://hyperpay-2020.quickconnect.to/d/f/704549514035379297
+
+============================================
+
+1- Kindly make sure to call the Get payment status API only once , and the Access token is set up in this format (OGFjZGE0Yzg3NThkYzY3NTAxNzU5NzdlMWI2ZTZlZjF8RGpLZHM0dG5Tdw==)
+
+
+2-Please make sure the below SDK is uploaded on the App when uploading to google play and App store
+ oppwa.mobile
+ ipworks3ds_sdk_deploy
+Also please make sure that you added this parameter:
+
+JAVA :
+paymentProvider.setThreeDSWorkflowListener(new ThreeDSWorkflowListener() {
+    @Override
+    public Activity onThreeDSChallengeRequired() {
+        return getCurrentActivity();
+    }
+});
+
+
+Kotlin:
+paymentProvider!!.setThreeDSWorkflowListener{this}
+
+IOS :
+class MyCardViewController: ThreeDSWorkflowListener { var provider: OPPPaymentProvider? /// }
+self.provider?.threeDSEventListener = self
+
+*Also Please find the download link for the latest SDK v4.8.0 for iOS and Android
+http://hyperpay-2020.quickconnect.to/d/f/714707014034437927
+
