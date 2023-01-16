@@ -423,7 +423,7 @@ class _RegistrationState extends State<Registration> {
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
       return;
-    } else if (_register_by == 'phone' && (_phone == ""||_phone.length<9)) {
+    } else if (_register_by == 'phone' && (_phone == ""||_phone.length<13)) {
       ToastComponent.showDialog(
           AppLocalizations.of(context).registration_screen_phone_warning,
           context,

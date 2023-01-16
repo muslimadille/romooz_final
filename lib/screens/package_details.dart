@@ -689,6 +689,7 @@ class _PackageItemsState extends State<PackageItems> {
                         if(is_logged_in.$)
                         {
                         if (validChoices()) {
+
                           var subscribeProcessResponse =
                               await PackagesRepository().subscribeAdminPackages(
                                   widget.packageId,
