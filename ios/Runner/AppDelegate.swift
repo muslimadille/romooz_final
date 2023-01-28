@@ -89,13 +89,17 @@ import FirebaseMessaging
         return
         }
         if transaction.type == .synchronous {
-        result("waiting")
+            result(transaction.resourcePath)
+            return
+
         } else if transaction.type == .asynchronous {
-        result(transaction.redirectURL?.absoluteString)
-        return
+                result(transaction.redirectURL?.absoluteString)
+            return
+                    
         } else {
         // Executed in case of failure of the transaction for any reason
         result("Executed in case of failure of the transaction for any reason")
+            return
         }
         }, cancelHandler: {
         // Executed if the shopper closes the payment page prematurely
