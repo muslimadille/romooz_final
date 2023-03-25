@@ -1300,7 +1300,12 @@ class _CheckoutState extends State<Checkout> {
   ///============== APPLEPAY==================================
   List<PaymentItem> _paymentItems = [];
   void onApplePayResult(paymentResult) {
-    setPaymentStatusToServer();
+    //setPaymentStatusToServer();
+    ToastComponent.showDialog(
+        ' apple pay responce  ${"${paymentResult.toString()}"}',
+        context,
+        gravity: Toast.CENTER,
+        duration: 10);
     debugPrint(paymentResult.toString());
   }
   bool isAppleDevice(){
