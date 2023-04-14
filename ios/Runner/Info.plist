@@ -25,8 +25,22 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>com.romooz.romoozfruitsapp.payments</string>
+			<string>com.romooz.romoozfruitsapp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.romooz.romoozfruitsapp.payments</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.romooz.romoozfruitsapp.payments</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
