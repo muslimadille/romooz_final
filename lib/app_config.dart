@@ -15,7 +15,7 @@ class AppConfig {
   static String mobile_app_code = "ar";
   static bool app_language_rtl = true;
 
-  //configure this
+  //configure thisƒ√
   static const bool HTTPS = true;
 
   //configure this

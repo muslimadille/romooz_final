@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/helpers/hyperpay/apple_pay_screen.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
+import 'package:active_ecommerce_flutter/screens/web_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/screens/order_list.dart';
@@ -564,17 +565,22 @@ class _CheckoutState extends State<Checkout> {
     }
 
 
-
-    /*Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return CheckoutView(
-        order_id: orderCreateResponse.orders_id,
-        order_type: "1",
-        payment_type: _paymentTypeList[_selected_payment_method_index].payment_method_key,
-      );
+    _checkoutId=await getCheckoutIdServer;
+    if(_checkoutId.isNotEmpty){
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        String link="https://app.romooz.app/payment/${orderCreateResponse.orders_id}/$_checkoutId";
+        return WebPage(link);
+      }));
+    }else{
+      ToastComponent.showDialog(
+          'Failed to get payment response',
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
     }
-    ));*/
-    /// START HYPER_PAY ACTIVITY
-    _getPaymentResponse();
+
+   /* /// START HYPER_PAY ACTIVITY
+    _getPaymentResponse();*/
   }
 
   pay_by_manual_payment() async {
@@ -1237,7 +1243,21 @@ class _CheckoutState extends State<Checkout> {
   String _checkoutId="";
   Future<void> _getPaymentResponse() async {
     /// get checkoutId from your server
-    try {
+    _checkoutId=await getCheckoutIdServer;
+    if(_checkoutId.isNotEmpty){
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        String link="https://app.romooz.app/payment/${widget.order_id}/$_checkoutId";
+        return WebPage(link);
+      }));
+    }else{
+      ToastComponent.showDialog(
+          'Failed to get payment response',
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    }
+
+    /*try {
       _checkoutId=await getCheckoutIdServer;
       /// send checkoutId to native method which get payment response
       var result=await platform.invokeMethod("getPaymentMethod",<String,dynamic>{
@@ -1259,7 +1279,7 @@ class _CheckoutState extends State<Checkout> {
           context,
           gravity: Toast.CENTER,
           duration: Toast.LENGTH_LONG);
-    }
+    }*/
 
   }
   Future<String> get getCheckoutIdServer async {
@@ -1277,7 +1297,7 @@ class _CheckoutState extends State<Checkout> {
     final Map _resBody = json.decode(response.body);
     return _resBody['checkout_id'];
   }
-  Future<void> setPaymentStatusToServer()async {
+  Future<void> setPaymentStatusToServer(String paymentMethod)async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/hyperpay-get-paymentStatus");
     final response = await http.post(
         url,
@@ -1288,7 +1308,7 @@ class _CheckoutState extends State<Checkout> {
         body: {
           "resource_path":"v2/checkouts/${_checkoutId}/payment",
           "payment_type":"hyperpay",
-          "payment_method_key":"mada",//TODO make method dynamic
+          "payment_method_key":paymentMethod,//TODO make method dynamic
           "orders_id":"${widget.order_id}"
         }
     );
