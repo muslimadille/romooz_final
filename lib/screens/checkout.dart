@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:active_ecommerce_flutter/data_model/order_create_response.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/apple_pay_screen.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:active_ecommerce_flutter/screens/web_page_screen.dart';
@@ -1297,7 +1298,7 @@ class _CheckoutState extends State<Checkout> {
     final Map _resBody = json.decode(response.body);
     return _resBody['checkout_id'];
   }
-  Future<void> setPaymentStatusToServer(String paymentMethod)async {
+  Future<void> setPaymentStatusToServer(String paymentMethod,int orderId)async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/hyperpay-get-paymentStatus");
     final response = await http.post(
         url,
@@ -1309,7 +1310,7 @@ class _CheckoutState extends State<Checkout> {
           "resource_path":"v2/checkouts/${_checkoutId}/payment",
           "payment_type":"hyperpay",
           "payment_method_key":paymentMethod,//TODO make method dynamic
-          "orders_id":"${widget.order_id}"
+          "orders_id":"${orderId}"
         }
     );
     final Map _resBody = json.decode(response.body);
@@ -1319,8 +1320,14 @@ class _CheckoutState extends State<Checkout> {
   }
   ///============== APPLEPAY==================================
   List<PaymentItem> _paymentItems = [];
-  void onApplePayResult(paymentResult) {
-    setPaymentStatusToServer("apple_pay");
+  void onApplePayResult(paymentResult) async{
+    OrderCreateResponse orderCreateResponse = await PaymentRepository()
+        .getOrderCreateResponseFromCod(
+        _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
+
+    print("orderCreateResponse =====${orderCreateResponse}");
+    await getCheckoutIdServer;
+    await setPaymentStatusToServer("apple",orderCreateResponse.combined_order_id);
     /*ToastComponent.showDialog(
         ' apple pay responce  ${"${paymentResult.toString()}"}',
         context,

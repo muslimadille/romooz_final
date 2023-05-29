@@ -143,8 +143,8 @@ class _ProductDetailsState extends State<ProductDetails> {
 
         setProductDetailValues();
 
-        cartAddResponse = await CartRepository().getCartAddResponse(
-            widget.id, _variant, user_id.$, _qtyController.text.toString());
+        /*cartAddResponse = await CartRepository().getCartAddResponse(
+            widget.id, _variant, user_id.$, _qtyController.text.toString());*/
 
         setState(() {});
       }
