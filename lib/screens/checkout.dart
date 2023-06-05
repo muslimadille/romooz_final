@@ -1298,7 +1298,7 @@ class _CheckoutState extends State<Checkout> {
     final Map _resBody = json.decode(response.body);
     return _resBody['checkout_id'];
   }
-  Future<void> setPaymentStatusToServer(String paymentMethod,int orderId)async {
+  Future<void> setPaymentStatusToServer(String paymentMethod,String orderId)async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/hyperpay-get-paymentStatus");
     final response = await http.post(
         url,
@@ -1308,7 +1308,7 @@ class _CheckoutState extends State<Checkout> {
         },
         body: {
           "resource_path":"v2/checkouts/${_checkoutId}/payment",
-          "payment_type":"hyperpay",
+          "payment_type":paymentMethod,
           "payment_method_key":paymentMethod,//TODO make method dynamic
           "orders_id":"${orderId}"
         }
@@ -1327,7 +1327,7 @@ class _CheckoutState extends State<Checkout> {
 
     print("orderCreateResponse =====${orderCreateResponse}");
     await getCheckoutIdServer;
-    await setPaymentStatusToServer("apple",orderCreateResponse.combined_order_id);
+    await setPaymentStatusToServer("apple",orderCreateResponse.orders_id??"");
     /*ToastComponent.showDialog(
         ' apple pay responce  ${"${paymentResult.toString()}"}',
         context,
