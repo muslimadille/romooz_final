@@ -4,10 +4,27 @@ import GoogleMaps
 import OPPWAMobile
 import FirebaseCore
 import FirebaseMessaging
+import SafariServices
+
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
-    
+@objc class AppDelegate: FlutterAppDelegate ,OPPCheckoutProviderDelegate,SFSafariViewControllerDelegate,PKPaymentAuthorizationViewControllerDelegate{
+    var checkoutid:String = "";
+    var total:String = "";
+    var subtotal:String = "";
+    var discount:String = "";
+    var taxs:String = "";
+    var shipping:String = "";
+
+
+
+    var flutterResult:FlutterResult?
+    var provider = OPPPaymentProvider(mode: OPPProviderMode.live)
+    var transaction: OPPTransaction?
+
+
+
+
     //flutter channel handeler
   override func application(
     _ application: UIApplication,
@@ -19,11 +36,11 @@ import FirebaseMessaging
 
       paymentChannel.setMethodCallHandler ({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
-          guard call.method == "getPaymentMethod" else {
+          guard call.method == "startApplePay" else {
           result(FlutterMethodNotImplemented)
           return
           }
-          self.getPaymentMethod(result: result , call: call)
+          self.startApplePay(flutterResult: result , call: call)
       })
       GeneratedPluginRegistrant.register(with: self)
       if #available(iOS 10.0, *) {
@@ -79,8 +96,8 @@ import FirebaseMessaging
         checkoutsettings.shopperResultURL =
         "com.romooz.romoozfruitsapp.payments://result"
         let args=call.arguments as? Dictionary<String,Any>
-        let checkoutId=(args?["checkoutId"] as? String)!
-        let checkoutProvider = OPPCheckoutProvider(paymentProvider: provider, checkoutID: checkoutId , settings: checkoutsettings)
+        let checkoutid=(args?["checkoutId"] as? String)!
+        let checkoutProvider = OPPCheckoutProvider(paymentProvider: provider, checkoutID:checkoutid , settings: checkoutsettings)
 
         checkoutProvider?.presentCheckout(forSubmittingTransactionCompletionHandler: { (transaction, error) in
         guard let transaction = transaction else {
@@ -109,40 +126,92 @@ import FirebaseMessaging
     
     ///==================apple pay=======================
     
-    private func getApplePayMethod(result:@escaping FlutterResult , call:FlutterMethodCall){
-        let provider = OPPPaymentProvider (mode: OPPProviderMode.live)
-        let checkoutSettings = OPPCheckoutSettings()
-        let paymentRequest = OPPPaymentProvider.paymentRequest(withMerchantIdentifier: "merchant.com.romooz.romoozfruitsapp.live", countryCode: "SA 966")
-        let args=call.arguments as? Dictionary<String,Any>
-        let checkoutId=(args?["checkoutId"] as? String)!
-        paymentRequest.supportedNetworks =  [PKPaymentNetwork.visa,PKPaymentNetwork.masterCard]
-        checkoutSettings.applePayPaymentRequest = paymentRequest
-        let checkoutProvider = OPPCheckoutProvider(paymentProvider: provider, checkoutID: checkoutId, settings: checkoutSettings)
+        private func startApplePay(flutterResult:@escaping FlutterResult , call:FlutterMethodCall) {
+            let checkoutSettings = OPPCheckoutSettings()
+            checkoutSettings.paymentBrands = ["APPLEPAY"]
+            checkoutSettings.shopperResultURL = "com.romooz.romoozfruitsapp.payments://result"
+
+            
+            let args=call.arguments as? Dictionary<String,Any>
+
+            self.flutterResult=flutterResult
+            self.checkoutid=(args?["checkoutId"] as? String)!
+            self.total=(args?["total"] as? String)!
+            self.subtotal=(args?["subtotal"] as? String)!
+            self.discount=(args?["discount"] as? String)!
+            self.taxs=(args?["tax"] as? String)!
+            self.shipping=(args?["shipping"] as? String)!
+            
+            let provider = OPPPaymentProvider (mode: OPPProviderMode.test)
+            OPPPaymentProvider.deviceSupportsApplePay()
+
+        let request = PKPaymentRequest() // Create the PKPaymentRequest object
+        // Configure the request as per your requirements
+        request.merchantIdentifier = "merchant.com.romooz.romoozfruitsapp.live"
+        request.countryCode = "SA"
+        request.currencyCode = "SAR"
+            request.merchantCapabilities = [.capability3DS, .capabilityEMV, .capabilityCredit,.capabilityDebit]
+        request.requiredShippingAddressFields = []
+            request.requiredBillingContactFields=[]
+            request.requiredShippingContactFields=[]
+        if #available(iOS 12.1.1, *) {
+            request.supportedNetworks = [ PKPaymentNetwork.mada,PKPaymentNetwork.visa,
+                                                 PKPaymentNetwork.masterCard ,PKPaymentNetwork.interac, PKPaymentNetwork.discover, PKPaymentNetwork.amex]
+        } else {
+            // Fallback on earlier versions
+            request.supportedNetworks = [ PKPaymentNetwork.visa,
+                                          PKPaymentNetwork.masterCard ,PKPaymentNetwork.interac, PKPaymentNetwork.discover, PKPaymentNetwork.amex]
+        }
+            
+            let discount = PKPaymentSummaryItem(label: "الخصم", amount: NSDecimalNumber(string: self.discount))
+            let shipping = PKPaymentSummaryItem(label: "الشحن", amount: NSDecimalNumber(string: self.shipping))
+            let subTotal =  PKPaymentSummaryItem(label: "المجموع الفرعي", amount: NSDecimalNumber(string: self.subtotal))
+
+            let total = PKPaymentSummaryItem(label: "Romooz", amount: NSDecimalNumber(string: self.total))
+            let tax = PKPaymentSummaryItem(label: "الضريبة", amount:NSDecimalNumber(string: self.taxs))
+                       
+            request.paymentSummaryItems = [subTotal,shipping,tax,discount,total]
+
+            if OPPPaymentProvider.canSubmitPaymentRequest(request) {
+                                      if let vc = PKPaymentAuthorizationViewController(paymentRequest: request) as PKPaymentAuthorizationViewController? {
+                                          vc.delegate = self
+                                         self.window?.rootViewController?.present(vc, animated: true, completion: nil)
+                                      } else {
+                                          self.flutterResult?("Apple Pay not supported.")                                      }
+                                  }
+       
+      }
+    
+    func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
+
         
-        checkoutProvider?.presentCheckout(withPaymentBrand: "APPLEPAY",
-           loadingHandler: { (inProgress) in
-            //result("loading")
-        }, completionHandler: { (transaction, error) in
-            if error != nil {
-                result("error")
-            } else {
-                if transaction?.redirectURL != nil {
-                    result("redirect")
-                    // Shopper was redirected to the issuer web page.
-                    // Request payment status when shopper returns to the app using transaction.resourcePath or just checkout id.
-                } else {
-                    result("success")
-                    // Request payment status for the synchronous transaction from your server using transactionPath.resourcePath or just checkout id.
-                }
-            }
-        }, cancelHandler: {
-            result("cancele")
-            // Executed if the shopper closes the payment page prematurely.
-        })
-        
-    }
+        if let params = try? OPPApplePayPaymentParams(checkoutID: self.checkoutid, tokenData: payment.token.paymentData) as OPPApplePayPaymentParams? {
+                
+            params.shopperResultURL="com.romooz.romoozfruitsapp.payments://result"
+    
+                   self.provider.submitTransaction(OPPTransaction(paymentParams: params), completionHandler: { (transaction, error) in
+                       if (error != nil) {
+                           self.flutterResult?(error)
+                           
+                                            } else {
+                           // Send request to your server to obtain transaction status.
+                                                
+                           completion(.success)
+                           self.flutterResult?("DONE")
+
+      
+                       }
+                   })
+               }
+           }
+      
+       func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
+        controller.dismiss(animated: true, completion: nil)
+      }
     
     
+    
+
 }
 
 

@@ -70,7 +70,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   CartAddResponse cartAddResponse;
 
-  int _quantity = 0;
+  int _quantity = 1;
   int _stock = 0;
   FocusNode _nodeText1 = FocusNode();
   List<dynamic> _relatedProducts = [];
@@ -366,7 +366,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     _choiceString = "";
     _variant = "";
     _selectedColorIndex = 0;
-    _quantity = 1;
+    _quantity = 0;
     _productDetailsFetched = false;
     _isInWishList = false;
     _isInCompareList = false;
@@ -2441,7 +2441,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: IconButton(
             icon: Icon(FontAwesome.plus, size: 16, color: MyTheme.dark_grey),
             onPressed: () {
-              if (_quantity+cartAddResponse.quantity < cartAddResponse.upperLimit) {
+              if (_quantity+(cartAddResponse!=null?cartAddResponse.quantity:0.0)< (cartAddResponse!=null?cartAddResponse.upperLimit:10.0)) {
                 _quantity++;
                 _qtyController.text = _quantity.toString();
                 setState(() {});

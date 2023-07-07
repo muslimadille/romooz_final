@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:active_ecommerce_flutter/data_model/order_create_response.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/apple_pay_screen.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
+import 'package:active_ecommerce_flutter/screens/text_screen.dart';
 import 'package:active_ecommerce_flutter/screens/web_page_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
@@ -152,42 +153,7 @@ class _CheckoutState extends State<Checkout> {
           }*/
 
         });
-        _paymentItems.add(
-          PaymentItem(
-            label: 'المجموع الفرعي',
-            amount: '${_subTotalString}',
-            status: PaymentItemStatus.unknown,
-          ),
-        );
-        _paymentItems.add(
-          PaymentItem(
-            label: 'الضرائب',
-            amount: '${_taxString}',
-            status: PaymentItemStatus.unknown,
-          ),
-        );
-        _paymentItems.add(
-          PaymentItem(
-            label: 'تكلفة الشحن',
-            amount: '${_shippingCostString}',
-            status: PaymentItemStatus.unknown,
-          ),
-        );
-        _paymentItems.add(
-          PaymentItem(
-            label: 'الخصم',
-            amount: '${_discountString}',
-            status: PaymentItemStatus.unknown,
-          ),
-        );
 
-        _paymentItems.add(
-          PaymentItem(
-            label: 'Tasla Co',
-            amount: '${_totalString}',
-            status: PaymentItemStatus.unknown,
-          ),
-        );
       }
     }
     _isInitial = false;
@@ -566,7 +532,7 @@ class _CheckoutState extends State<Checkout> {
     }
 
 
-    _checkoutId=await getCheckoutIdServer;
+    _checkoutId=await getCheckoutIdServer();
     if(_checkoutId.isNotEmpty){
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         String link="https://app.romooz.app/payment/${orderCreateResponse.orders_id}/$_checkoutId";
@@ -1244,7 +1210,7 @@ class _CheckoutState extends State<Checkout> {
   String _checkoutId="";
   Future<void> _getPaymentResponse() async {
     /// get checkoutId from your server
-    _checkoutId=await getCheckoutIdServer;
+    _checkoutId=await getCheckoutIdServer();
     if(_checkoutId.isNotEmpty){
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         String link="https://app.romooz.app/payment/${widget.order_id}/$_checkoutId";
@@ -1283,7 +1249,7 @@ class _CheckoutState extends State<Checkout> {
     }*/
 
   }
-  Future<String> get getCheckoutIdServer async {
+  Future<String>  getCheckoutIdServer({String method}) async {
     Uri url = Uri.parse("${AppConfig.BASE_URL}/hyperpay-get-checkoutId");
     final response = await http.post(
         url,
@@ -1292,7 +1258,7 @@ class _CheckoutState extends State<Checkout> {
           "Authorization": "Bearer ${access_token.$}",
         },
         body: {
-          "payment_method_key":"mada" //TODO make method dynamic
+          "payment_method_key":method??"mada" //TODO make method dynamic
         }
     );
     final Map _resBody = json.decode(response.body);
@@ -1319,38 +1285,78 @@ class _CheckoutState extends State<Checkout> {
     }));
   }
   ///============== APPLEPAY==================================
-  List<PaymentItem> _paymentItems = [];
-  void onApplePayResult(paymentResult) async{
-    OrderCreateResponse orderCreateResponse = await PaymentRepository()
-        .getOrderCreateResponseFromCod(
-        _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
 
-    print("orderCreateResponse =====${orderCreateResponse}");
-    await getCheckoutIdServer;
-    await setPaymentStatusToServer("apple",orderCreateResponse.orders_id??"");
-    /*ToastComponent.showDialog(
-        ' apple pay responce  ${"${paymentResult.toString()}"}',
-        context,
-        gravity: Toast.CENTER,
-        duration: 10);*/
-    debugPrint(paymentResult.toString());
-  }
   bool isAppleDevice(){
     return Platform.isIOS;
   }
+  startApplePay()async{
+    try {
+      OrderCreateResponse orderCreateResponse = await PaymentRepository()
+          .getOrderCreateResponseFromCod(
+          _paymentTypeList[_selected_payment_method_index].payment_type_key, widget.shippingSelectedDate);
+
+      if(orderCreateResponse.orders_id==null){
+        ToastComponent.showDialog(
+            '${"${orderCreateResponse.message.toString()}"}',
+            context,
+            gravity: Toast.CENTER,
+            duration: Toast.LENGTH_LONG);
+      }else{
+        _checkoutId=await getCheckoutIdServer(method: "apple");
+        var result=await platform.invokeMethod("startApplePay",<String,dynamic>{
+          "checkoutId":_checkoutId??"",
+          "total":(_totalString??"0.00").replaceAll(",", ''),
+          "discount":(_discountString??"0.00").replaceAll(",", ''),
+          "shipping":(_shippingCostString??"0.00").replaceAll(",", ''),
+          "subtotal":(_subTotalString??"0.00").replaceAll(",", ''),
+          "tax":(_taxString??"0.00").replaceAll(",", '')
+        });
+        if(result.toString().contains("DONE")){
+          await setPaymentStatusToServer("apple",orderCreateResponse.orders_id);
+        }else{
+          ToastComponent.showDialog(
+              ' payment response  ${"${result.toString()}"}',
+              context,
+              gravity: Toast.CENTER,
+              duration: Toast.LENGTH_LONG);
+        }
+      }
+
+    } on PlatformException catch (e) {
+      ToastComponent.showDialog(
+          'Failed to get payment response  ${e.message}',
+          context,
+          gravity: Toast.CENTER,
+          duration: Toast.LENGTH_LONG);
+    }
+  }
 Widget _applePayBtn(){
-    return SizedBox(child: ApplePayButton(
-      paymentConfigurationAsset: 'default_payment_profile_apple_pay.json',
-      paymentItems: _paymentItems,
-      
-      style: ApplePayButtonStyle.black,
-      type: ApplePayButtonType.inStore,
-      margin: const EdgeInsets.all(10),
-      onPaymentResult: onApplePayResult,
-      loadingIndicator: const Center(
-        child: CircularProgressIndicator(),
-      ),
-    ),);
+    return SizedBox(child:
+        FlatButton(
+          minWidth: MediaQuery.of(context).size.width,
+          height: 50,
+          color: MyTheme.accent_color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0.0),
+          ),
+          child: Text(
+            widget.isWalletRecharge
+                ? AppLocalizations.of(context)
+                .recharge_wallet_screen_recharge_wallet
+                : widget.manual_payment_from_order_details
+                ? AppLocalizations.of(context)
+                .common_proceed_in_all_caps
+                : AppLocalizations.of(context)
+                .checkout_screen_place_my_order,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600),
+          ),
+      onPressed: (){
+          startApplePay();
+  },
+      ));
 }
 
 
