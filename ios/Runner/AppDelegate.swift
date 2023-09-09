@@ -8,7 +8,7 @@ import SafariServices
 
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate ,OPPCheckoutProviderDelegate,SFSafariViewControllerDelegate,PKPaymentAuthorizationViewControllerDelegate{
+@objc class AppDelegate: FlutterAppDelegate ,OPPCheckoutProviderDelegate,SFSafariViewControllerDelegate,PKPaymentAuthorizationViewControllerDelegate,OPPThreeDSEventListener,UIAdaptivePresentationControllerDelegate,UINavigationControllerDelegate{
     var checkoutid:String = "";
     var total:String = "";
     var subtotal:String = "";
@@ -21,6 +21,8 @@ import SafariServices
     var flutterResult:FlutterResult?
     var provider = OPPPaymentProvider(mode: OPPProviderMode.live)
     var transaction: OPPTransaction?
+    var safariVC:SFSafariViewController?
+
 
 
 
@@ -40,7 +42,7 @@ import SafariServices
           result(FlutterMethodNotImplemented)
           return
           }
-          self.startApplePay(flutterResult: result , call: call)
+          self.getPaymentMethod(result: result , call: call)
       })
       GeneratedPluginRegistrant.register(with: self)
       if #available(iOS 10.0, *) {
@@ -57,8 +59,24 @@ import SafariServices
     
     private func getPaymentMethod(result:@escaping FlutterResult , call:FlutterMethodCall){
         let provider = OPPPaymentProvider (mode: OPPProviderMode.live)
-
         let checkoutsettings=OPPCheckoutSettings()
+
+        let paymentRequest = OPPPaymentProvider.paymentRequest(withMerchantIdentifier: "merchant.com.romooz.romoozfruitsapp.live", countryCode: "SA")
+                       if #available(iOS 12.1.1, *) {
+                           paymentRequest.supportedNetworks = [ PKPaymentNetwork.mada,PKPaymentNetwork.visa,
+                                                                PKPaymentNetwork.masterCard ]
+                       } else {
+                           // Fallback on earlier versions
+                           paymentRequest.supportedNetworks = [ PKPaymentNetwork.visa,
+                                                                      PKPaymentNetwork.masterCard ]
+                       }
+        let total = PKPaymentSummaryItem(label: "Romooz", amount: NSDecimalNumber(string: self.total))
+                   
+        paymentRequest.paymentSummaryItems = [total]
+        
+        checkoutsettings.applePayPaymentRequest = paymentRequest
+        checkoutsettings.paymentBrands = ["APPLEPAY"]
+
         checkoutsettings.language="ar"
         // General colors of the checkout UI
         func getColorFromHex(rgbValue:UInt32)->UIColor{
@@ -91,7 +109,7 @@ import SafariServices
         checkoutsettings.theme.errorFont = UIFont.systemFont(ofSize: 12.0)
 
         // set available payment brands for your shop
-        checkoutsettings.paymentBrands = ["MADA"]
+        //checkoutsettings.paymentBrands = [Brand.APPLEPAY]
         // Set shopper result URL
         checkoutsettings.shopperResultURL =
         "com.romooz.romoozfruitsapp.payments://result"
@@ -102,15 +120,17 @@ import SafariServices
         checkoutProvider?.presentCheckout(forSubmittingTransactionCompletionHandler: { (transaction, error) in
         guard let transaction = transaction else {
         // Handle invalid transaction, check error
-        result("Handle invalid transaction, check error")
+            result("\(error)")
         return
         }
         if transaction.type == .synchronous {
-            result(transaction.resourcePath)
+            result("DONE")
+            //result(transaction.resourcePath)
             return
 
         } else if transaction.type == .asynchronous {
-                result(transaction.redirectURL?.absoluteString)
+            result("DONE")
+               // result(transaction.redirectURL?.absoluteString)
             return
                     
         } else {
@@ -127,9 +147,7 @@ import SafariServices
     ///==================apple pay=======================
     
         private func startApplePay(flutterResult:@escaping FlutterResult , call:FlutterMethodCall) {
-            let checkoutSettings = OPPCheckoutSettings()
-            checkoutSettings.paymentBrands = ["APPLEPAY"]
-            checkoutSettings.shopperResultURL = "com.romooz.romoozfruitsapp.payments://result"
+            
 
             
             let args=call.arguments as? Dictionary<String,Any>
@@ -142,7 +160,9 @@ import SafariServices
             self.taxs=(args?["tax"] as? String)!
             self.shipping=(args?["shipping"] as? String)!
             
-            let provider = OPPPaymentProvider (mode: OPPProviderMode.test)
+            self.provider = OPPPaymentProvider (mode: OPPProviderMode.live)
+            self.provider.threeDSEventListener = self
+
             OPPPaymentProvider.deviceSupportsApplePay()
 
         let request = PKPaymentRequest() // Create the PKPaymentRequest object
@@ -150,10 +170,11 @@ import SafariServices
         request.merchantIdentifier = "merchant.com.romooz.romoozfruitsapp.live"
         request.countryCode = "SA"
         request.currencyCode = "SAR"
-            request.merchantCapabilities = [.capability3DS, .capabilityEMV, .capabilityCredit,.capabilityDebit]
-        request.requiredShippingAddressFields = []
-            request.requiredBillingContactFields=[]
-            request.requiredShippingContactFields=[]
+        //request.merchantCapabilities = [.capability3DS,.capabilityEMV,.capabilityCredit,.capabilityDebit]
+        //request.requiredShippingAddressFields = []
+        //request.requiredBillingContactFields=[]
+        //request.requiredShippingContactFields=[]
+            
         if #available(iOS 12.1.1, *) {
             request.supportedNetworks = [ PKPaymentNetwork.mada,PKPaymentNetwork.visa,
                                                  PKPaymentNetwork.masterCard ,PKPaymentNetwork.interac, PKPaymentNetwork.discover, PKPaymentNetwork.amex]
@@ -163,14 +184,15 @@ import SafariServices
                                           PKPaymentNetwork.masterCard ,PKPaymentNetwork.interac, PKPaymentNetwork.discover, PKPaymentNetwork.amex]
         }
             
-            let discount = PKPaymentSummaryItem(label: "الخصم", amount: NSDecimalNumber(string: self.discount))
-            let shipping = PKPaymentSummaryItem(label: "الشحن", amount: NSDecimalNumber(string: self.shipping))
-            let subTotal =  PKPaymentSummaryItem(label: "المجموع الفرعي", amount: NSDecimalNumber(string: self.subtotal))
+           // let discount = PKPaymentSummaryItem(label: "الخصم", amount: NSDecimalNumber(string: self.discount))
+           // let shipping = PKPaymentSummaryItem(label: "الشحن", amount: NSDecimalNumber(string: self.shipping))
+           // let subTotal =  PKPaymentSummaryItem(label: "المجموع الفرعي", amount: NSDecimalNumber(string: self.subtotal))
+            // let tax = PKPaymentSummaryItem(label: "الضريبة", amount:NSDecimalNumber(string: self.taxs))
+
 
             let total = PKPaymentSummaryItem(label: "Romooz", amount: NSDecimalNumber(string: self.total))
-            let tax = PKPaymentSummaryItem(label: "الضريبة", amount:NSDecimalNumber(string: self.taxs))
                        
-            request.paymentSummaryItems = [subTotal,shipping,tax,discount,total]
+            request.paymentSummaryItems = [total]
 
             if OPPPaymentProvider.canSubmitPaymentRequest(request) {
                                       if let vc = PKPaymentAuthorizationViewController(paymentRequest: request) as PKPaymentAuthorizationViewController? {
@@ -184,30 +206,59 @@ import SafariServices
     
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
 
-        
+
+       
         if let params = try? OPPApplePayPaymentParams(checkoutID: self.checkoutid, tokenData: payment.token.paymentData) as OPPApplePayPaymentParams? {
                 
             params.shopperResultURL="com.romooz.romoozfruitsapp.payments://result"
-    
+            
                    self.provider.submitTransaction(OPPTransaction(paymentParams: params), completionHandler: { (transaction, error) in
                        if (error != nil) {
                            self.flutterResult?(error)
                            
                                             } else {
-                           // Send request to your server to obtain transaction status.
-                                                
+            
                            completion(.success)
-                           self.flutterResult?("DONE")
+            self.provider.requestCheckoutInfo(withCheckoutID: self.checkoutid, completionHandler: { (checkoutInfo, error) in guard let resourcePath = checkoutInfo?.resourcePath else {
+                self.flutterResult?(error)
+                                                        return
+                                                    }
+                self.flutterResult?(resourcePath)
+
+                                                    // Use resourcePath for getting transaction status
+                                                })
 
       
                        }
                    })
+            
                }
            }
       
        func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
         controller.dismiss(animated: true, completion: nil)
       }
+    
+    // 3d verification
+    
+    public func onThreeDSChallengeRequired(completion: @escaping (UINavigationController) -> Void) {
+            let rootViewController = UIApplication.shared.delegate?.window??.rootViewController as! UINavigationController
+
+            let nc = UINavigationController()
+            nc.delegate = self
+            
+            DispatchQueue.main.async {
+                rootViewController.present(nc, animated: true) {
+                    completion(nc)
+                }
+            }
+        }
+    
+    public func onThreeDSConfigRequired(completion: @escaping (OPPThreeDSConfig) -> Void) {
+            let config = OPPThreeDSConfig()
+            config.appBundleID = Bundle.main.bundleIdentifier!
+            completion(config)
+        }
     
     
     

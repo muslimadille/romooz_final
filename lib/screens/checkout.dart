@@ -1311,6 +1311,11 @@ class _CheckoutState extends State<Checkout> {
           "subtotal":(_subTotalString??"0.00").replaceAll(",", ''),
           "tax":(_taxString??"0.00").replaceAll(",", '')
         });
+
+        // await Clipboard.setData(ClipboardData(text:result.toString()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return TextScreen("https://app.romooz.app/payment-status/${orderCreateResponse.orders_id}?resourcePath=$result");
+        // }));
         if(result.toString().contains("DONE")){
           await setPaymentStatusToServer("apple",orderCreateResponse.orders_id);
         }else{
