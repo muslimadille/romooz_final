@@ -124,13 +124,13 @@ import SafariServices
         return
         }
         if transaction.type == .synchronous {
-            result("DONE")
-            //result(transaction.resourcePath)
+            //result("DONE")
+            result(transaction.resourcePath)
             return
 
         } else if transaction.type == .asynchronous {
-            result("DONE")
-               // result(transaction.redirectURL?.absoluteString)
+            //result("DONE")
+                result(transaction.redirectURL?.absoluteString)
             return
                     
         } else {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:active_ecommerce_flutter/data_model/order_create_response.dart';
+import 'package:active_ecommerce_flutter/data_model/transaction_response_model.dart'hide Card;
 import 'package:active_ecommerce_flutter/helpers/hyperpay/apple_pay_screen.dart';
 import 'package:active_ecommerce_flutter/helpers/hyperpay/checkout_view.dart';
 import 'package:active_ecommerce_flutter/screens/text_screen.dart';
@@ -87,15 +88,9 @@ class _CheckoutState extends State<Checkout> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*print("user data");
-    print(is_logged_in.$);
-    print(access_token.value);
-    print(user_id.$);
-    print(user_name.$);*/
-
     print("_shippingSelectedDate${widget.shippingSelectedDate}");
-
     fetchAll();
+
   }
 
   @override
@@ -1217,6 +1212,7 @@ class _CheckoutState extends State<Checkout> {
         return WebPage(link);
       }));
     }else{
+
       ToastComponent.showDialog(
           'Failed to get payment response',
           context,
@@ -1279,9 +1275,9 @@ class _CheckoutState extends State<Checkout> {
           "orders_id":"${orderId}"
         }
     );
-    final Map _resBody = json.decode(response.body);
+    //final Map _resBody = json.decode(response.body);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return OrderList();
+      return OrderList(from_checkout: true);
     }));
   }
   ///============== APPLEPAY==================================
@@ -1312,19 +1308,69 @@ class _CheckoutState extends State<Checkout> {
           "tax":(_taxString??"0.00").replaceAll(",", '')
         });
 
-        // await Clipboard.setData(ClipboardData(text:result.toString()));
-        // Navigator.push(context, MaterialPageRoute(builder: (context) {
-        //   return TextScreen("https://app.romooz.app/payment-status/${orderCreateResponse.orders_id}?resourcePath=$result");
-        // }));
-        if(result.toString().contains("DONE")){
-          await setPaymentStatusToServer("apple",orderCreateResponse.orders_id);
-        }else{
-          ToastComponent.showDialog(
-              ' payment response  ${"${result.toString()}"}',
-              context,
-              gravity: Toast.CENTER,
-              duration: Toast.LENGTH_LONG);
+        try{
+          TransactionResponsModel transactionResponsModel=await getTransctionnDetails("https://app.romooz.app/payment-status/${orderCreateResponse.orders_id}?resourcePath=$result");
+          if(transactionResponsModel.result.code=="000.000.000"){
+            await setPaymentStatusToServer("apple",orderCreateResponse.orders_id);
+          }else{
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(
+                      AppLocalizations.of(context).localeName=="ar"?
+                      "فشل  عملية الدفع":'payment failed'),
+                  content: Text('${transactionResponsModel.result.description}'),
+                  actions: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: MyTheme.accent_color,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 25, vertical: 5),
+                          textStyle: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      onPressed: (){Navigator.of(context).pop();},
+                      child: Text(
+                          AppLocalizations.of(context).localeName=="ar"?
+                          "انهاء":'Close',style:TextStyle(color:Colors.white)),
+                    )
+                  ],
+                );
+              },
+            );
+          }
+        }catch(e){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text(
+                    AppLocalizations.of(context).localeName=="ar"?
+                    "فشل  عملية الدفع":'payment failed'),
+                actions: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: MyTheme.accent_color,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 5),
+                        textStyle: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold)),
+                    onPressed: (){Navigator.of(context).pop();},
+                    child: Text(
+                        AppLocalizations.of(context).localeName=="ar"?
+                        "انهاء":'Close',style:TextStyle(color:Colors.white)),
+                  )
+                ],
+              );
+            },
+          );
         }
+         //await Clipboard.setData(ClipboardData(text:"https://app.romooz.app/payment-status/${orderCreateResponse.orders_id}?resourcePath=$result"));
+         // Navigator.push(context, MaterialPageRoute(builder: (context) {
+         //   return TextScreen("https://app.romooz.app/payment-status/${orderCreateResponse.orders_id}?resourcePath=$result");
+         // }));
+
+
       }
 
     } on PlatformException catch (e) {
@@ -1363,6 +1409,13 @@ Widget _applePayBtn(){
   },
       ));
 }
+
+  Future<TransactionResponsModel> getTransctionnDetails(String urlText) async {
+    Uri url = Uri.parse(urlText);
+    final response = await http.get(url);
+    TransactionResponsModel data=  transactionResponsModelFromJson(response.body);
+    return data;
+  }
 
 
 }
